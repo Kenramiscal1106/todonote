@@ -89,12 +89,26 @@
   }
   button {
     all: unset;
+    display: inline-flex;
+    padding: 6px var(--space-3, 12px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-1, 4px);
+    border-radius:1rem;
+    cursor: pointer;
   }
 }
 @layer components {
+  button {
+    &.primary {
+      background-color: var(--colors-primary-600);
+      &:active {
+        background-color: var(--colors-primary-500);
+      }
+    }
+  }
   .toast {
     display: flex;
-    width: 291px;
     padding: var(--space-2, 8px) var(--space-4, 16px);
     justify-content: space-between;
     align-items: center;
@@ -139,13 +153,14 @@
       stroke: var(--colors-alert-500);
     }
   }
-  .toast--drawer {
+  #toast-drawer {
     display: flex;
-    flex-direction:column;
-    gap:var(--space-3);
-    position:fixed;
-    bottom:var(--space-4);
-    right:var(--space-4);
+    flex-direction: column;
+    gap: var(--space-3);
+    position: fixed;
+    bottom: var(--space-4);
+    right: var(--space-4);
     z-index: 100;
+    width:min(100%, 20rem);
   }
 }
