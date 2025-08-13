@@ -65,14 +65,14 @@ const alertSVG = `<svg
 
 // code for toast
 const drawer = document.querySelector("#toast-drawer");
-const trigger = document.querySelector("#toast-trigger");
+// const trigger = document.querySelector("#toast-trigger");
 
-trigger.addEventListener("click", () => {
-  renderToast({
-    message: "Hello, World",
-    type: "alert",
-  });
-});
+// trigger.addEventListener("click", () => {
+//   renderToast({
+//     message: "Hello, World",
+//     type: "alert",
+//   });
+// });
 
 /**
  * a keyframe for toastKeyframe animation
@@ -83,6 +83,11 @@ const toastKeyframe = [
   { opacity: 1, translate: "0 0" },
 ];
 
+
+/**
+ * 
+ * @param {{type:string, message:string}} notif 
+ */
 function renderToast(notif) {
   const toastWrapper = document.createElement("div");
   toastWrapper.classList.add("toast", `toast__${notif.type}`);
@@ -143,7 +148,7 @@ function renderToast(notif) {
 
   drawer.insertBefore(toastWrapper, drawer.firstChild);
   toastWrapper.animate(toastKeyframe, {
-    duration: 200,
+    duration: 175,
   });
 }
 
