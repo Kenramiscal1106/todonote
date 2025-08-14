@@ -64,14 +64,6 @@ const alertSVG = `<svg
 
 // code for toast
 const drawer = document.querySelector("#toast-drawer");
-// const trigger = document.querySelector("#toast-trigger");
-
-// trigger.addEventListener("click", () => {
-//   renderToast({
-//     message: "Hello, World",
-//     type: "alert",
-//   });
-// });
 
 /**
  * a keyframe for toastKeyframe animation
@@ -149,15 +141,59 @@ function renderToast(notif) {
     duration: 175,
   });
 }
+/**
+ * @type {IDBDatabase | null}
+ */
 let db;
 const request = window.indexedDB.open("Todos", 3);
 
-request.onsuccess = (event) => {
-  renderToast({
-    message: "request success",
-    type: "success",
-  });
+/**
+ * @param {{
+ *  id:ReturnType<typeof crypto.randomUUID>,
+ *  taskName:string,
+ *  deadline:string,
+ *  categoryId: ReturnType<typeof crypto.randomUUID>,
+ *  categoryIcon: string
+ * }} todo
+ */
+function renderTodo(todo) {
+  const deleteButton = document.createElement("button");
+  deleteButton.setAttribute("data-task-id", todo.id);
+  deleteButton.addEventListener("click", deleteTodo);
+  deleteButton.textContent = "Delete Todo";
+
+  const todoContainer = document.createElement("div");
+  todoContainer.classList.add("todo");
+  todoContainer.textContent = todo.id + " " + todo.taskName;
+
+  todoContainer.appendChild(deleteButton);
+  document.body.appendChild(todoContainer);
+}
+
+request.onsuccess = () => {
   db = request.result;
+  const todoObjectStore = db
+    .transaction("Todos", "readwrite")
+    .objectStore("Todos");
+
+  const todosRequest = todoObjectStore.getAll();
+
+  todosRequest.onsuccess = (evt) => {
+    renderToast({
+      message: "Data successfully loaded",
+      type: "success",
+    });
+    evt.target.result.forEach((todo) => {
+      renderTodo(todo);
+    });
+  };
+
+  todosRequest.onerror = (event) => {
+    renderToast({
+      message: event.target.error?.message,
+      type: "alert",
+    });
+  };
 };
 
 request.onerror = (event) => {
@@ -169,41 +205,56 @@ request.onerror = (event) => {
 
 request.onupgradeneeded = (event) => {
   db = event.target.result;
-  todoObjectStore = db.transaction("Todos", "readwrite").objectStore("Todos");
-  console.log(db);
   renderToast({
-    message: "request successful",
+    message: "DB upgraded successfully",
     type: "success",
   });
-  console.log(db);
-  const objectStore = db.createObjectStore("Todos", { keyPath: "id" });
-  objectStore.createIndex("taskName", "taskName", { unique: false });
+  
+  const todoObjectStore = db
+    .transaction("Todos", "readwrite")
+    .objectStore("Todos");
+  const todosRequest = todoObjectStore.getAll();
+  todosRequest.onsuccess = (evt) => {
+    evt.target.result.forEach((todo) => {
+      renderTodo(todo);
+    });
+  };
 };
 
 function addTodo() {
-  console.log(db);
-  const todoObjectStore = db.transaction("Todos", "readwrite").objectStore("Todos");
+  const todoObjectStore = db
+    .transaction("Todos", "readwrite")
+    .objectStore("Todos");
 
-  const addRequest = todoObjectStore.add({
+  const newTodo = {
     id: crypto.randomUUID(),
     taskName: "Hello, todo",
     deadline: new Date().toISOString(),
     categoryId: crypto.randomUUID(),
     categoryIcon: "+",
-  });
-  console.log(addRequest);
-  addRequest.onsuccess = (evt) => {
+  };
+  const action = todoObjectStore.add(newTodo);
+  action.onsuccess = (evt) => {
     renderToast({
-      message: "added todo",
+      message: "Todo successfully added",
       type: "success",
     });
+    renderTodo(newTodo);
   };
 }
 
 function deleteTodo(event) {
-  const todoId = event.target.getAttribute("data-task");
-  todoObjectStore.delete(todoId);
-}
+  const todoObjectStore = db
+    .transaction("Todos", "readwrite")
+    .objectStore("Todos");
 
-const button = document.querySelector("#test-DB");
-button.addEventListener("click", addTodo)
+  const todoId = event.target.getAttribute("data-task-id");
+  const action = todoObjectStore.delete(todoId);
+  action.onsuccess = () => {
+    renderToast({
+      type: "success",
+      message: "Todo successfully deleted",
+    });
+  };
+  document.body.removeChild(event.target.parentElement);
+}
