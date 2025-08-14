@@ -1,35 +1,13 @@
 "use strict";
 
-import { renderToast } from "./toast";;
+import { renderToast } from "./toast.js";
+import { renderTodo } from "./todos.js";
 
 /**
  * @type {IDBDatabase | null}
  */
 let db;
 const request = window.indexedDB.open("Todos", 3);
-
-/**
- * @param {{
- *  id:ReturnType<typeof crypto.randomUUID>,
- *  taskName:string,
- *  deadline:string,
- *  categoryId: ReturnType<typeof crypto.randomUUID>,
- *  categoryIcon: string
- * }} todo
- */
-function renderTodo(todo) {
-  const deleteButton = document.createElement("button");
-  deleteButton.setAttribute("data-task-id", todo.id);
-  deleteButton.addEventListener("click", deleteTodo);
-  deleteButton.textContent = "Delete Todo";
-
-  const todoContainer = document.createElement("div");
-  todoContainer.classList.add("todo");
-  todoContainer.textContent = todo.id + " " + todo.taskName;
-
-  todoContainer.appendChild(deleteButton);
-  document.body.appendChild(todoContainer);
-}
 
 request.onsuccess = () => {
   db = request.result;

@@ -73,8 +73,10 @@ const toastKeyframe = [
 ];
 
 /**
- *
- * @param {{type:"alert" | "success", message:string}} notif
+ * @param {{
+ *  type:"alert" | "success",
+ *  message:string
+ * }} notif
  */
 export function renderToast(notif) {
   const toastWrapper = document.createElement("div");
