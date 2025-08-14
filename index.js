@@ -62,7 +62,6 @@ const alertSVG = `<svg
 </svg>
 `;
 
-
 // code for toast
 const drawer = document.querySelector("#toast-drawer");
 // const trigger = document.querySelector("#toast-trigger");
@@ -79,14 +78,13 @@ const drawer = document.querySelector("#toast-drawer");
  * @type {KeyframeEffect}
  */
 const toastKeyframe = [
-  { opacity: 0, translate: "-1rem 0" },
+  { opacity: 0, translate: "1rem 0" },
   { opacity: 1, translate: "0 0" },
 ];
 
-
 /**
- * 
- * @param {{type:string, message:string}} notif 
+ *
+ * @param {{type:"alert" | "success", message:string}} notif
  */
 function renderToast(notif) {
   const toastWrapper = document.createElement("div");
@@ -94,9 +92,7 @@ function renderToast(notif) {
   const htmlContent = `
     <div class="toast--info">
       ${notif.type === "success" ? successSVG : alertSVG}
-      <div>${
-        notif.message + " " + Math.floor(Math.random() * 32).toString()
-      }</div>
+      <div>${notif.message}</div>
     </div>
   `;
   toastWrapper.innerHTML = htmlContent;
@@ -127,12 +123,14 @@ function renderToast(notif) {
   toastWrapper.appendChild(toastClose);
 
   setTimeout(() => {
-    toastWrapper.animate(toastKeyframe, {
-      duration: 200,
-      direction: "reverse"
-    }).finished.then(() => {
-      drawer.removeChild(toastWrapper);
-    })
+    toastWrapper
+      .animate(toastKeyframe, {
+        duration: 200,
+        direction: "reverse",
+      })
+      .finished.then(() => {
+        drawer.removeChild(toastWrapper);
+      });
   }, 5000);
   toastClose.addEventListener("click", () => {
     toastWrapper
@@ -151,5 +149,61 @@ function renderToast(notif) {
     duration: 175,
   });
 }
+let db;
+const request = window.indexedDB.open("Todos", 3);
 
+request.onsuccess = (event) => {
+  renderToast({
+    message: "request success",
+    type: "success",
+  });
+  db = request.result;
+};
 
+request.onerror = (event) => {
+  renderToast({
+    message: event.target.error?.message,
+    type: "alert",
+  });
+};
+
+request.onupgradeneeded = (event) => {
+  db = event.target.result;
+  todoObjectStore = db.transaction("Todos", "readwrite").objectStore("Todos");
+  console.log(db);
+  renderToast({
+    message: "request successful",
+    type: "success",
+  });
+  console.log(db);
+  const objectStore = db.createObjectStore("Todos", { keyPath: "id" });
+  objectStore.createIndex("taskName", "taskName", { unique: false });
+};
+
+function addTodo() {
+  console.log(db);
+  const todoObjectStore = db.transaction("Todos", "readwrite").objectStore("Todos");
+
+  const addRequest = todoObjectStore.add({
+    id: crypto.randomUUID(),
+    taskName: "Hello, todo",
+    deadline: new Date().toISOString(),
+    categoryId: crypto.randomUUID(),
+    categoryIcon: "+",
+  });
+  console.log(addRequest);
+  addRequest.onsuccess = (evt) => {
+    renderToast({
+      message: "added todo",
+      type: "success",
+    });
+  };
+}
+
+function deleteTodo(event) {
+  const todoId = event.target.getAttribute("data-task");
+  todoObjectStore.delete(todoId);
+}
+
+const button = document.querySelector("#test-DB");
+button.addEventListener("click", addTodo)
