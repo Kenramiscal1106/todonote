@@ -16,7 +16,6 @@ request.onsuccess = () => {
     .objectStore("Todos");
 
   const todosRequest = todoObjectStore.getAll();
-
   todosRequest.onsuccess = (evt) => {
     renderToast({
       message: "Data successfully loaded",
@@ -96,4 +95,15 @@ function deleteTodo(event) {
     });
   };
   document.body.removeChild(event.target.parentElement);
+}
+
+function updateTodo(event) {
+  const todoObjectStore = db
+    .transaction("Todos", "readwrite")
+    .objectStore("Todos");
+  const todoId = event.target.getAttribute("data-task-id");
+  
+  // todoObjectStore.put()
+  // const todoId = 
+  // todoObjectStore.
 }
