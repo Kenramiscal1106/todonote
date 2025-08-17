@@ -1,3 +1,6 @@
+import { deleteTodo } from "./index.js";
+
+
 /**
  * @param {{
  *  id:ReturnType<typeof crypto.randomUUID>,

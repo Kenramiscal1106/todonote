@@ -56,7 +56,7 @@ request.onsuccess = () => {
     });
   };
 
-  todosRequest.onerror = (event) => {
+  data.onerror = (event) => {
     renderToast({
       message: event.target.error?.message,
       type: "alert",
@@ -86,7 +86,7 @@ request.onupgradeneeded = (event) => {
   });
 };
 
-function addTodo() {
+export function addTodo() {
   const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
   /**
    * @type {{
@@ -114,7 +114,7 @@ function addTodo() {
   };
 }
 
-function deleteTodo(event) {
+export function deleteTodo(event) {
   const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
 
   const todoId = event.target.getAttribute("data-task-id");
@@ -130,7 +130,7 @@ function deleteTodo(event) {
   document.body.removeChild(event.target.parentElement);
 }
 
-function updateTodo(newData) {
+export function updateTodo(newData) {
   return (event) => {
     const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
     const todoId = event.target.getAttribute("data-task-id");
