@@ -50,9 +50,9 @@ request.onsuccess = () => {
       type: "success",
     });
     console.log(event.target.result);
-    event.target.result.forEach((todo) => {
-      renderTodo(todo);
-    });
+    // event.target.result.forEach((todo) => {
+    //   renderTodo(todo);
+    // });
   };
 
   data.onerror = (event) => {
