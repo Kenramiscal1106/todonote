@@ -3,10 +3,10 @@
  * @param {string} message
  */
 export function openModal(type, message) {
-  const modalSelector = document.querySelector(`div#modal__${type}`);
-  modalSelector.classList.add("modal__open");
+  const modalSelector = document.querySelector(`div#modal--${type}`);
+  modalSelector.classList.add("modal--open");
   if (type === "delete") {
-    const messageSelector = document.querySelector("div#modal--message");
+    const messageSelector = document.querySelector("div.modal__message");
     messageSelector.textContent = message;
   }
 }
@@ -15,6 +15,6 @@ export function openModal(type, message) {
  * @param {"todo" | "category" | "delete"} type
  */
 export function closeModal(type) {
-  const modalSelector = document.querySelector(`div#modal__${type}`);
+  const modalSelector = document.querySelector(`div#modal--${type}`);
   modalSelector.classList.remove("modal__close");
 }
