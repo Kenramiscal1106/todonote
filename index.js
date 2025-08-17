@@ -16,7 +16,6 @@ let db;
  */
 const request = window.indexedDB.open("Main", 3);
 
-
 request.onsuccess = () => {
   db = request.result;
 
@@ -102,7 +101,7 @@ export function addTodo() {
     taskName: "Hello, todo",
     deadline: new Date().toISOString(),
     categoryId: crypto.randomUUID(),
-    status: "pending"
+    status: "pending",
   };
   const action = todoStore.add(newTodo);
   action.onsuccess = () => {
@@ -119,7 +118,7 @@ export function deleteTodo(event) {
 
   const todoId = event.target.getAttribute("data-task-id");
   idDelete = todoId;
-  openModal()
+  openModal();
   const action = todoStore.delete(todoId);
   action.onsuccess = () => {
     renderToast({
@@ -150,4 +149,107 @@ export function updateTodo(newData) {
       });
     };
   };
+}
+
+/**
+ * Gets all the todos
+ * @param {string} categoryId
+ * @returns {{
+ * id: string,
+ * taskName: string,
+ * deadline: string,
+ * categoryId: string,
+ * status: "pending" | "ongoing" | "done"
+ * }}
+ */
+export function getCategoryTodos(categoryId) {
+  let todos = [];
+  const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
+  const indexSearch = todoStore.index("categoryId");
+
+  const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
+
+  data.onsuccess = (event) => {
+    todos = event.target.result;
+  };
+  data.onerror = (event) => {
+    renderToast({
+      type: "alert",
+      message: event.target.error?.message,
+    });
+  };
+}
+/**
+ * @param {string} categoryId
+ * @returns {Map<string, {
+ * id: string,
+ * taskName: string,
+ * deadline: string,
+ * categoryId: string,
+ * status: "pending" | "ongoing" | "done"
+ * }[]>}
+ */
+export function getCalendarTodos(categoryId) {
+  /**
+   * @type {Map<string, {
+   * id: string,
+   * taskName: string,
+   * deadline: string,
+   * categoryId: string,
+   * status: "pending" | "ongoing" | "done"
+   * }[]>}
+   */
+  const todosMap = new Map();
+  const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
+  const indexSearch = todoStore.index("categoryId");
+
+  const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
+
+  data.onsuccess = (event) => {
+    event.target.result.forEach((todo) => {
+      if (todosMap.has(todo.deadline)) {
+        const dateTodo = todosMap.get(todo.deadline);
+        dateTodo.push(todo);
+        return;
+      }
+      todosMap.set(todo.deadline, todo);
+    });
+  };
+  data.onerror = (event) => {
+    renderToast({
+      type: "alert",
+      message: event.target.error?.message,
+    });
+  };
+  return todosMap;
+}
+/**
+ * 
+ * @param {string} categoryId
+ */
+export function getKanbanTodos(categoryId) {
+  const todosByStatus = {
+    "pending": [],
+    "ongoing": [],
+    "done": []
+  }
+  const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
+  const indexSearch = todoStore.index("categoryId");
+  
+
+  const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
+
+
+  data.onsuccess = (event) => {
+    event.target.result.forEach((todo) => {
+      todosByStatus[todo.status].push(todo)
+    });
+  };
+  data.onerror = (event) => {
+    renderToast({
+      type: "alert",
+      message: event.target.error?.message,
+    });
+  };
+  return todosByStatus;
 }
