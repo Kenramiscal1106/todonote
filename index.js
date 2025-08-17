@@ -20,9 +20,9 @@ const request = window.indexedDB.open("Main", 3);
 request.onsuccess = () => {
   db = request.result;
 
-  // const categoriesStore = db
-  //   .transaction("Categories", "readwrite")
-  //   .objectStore("Categories");
+  const categoriesStore = db
+    .transaction("Categories", "readwrite")
+    .objectStore("Categories");
 
   // console.log(categoriesStore);
   // for (let i = 0; i < 4; i++) {

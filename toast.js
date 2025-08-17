@@ -64,12 +64,22 @@ const alertSVG = `<svg
 const drawer = document.querySelector("#toast-drawer");
 
 /**
- * a keyframe for toastKeyframe animation
+ * a keyframe for inKeyFrame animation
  * @type {KeyframeEffect}
  */
-const toastKeyframe = [
+const inKeyFrame = [
   { opacity: 0, translate: "1rem 0" },
   { opacity: 1, translate: "0 0" },
+];
+
+/**
+ * a keyframe for inKeyFrame animation
+ * @type {KeyframeEffect}
+ */
+const outKeyFrame = [
+  { opacity: 1, scale: 1 },
+  { opacity: 1, scale: 0.9 },
+  { opacity: 0, scale: 0.9 },
 ];
 
 /**
@@ -80,7 +90,7 @@ const toastKeyframe = [
  */
 export function renderToast(notif) {
   const toastWrapper = document.createElement("div");
-  toastWrapper.classList.add("toast", `toast__${notif.type}`);
+  toastWrapper.classList.add("toast", `toast--${notif.type}`);
   const htmlContent = `
     <div class="toast--info">
       ${notif.type === "success" ? successSVG : alertSVG}
@@ -90,7 +100,7 @@ export function renderToast(notif) {
   toastWrapper.innerHTML = htmlContent;
 
   const toastClose = document.createElement("button");
-  toastClose.classList.add("toast--close");
+  toastClose.classList.add("toast__btn--close");
   toastClose.innerHTML = `<svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"
@@ -114,11 +124,11 @@ export function renderToast(notif) {
 
   toastWrapper.appendChild(toastClose);
 
-  setTimeout(() => {
+  const timeOut = setTimeout(() => {
     toastWrapper
-      .animate(toastKeyframe, {
+      .animate(outKeyFrame, {
         duration: 200,
-        direction: "reverse",
+        easing: "ease-in-out"
       })
       .finished.then(() => {
         drawer.removeChild(toastWrapper);
@@ -126,18 +136,18 @@ export function renderToast(notif) {
   }, 5000);
   toastClose.addEventListener("click", () => {
     toastWrapper
-      .animate(toastKeyframe, {
+      .animate(outKeyFrame, {
         duration: 200,
-        direction: "reverse",
       })
       .finished.then(() => {
+        clearTimeout(timeOut);
         drawer.removeChild(toastWrapper);
       });
     // drawer.removeChild(toastWrapper);
   });
 
   drawer.insertBefore(toastWrapper, drawer.firstChild);
-  toastWrapper.animate(toastKeyframe, {
+  toastWrapper.animate(inKeyFrame, {
     duration: 175,
   });
 }
