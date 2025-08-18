@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 :root {
   --space-1: 4px;
   --space-2: 8px;
@@ -135,9 +137,9 @@
     justify-content: center;
     align-items: center;
     gap: var(--space-4, 16px);
-    border-radius:var(--rounded-medium);
+    border-radius: var(--rounded-medium);
   }
-  .modal__icon{
+  .modal__icon {
     padding: var(--space-4, 16px);
     border-radius: var(--rounded-full);
     display: flex;
@@ -145,13 +147,13 @@
   .modal__icon--alert {
     background-color: hsla(9, 72%, 63%, 0.1);
     & > svg * {
-      stroke:var(--colors-alert-500);
+      stroke: var(--colors-alert-500);
     }
   }
   .modal__actions {
-    display:flex;
+    display: flex;
     justify-content: stretch;
-    gap:var(--space-3);
+    gap: var(--space-3);
   }
   .modal__btn {
     padding: var(--space-3, 12px) var(--space-4, 16px);
@@ -159,12 +161,12 @@
     font-weight: medium;
   }
   .overlay {
-    position:fixed;
-    top:0;
-    left:0;
-    width:100vw;
-    height:100vh;
-    background-color:hsla(9, 0%, 10%, 0.18)
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: hsla(9, 0%, 10%, 0.18);
   }
 
   .toast {
