@@ -217,7 +217,7 @@
     }
   }
 
-  .toast--close {
+  .toast__btn--close {
     display: flex;
     padding: var(--space-1, 4px);
     justify-content: center;
