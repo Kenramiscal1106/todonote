@@ -140,7 +140,7 @@
     gap: var(--space-4, 16px);
     border-radius: var(--rounded-medium);
     z-index: 20;
-    display:none;
+    display: none;
   }
   .modal--open {
     display: flex;
@@ -168,17 +168,18 @@
   .modal__message {
     text-align: center;
   }
-  .modal__text-input, .modal__select-input {
+  .modal__text-input,
+  .modal__select-input {
     border-radius: var(--rounded-full, 999px);
-    border:none;
+    border: none;
     background: var(--colors-neutral-900, #1d1e20ff);
     padding: var(--space-3, 12px) var(--space-6, 24px);
-    display:block;
-    width:100%;
-    color:var(--colors-neutral-100);
+    display: block;
+    width: 100%;
+    color: var(--colors-neutral-100);
     font-size: var(--text-base);
     &:focus {
-      outline:2px solid var(--colors-primary-500);
+      outline: 2px solid var(--colors-primary-500);
     }
   }
   option[value=""] {
@@ -201,10 +202,10 @@
     z-index: 10;
     background-color: hsla(9, 0%, 10%, 0.18);
     backdrop-filter: blur(3px);
-    display:none;
+    display: none;
   }
   .overlay--open {
-    display:block;
+    display: block;
   }
   .toast {
     display: flex;
@@ -229,7 +230,7 @@
     display: flex;
     padding: var(--space-1, 4px);
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
     gap: 10px;
     .toast--alert & {
       stroke: var(--colors-alert-700, #751908);
