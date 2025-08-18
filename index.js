@@ -1,6 +1,7 @@
 "use strict";
 
 import { openModal } from "./modal.js";
+import { renderCategoryTab } from "./sidebar.js";
 import { renderToast } from "./toast.js";
 import { renderTodo } from "./todos.js";
 
@@ -49,7 +50,6 @@ request.onsuccess = () => {
       message: "Data successfully loaded",
       type: "success",
     });
-    console.log(event.target.result);
     // event.target.result.forEach((todo) => {
     //   renderTodo(todo);
     // });
@@ -105,6 +105,7 @@ export function addCategories(newData) {
       message: "Category successfully created",
       type: "success",
     });
+    renderCategoryTab(newData);
   };
   action.onerror = (event) => {
     renderToast({
