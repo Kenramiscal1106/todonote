@@ -8,12 +8,12 @@
     <script src="index.js" type="module" defer></script>
     <script src="todos.js" type="module" defer></script>
     <script src="toast.js" type="module" defer></script>
-    <script src="modal.js" type="module" defer></script>
   </head>
   <body>
+    <!-- <button class="primary" id="toast-trigger">Testing my toast</button> -->
     <div id="toast-drawer"></div>
-    <div class="navbar">
-      <div class="navbar__header">
+    <div class="side-bar">
+      <div class="brand-name">
         <img src="assets/logo.png" alt="" />
         <h1>2DoNote</h1>
       </div>
@@ -22,7 +22,7 @@
         <p>Home</p>
       </div>
       <div class="categories">
-        <div class="title">
+        <div class="categories-title">
           <h2>Categories</h2>
           <svg
             width="24"
@@ -55,46 +55,43 @@
         </ul>
       </div>
       <div class="progress">
-        <div class="container">
-          <p>Progress</p>
-        </div>
-        <div class="container-low">
-          <svg
-            class="prog-bar"
-            width="232"
-            height="12"
-            viewBox="0 0 232 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 6C0 2.68629 2.68629 0 6 0H226C229.314 0 232 2.68629 232 6C232 9.31371 229.314 12 226 12H6.00001C2.6863 12 0 9.31371 0 6Z"
-              fill="#3C3E48"
-            />
-            <path
-              d="M0 6C0 2.68629 2.68629 0 6 0H159.581C162.894 0 165.581 2.68629 165.581 6C165.581 9.31371 162.894 12 159.581 12H6.00001C2.6863 12 0 9.31371 0 6Z"
-              fill="url(#paint0_linear_86_663)"
-            />
-            <defs>
-              <linearGradient
-                id="paint0_linear_86_663"
-                x1="0"
-                y1="6"
-                x2="165.581"
-                y2="6"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stop-color="#217CAD" />
-                <stop offset="1" stop-color="#6DB3D9" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <p>77% <span>done</span></p>
-        </div>
+        <p>Progress</p>
+        <svg
+          class="prog-bar"
+          width="232"
+          height="12"
+          viewBox="0 0 232 12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 6C0 2.68629 2.68629 0 6 0H226C229.314 0 232 2.68629 232 6C232 9.31371 229.314 12 226 12H6.00001C2.6863 12 0 9.31371 0 6Z"
+            fill="#3C3E48"
+          />
+          <path
+            d="M0 6C0 2.68629 2.68629 0 6 0H159.581C162.894 0 165.581 2.68629 165.581 6C165.581 9.31371 162.894 12 159.581 12H6.00001C2.6863 12 0 9.31371 0 6Z"
+            fill="url(#paint0_linear_86_663)"
+          />
+          <defs>
+            <linearGradient
+              id="paint0_linear_86_663"
+              x1="0"
+              y1="6"
+              x2="165.581"
+              y2="6"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="#217CAD" />
+              <stop offset="1" stop-color="#6DB3D9" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <p class="progress-status">77% <span>done</span></p>
+      </div>
       </div>
     </div>
     <div class="panel">
-      <div class="headerp">
+      <div class="header">
         <div class="container">
           <div class="title-container">
             <p class="icon">🏠</p>
@@ -304,118 +301,39 @@
               </button>
             </div>
           </div>
-          <hr />
+          <hr>
         </div>
       </div>
-      <div class="default">
+      <div class="default" style="display: none;">
         <div class="to-do-item">
           <div class="desc">
             <p>Do Laundry</p>
             <div class="deadline">
-              <svg
-                class="clock"
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.5 16.5C13.6421 16.5 17 13.1422 17 9.00005C17 4.85791 13.6421 1.50005 9.5 1.50005C5.35786 1.50005 2 4.85791 2 9.00005C2 13.1422 5.35786 16.5 9.5 16.5Z"
-                  stroke="#E5715C"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M9.5 4.5V9L12.5 10.5"
-                  stroke="#E5715C"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg class= "clock" "19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.5 16.5C13.6421 16.5 17 13.1422 17 9.00005C17 4.85791 13.6421 1.50005 9.5 1.50005C5.35786 1.50005 2 4.85791 2 9.00005C2 13.1422 5.35786 16.5 9.5 16.5Z" stroke="#E5715C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9.5 4.5V9L12.5 10.5" stroke="#E5715C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
               <p>5 mins left</p>
             </div>
           </div>
           <div class="to-do-actions">
             <div id="check" class="action">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M15.5 4.5L7.25 12.75L3.5 9"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5 4.5L7.25 12.75L3.5 9" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
             <div id="edit" class="action">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.5 15H16.25"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M12.875 2.62499C13.1734 2.32662 13.578 2.159 14 2.159C14.2089 2.159 14.4158 2.20015 14.6088 2.2801C14.8019 2.36006 14.9773 2.47725 15.125 2.62499C15.2727 2.77272 15.3899 2.94811 15.4699 3.14114C15.5498 3.33417 15.591 3.54105 15.591 3.74999C15.591 3.95892 15.5498 4.1658 15.4699 4.35883C15.3899 4.55186 15.2727 4.72725 15.125 4.87499L5.75 14.25L2.75 15L3.5 12L12.875 2.62499Z"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.5 15H16.25" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12.875 2.62499C13.1734 2.32662 13.578 2.159 14 2.159C14.2089 2.159 14.4158 2.20015 14.6088 2.2801C14.8019 2.36006 14.9773 2.47725 15.125 2.62499C15.2727 2.77272 15.3899 2.94811 15.4699 3.14114C15.5498 3.33417 15.591 3.54105 15.591 3.74999C15.591 3.95892 15.5498 4.1658 15.4699 4.35883C15.3899 4.55186 15.2727 4.72725 15.125 4.87499L5.75 14.25L2.75 15L3.5 12L12.875 2.62499Z" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             </div>
             <div id="trash" class="action">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M2.75 4.5H4.25H16.25"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M14.75 4.5V15C14.75 15.3978 14.592 15.7794 14.3107 16.0607C14.0294 16.342 13.6478 16.5 13.25 16.5H5.75C5.35218 16.5 4.97064 16.342 4.68934 16.0607C4.40804 15.7794 4.25 15.3978 4.25 15V4.5M6.5 4.5V3C6.5 2.60218 6.65804 2.22064 6.93934 1.93934C7.22064 1.65804 7.60218 1.5 8 1.5H11C11.3978 1.5 11.7794 1.65804 12.0607 1.93934C12.342 2.22064 12.5 2.60218 12.5 3V4.5"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M8 8.25V12.75"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M11 8.25V12.75"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.75 4.5H4.25H16.25" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14.75 4.5V15C14.75 15.3978 14.592 15.7794 14.3107 16.0607C14.0294 16.342 13.6478 16.5 13.25 16.5H5.75C5.35218 16.5 4.97064 16.342 4.68934 16.0607C4.40804 15.7794 4.25 15.3978 4.25 15V4.5M6.5 4.5V3C6.5 2.60218 6.65804 2.22064 6.93934 1.93934C7.22064 1.65804 7.60218 1.5 8 1.5H11C11.3978 1.5 11.7794 1.65804 12.0607 1.93934C12.342 2.22064 12.5 2.60218 12.5 3V4.5" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 8.25V12.75" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M11 8.25V12.75" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
           </div>
@@ -424,110 +342,31 @@
           <div class="desc">
             <p>Do Laundry</p>
             <div class="deadline">
-              <svg
-                class="clock"
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.5 16.5C13.6421 16.5 17 13.1422 17 9.00005C17 4.85791 13.6421 1.50005 9.5 1.50005C5.35786 1.50005 2 4.85791 2 9.00005C2 13.1422 5.35786 16.5 9.5 16.5Z"
-                  stroke="#E5715C"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M9.5 4.5V9L12.5 10.5"
-                  stroke="#E5715C"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg class= "clock" "19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.5 16.5C13.6421 16.5 17 13.1422 17 9.00005C17 4.85791 13.6421 1.50005 9.5 1.50005C5.35786 1.50005 2 4.85791 2 9.00005C2 13.1422 5.35786 16.5 9.5 16.5Z" stroke="#E5715C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9.5 4.5V9L12.5 10.5" stroke="#E5715C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
               <p>5 mins left</p>
             </div>
           </div>
           <div class="to-do-actions">
             <div id="check" class="action">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M15.5 4.5L7.25 12.75L3.5 9"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5 4.5L7.25 12.75L3.5 9" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
             <div id="edit" class="action">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.5 15H16.25"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M12.875 2.62499C13.1734 2.32662 13.578 2.159 14 2.159C14.2089 2.159 14.4158 2.20015 14.6088 2.2801C14.8019 2.36006 14.9773 2.47725 15.125 2.62499C15.2727 2.77272 15.3899 2.94811 15.4699 3.14114C15.5498 3.33417 15.591 3.54105 15.591 3.74999C15.591 3.95892 15.5498 4.1658 15.4699 4.35883C15.3899 4.55186 15.2727 4.72725 15.125 4.87499L5.75 14.25L2.75 15L3.5 12L12.875 2.62499Z"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.5 15H16.25" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12.875 2.62499C13.1734 2.32662 13.578 2.159 14 2.159C14.2089 2.159 14.4158 2.20015 14.6088 2.2801C14.8019 2.36006 14.9773 2.47725 15.125 2.62499C15.2727 2.77272 15.3899 2.94811 15.4699 3.14114C15.5498 3.33417 15.591 3.54105 15.591 3.74999C15.591 3.95892 15.5498 4.1658 15.4699 4.35883C15.3899 4.55186 15.2727 4.72725 15.125 4.87499L5.75 14.25L2.75 15L3.5 12L12.875 2.62499Z" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             </div>
             <div id="trash" class="action">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M2.75 4.5H4.25H16.25"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M14.75 4.5V15C14.75 15.3978 14.592 15.7794 14.3107 16.0607C14.0294 16.342 13.6478 16.5 13.25 16.5H5.75C5.35218 16.5 4.97064 16.342 4.68934 16.0607C4.40804 15.7794 4.25 15.3978 4.25 15V4.5M6.5 4.5V3C6.5 2.60218 6.65804 2.22064 6.93934 1.93934C7.22064 1.65804 7.60218 1.5 8 1.5H11C11.3978 1.5 11.7794 1.65804 12.0607 1.93934C12.342 2.22064 12.5 2.60218 12.5 3V4.5"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M8 8.25V12.75"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M11 8.25V12.75"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.75 4.5H4.25H16.25" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14.75 4.5V15C14.75 15.3978 14.592 15.7794 14.3107 16.0607C14.0294 16.342 13.6478 16.5 13.25 16.5H5.75C5.35218 16.5 4.97064 16.342 4.68934 16.0607C4.40804 15.7794 4.25 15.3978 4.25 15V4.5M6.5 4.5V3C6.5 2.60218 6.65804 2.22064 6.93934 1.93934C7.22064 1.65804 7.60218 1.5 8 1.5H11C11.3978 1.5 11.7794 1.65804 12.0607 1.93934C12.342 2.22064 12.5 2.60218 12.5 3V4.5" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 8.25V12.75" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M11 8.25V12.75" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
           </div>
@@ -536,120 +375,96 @@
           <div class="desc">
             <p>Do Laundry</p>
             <div class="deadline">
-              <svg
-                class="clock"
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.5 16.5C13.6421 16.5 17 13.1422 17 9.00005C17 4.85791 13.6421 1.50005 9.5 1.50005C5.35786 1.50005 2 4.85791 2 9.00005C2 13.1422 5.35786 16.5 9.5 16.5Z"
-                  stroke="#E5715C"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M9.5 4.5V9L12.5 10.5"
-                  stroke="#E5715C"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg class= "clock" "19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.5 16.5C13.6421 16.5 17 13.1422 17 9.00005C17 4.85791 13.6421 1.50005 9.5 1.50005C5.35786 1.50005 2 4.85791 2 9.00005C2 13.1422 5.35786 16.5 9.5 16.5Z" stroke="#E5715C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9.5 4.5V9L12.5 10.5" stroke="#E5715C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
               <p>5 mins left</p>
             </div>
           </div>
           <div class="to-do-actions">
             <div id="check" class="action">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M15.5 4.5L7.25 12.75L3.5 9"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5 4.5L7.25 12.75L3.5 9" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
             <div id="edit" class="action">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9.5 15H16.25"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M12.875 2.62499C13.1734 2.32662 13.578 2.159 14 2.159C14.2089 2.159 14.4158 2.20015 14.6088 2.2801C14.8019 2.36006 14.9773 2.47725 15.125 2.62499C15.2727 2.77272 15.3899 2.94811 15.4699 3.14114C15.5498 3.33417 15.591 3.54105 15.591 3.74999C15.591 3.95892 15.5498 4.1658 15.4699 4.35883C15.3899 4.55186 15.2727 4.72725 15.125 4.87499L5.75 14.25L2.75 15L3.5 12L12.875 2.62499Z"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.5 15H16.25" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12.875 2.62499C13.1734 2.32662 13.578 2.159 14 2.159C14.2089 2.159 14.4158 2.20015 14.6088 2.2801C14.8019 2.36006 14.9773 2.47725 15.125 2.62499C15.2727 2.77272 15.3899 2.94811 15.4699 3.14114C15.5498 3.33417 15.591 3.54105 15.591 3.74999C15.591 3.95892 15.5498 4.1658 15.4699 4.35883C15.3899 4.55186 15.2727 4.72725 15.125 4.87499L5.75 14.25L2.75 15L3.5 12L12.875 2.62499Z" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             </div>
             <div id="trash" class="action">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M2.75 4.5H4.25H16.25"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M14.75 4.5V15C14.75 15.3978 14.592 15.7794 14.3107 16.0607C14.0294 16.342 13.6478 16.5 13.25 16.5H5.75C5.35218 16.5 4.97064 16.342 4.68934 16.0607C4.40804 15.7794 4.25 15.3978 4.25 15V4.5M6.5 4.5V3C6.5 2.60218 6.65804 2.22064 6.93934 1.93934C7.22064 1.65804 7.60218 1.5 8 1.5H11C11.3978 1.5 11.7794 1.65804 12.0607 1.93934C12.342 2.22064 12.5 2.60218 12.5 3V4.5"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M8 8.25V12.75"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M11 8.25V12.75"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
+              <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.75 4.5H4.25H16.25" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14.75 4.5V15C14.75 15.3978 14.592 15.7794 14.3107 16.0607C14.0294 16.342 13.6478 16.5 13.25 16.5H5.75C5.35218 16.5 4.97064 16.342 4.68934 16.0607C4.40804 15.7794 4.25 15.3978 4.25 15V4.5M6.5 4.5V3C6.5 2.60218 6.65804 2.22064 6.93934 1.93934C7.22064 1.65804 7.60218 1.5 8 1.5H11C11.3978 1.5 11.7794 1.65804 12.0607 1.93934C12.342 2.22064 12.5 2.60218 12.5 3V4.5" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 8.25V12.75" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M11 8.25V12.75" stroke="#F9FAFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
           </div>
         </div>
       </div>
-      <div class="table" style="display: none"></div>
-      <div class="calendar" style="display: none"></div>
-      <div class="kanban" style="display: none">
+      <div class="table" style="display: none;">
+        <table>
+          <thead>
+            <tr>
+              <th>Task Name</th>
+              <th>Deadline</th>
+              <th>Courses</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Limits and Continuity</td>
+              <td>July 28, 2025</td>
+              <td>Analytic Geometry and Calculus</td>
+              <td class="tstatus">Done</td>
+            </tr>
+            <tr>
+              <td>Algorithms Quiz 💀</td>
+              <td>August 20, 2025</td>
+              <td>CMSC 12</td>
+              <td class="tstatus">Pending</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="calendar" style="display: none;"></div>
+      <div class="kanban">
         <div class="status">
           <h2>Done</h2>
+          <div class="list" draggable="true">
+            <div class="item">
+              <p>Do Laundry</p>
+              <div class="time-left">
+                <svg
+                  width="18"
+                  height="19"
+                  viewBox="0 0 18 19"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 17C13.1421 17 16.5 13.6422 16.5 9.50005C16.5 5.35791 13.1421 2.00005 9 2.00005C4.85786 2.00005 1.5 5.35791 1.5 9.50005C1.5 13.6422 4.85786 17 9 17Z"
+                    stroke="#E5715C"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M9 5V9.5L12 11"
+                    stroke="#E5715C"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <p>5 mins left</p>
+              </div>
+            </div>
+          </div>
           <div class="list" draggable="true">
             <div class="item">
               <p>Do Laundry</p>
@@ -683,7 +498,7 @@
         </div>
         <div class="status">
           <h2>Pending</h2>
-          <div class="list">
+          <div class="list" draggable="true">
             <div class="item">
               <p>Do Laundry</p>
               <div class="time-left">
@@ -716,7 +531,7 @@
         </div>
         <div class="status">
           <h2>Ongoing</h2>
-          <div class="list">
+          <div class="list" draggable="true">
             <div class="item">
               <p>Do Laundry</p>
               <div class="time-left">

@@ -217,28 +217,27 @@
     }
   }
 
-  .toast__btn--close {
+  .toast--close {
     display: flex;
     padding: var(--space-1, 4px);
     justify-content: center;
     align-items: center;
     gap: 10px;
-
-    .toast--alert & {
+    .toast__alert & {
       stroke: var(--colors-alert-700, #751908);
     }
-    .toast--success & {
+    .toast__success & {
       stroke: var(--colors-success-700, #11803f);
     }
   }
-  .toast--success {
+  .toast__success {
     background: var(--colors-success-900, #004c20);
     color: var(--colors-success-200, #80f5b1);
     .toast--info {
       stroke: var(--colors-success-500, #3dd47c);
     }
   }
-  .toast--alert {
+  .toast__alert {
     background: var(--colors-alert-900, #400a00);
     color: var(--colors-alert-200, #fbbfb4);
     .toast--info {
@@ -256,7 +255,7 @@
     width: min(100%, 20rem);
   }
 
-  .navbar {
+  .side-bar {
     display: flex;
     width: 280px;
     height: 100vh;
@@ -267,7 +266,7 @@
     background: rgba(40, 41, 47, 0.62);
   }
 
-  .navbar__header {
+  .brand-name {
     display: flex;
     padding: 0 var(--space-4, 16px);
     align-items: center;
@@ -285,10 +284,12 @@
 
   .home p {
     color: var(--colors-neutral-300, #bcbec8);
+    font-family: Inter;
     font-size: var(--text-base, 16px);
     font-style: normal;
     font-weight: 400;
     line-height: 130%; /* 20.8px */
+    cursor: pointer;
   }
 
   .progress {
@@ -299,13 +300,14 @@
     align-self: stretch;
   }
 
-  .navbar__header img {
+  .brand-name img {
     width: 19.526px;
     height: 24px;
   }
 
-  .navbar__header h1 {
+  .brand-name h1 {
     color: #fff;
+    font-family: Inter;
     font-size: var(--text-lg, 18px);
     font-style: normal;
     font-weight: 700;
@@ -319,6 +321,7 @@
 
   .home p {
     color: var(--colors-neutral-300, #bcbec8);
+    font-family: Inter;
     font-size: var(--text-base, 16px);
     font-style: normal;
     font-weight: 400;
@@ -329,50 +332,36 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-1, 4px);
-    align-self: stretch;
-  }
-
-  .container {
-    display: flex;
     padding: var(--space-1, 4px) var(--space-4, 16px);
-    align-items: center;
     gap: var(--space-1, 4px);
     align-self: stretch;
   }
 
-  .container p {
+  .progress p {
     color: #fff;
+    font-family: Inter;
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
     line-height: 130%; /* 23.4px */
   }
 
-  .container-low {
-    display: flex;
-    padding: 0 var(--space-2, 8px);
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: var(--space-1, 4px);
-    align-self: stretch;
-  }
-
-  .container-low p {
+  .progress-status {
     color: var(--colors-neutral-100, #f9fafa);
+    font-family: Inter;
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 700;
     line-height: 130%; /* 18.2px */
   }
 
-  .container-low .prog-bar {
+  .progress .prog-bar {
     position: ans;
   }
 
-  .container-low span {
+  .progress span {
     color: var(--colors-neutral-400, #979aaa);
+    font-family: Inter;
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 400;
@@ -409,16 +398,19 @@
     border-radius: var(--rounded-small, 8px);
     border: 1px solid var(--colors-neutral-700, #3c3e48);
     background: var(--colors-neutral-800, #28292f);
+    cursor: grab;
   }
 
   .kanban .item {
     display: flex;
     align-items: center;
-    gap: var(--space-2, 8px);
+    justify-content: space-between;
+    width: 100%;
   }
 
   .kanban .item p {
     color: var(--colors-neutral-100, #f9fafa);
+    font-family: Inter;
     font-size: var(--text-base, 16px);
     font-style: normal;
     font-weight: 500;
@@ -456,7 +448,7 @@
     align-self: stretch;
   }
 
-  .title {
+  .categories-title {
     display: flex;
     padding: var(--space-1, 4px) var(--space-4, 16px);
     justify-content: space-between;
@@ -480,13 +472,24 @@
     align-self: stretch;
   }
 
+  .categories li:hover {
+    border-radius: var(--rounded-medium, 12px);
+    background: var(--colors-neutral-700, #3c3e48);
+    transition: background-color 0.4s ease;
+    cursor: pointer;
+  }
+
   .categories ul li:nth-child(1) {
     border-radius: var(--rounded-medium, 12px);
     background: var(--colors-neutral-700, #3c3e48);
     font-weight: 700;
   }
 
-  .headerp {
+  .categories-title svg {
+    cursor: pointer;
+  }
+
+  .header {
     display: flex;
     padding: var(--space-3, 12px) 24px;
     flex-direction: column;
@@ -496,7 +499,7 @@
     align-self: stretch;
   }
 
-  .headerp .container {
+  .header .container {
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -517,6 +520,7 @@
 
   .streak-group .streak-count {
     color: var(--colors-alert-500, #ad402d);
+    font-family: Inter;
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 500;
@@ -531,6 +535,7 @@
 
   .title-container p {
     color: var(--colors-neutral-300, #bcbec8);
+    font-family: Inter;
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 400;
@@ -539,6 +544,7 @@
 
   .title-container .icon {
     color: #fff;
+    font-family: Inter;
     font-size: var(--text-3xl, 32px);
     font-style: normal;
     font-weight: 500;
@@ -583,6 +589,7 @@
     align-items: center;
     gap: var(--space-1, 4px);
     color: var(--colors-neutral-100, #f9fafa);
+    font-family: Inter;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -651,6 +658,7 @@
 
   .desc p {
     color: var(--colors-neutral-100, #f9fafa);
+    font-family: Inter;
     font-size: var(--text-xl, 20px);
     font-style: normal;
     font-weight: 500;
@@ -665,6 +673,7 @@
 
   .deadline p {
     color: var(--colors-alert-400, #e5715c);
+    font-family: Inter;
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 400;
@@ -689,5 +698,47 @@
 
   #check {
     background: var(--colors-primary-600, #217cad);
+  }
+
+  .table {
+    width: 100%;
+    padding: 0 3vw;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+  }
+
+  th {
+    border: none;
+  }
+
+  td {
+    border: 1px solid #ccc;
+    transition: background-color 0.3s ease;
+  }
+
+  td:first-child {
+    border-left: none;
+  }
+
+  td:last-child {
+    border-right: none;
+  }
+
+  .tstatus {
+    font-weight: bold;
+  }
+
+  td:hover {
+    background-color: #181313;
+    cursor: pointer;
   }
 }
