@@ -1,7 +1,11 @@
 import { addCategories, addTodo, getCategories } from "./index.js";
 
+/**
+ * @type {"todo" | "category" | "delete"}
+ */
+let currentType = "todo";
+const [todoForm, categoryForm] = document.querySelectorAll("form.modal");
 const overlay = document.querySelector("div.overlay");
-
 const categoryEvents = document.querySelectorAll(".categories-add");
 const todoEvents = document.querySelectorAll(".todos-add");
 
@@ -24,10 +28,6 @@ closeElements.forEach((element) => {
   });
 });
 
-/**
- * @type {"todo" | "category" | "delete"}
- */
-let currentType = "todo";
 
 overlay.addEventListener("click", () => {
   closeModal(currentType);
@@ -75,7 +75,6 @@ export function closeModal(type) {
   overlay.classList.remove("overlay--open");
 }
 
-const [todoForm, categoryForm] = document.querySelectorAll("form.modal");
 
 todoForm.addEventListener("submit", (e) => {
   e.preventDefault();
