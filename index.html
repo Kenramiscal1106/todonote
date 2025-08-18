@@ -9,6 +9,7 @@
     <script src="todos.js" type="module" defer></script>
     <script src="toast.js" type="module" defer></script>
     <script src="modal.js" type="module" defer></script>
+    <script src="kanban.js" type="module" defer></script>
   </head>
   <body>
     <div id="toast-drawer"></div>
@@ -860,9 +861,10 @@
         type="text"
         placeholder="Enter task name"
         class="modal__text-input"
+        name="task-name"
       />
       <select
-        name="categories"
+        name="category-id"
         id="select-categories"
         class="modal__select-input"
         placeholder="Select Category"
@@ -870,8 +872,8 @@
         <option value="">Select Category</option>
       </select>
       <div class="modal__actions">
-        <button class="modal__btn ghost close-modal">Cancel</button
-        ><button class="modal__btn primary">Add</button>
+        <button class="modal__btn ghost close-modal" type="button">Cancel</button
+        ><button class="modal__btn primary" type="submit">Add</button>
       </div>
     </form>
     <div class="overlay"></div>
@@ -912,10 +914,17 @@
         type="text"
         class="modal__text-input"
         placeholder="Enter Category Name"
+        name="category-name"
+      />
+      <input
+        type="text"
+        class="modal__text-input"
+        placeholder="Enter emoji"
+        name="category-emoji"
       />
       <div class="modal__actions">
-        <button class="modal__btn ghost close-modal">Cancel</button
-        ><button class="modal__btn modal__btn primary">Add</button>
+        <button class="modal__btn ghost close-modal" type="button">Cancel</button
+        ><button class="modal__btn modal__btn primary" type="submit">Add</button>
       </div>
     </form>
     <!-- <div class="modal modal--delete">
