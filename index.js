@@ -85,31 +85,82 @@ request.onupgradeneeded = (event) => {
   });
 };
 
-export function addTodo() {
-  const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
-  /**
-   * @type {{
-   * id: string,
-   * taskName: string,
-   * deadline: string,
-   * categoryId: string,
-   * status: "pending" | "ongoing" | "done"
-   * }}
-   */
-  const newTodo = {
-    id: crypto.randomUUID(),
-    taskName: "Hello, todo",
-    deadline: new Date().toISOString(),
-    categoryId: crypto.randomUUID(),
-    status: "pending",
+/**
+ * @param {{
+ * id: string,
+ * name: string,
+ * categoryIcon: string,
+ * order: string[]
+ * }} newData
+ */
+export function addCategories(newData) {
+  const categoriesStore = db
+    .transaction("Categories", "readwrite")
+    .objectStore("Categories");
+
+  const action = categoriesStore.add(newData);
+
+  action.onsuccess = (event) => {
+    renderToast({
+      message: "Category successfully created",
+      type: "success",
+    });
   };
-  const action = todoStore.add(newTodo);
+  action.onerror = (event) => {
+    renderToast({
+      message: event.target.error?.message,
+      type: "alert",
+    });
+  };
+}
+
+/**
+ * @returns {Promise<{
+ * id: string,
+ * name: string,
+ * categoryIcon: string,
+ * order: string[]
+ * }[]>}
+ */
+export function getCategories() {
+  // let categories = [];
+  return new Promise((resolve, reject) => {
+    const categoriesStore = db
+      .transaction("Categories", "readonly")
+      .objectStore("Categories");
+
+    const action = categoriesStore.getAll();
+    action.onsuccess = (event) => {
+      resolve(event.target.result);
+    };
+    action.onerror = (event) => {
+      renderToast({
+        type: "alert",
+        message: event.target.error?.message,
+      });
+      reject(event.target.error?.message);
+    };
+  });
+}
+
+/**
+ * @param {{
+ * id: string,
+ * taskName: string,
+ * deadline: string,
+ * categoryId: string,
+ * status: "pending" | "ongoing" | "done"
+ * }} data
+ */
+export function addTodo(data) {
+  const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
+
+  const action = todoStore.add(data);
   action.onsuccess = () => {
     renderToast({
       message: "Todo successfully added",
       type: "success",
     });
-    renderTodo(newTodo);
   };
 }
 
@@ -224,25 +275,23 @@ export function getCalendarTodos(categoryId) {
   return todosMap;
 }
 /**
- * 
+ *
  * @param {string} categoryId
  */
 export function getKanbanTodos(categoryId) {
   const todosByStatus = {
-    "pending": [],
-    "ongoing": [],
-    "done": []
-  }
+    pending: [],
+    ongoing: [],
+    done: [],
+  };
   const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
   const indexSearch = todoStore.index("categoryId");
-  
 
   const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
 
-
   data.onsuccess = (event) => {
     event.target.result.forEach((todo) => {
-      todosByStatus[todo.status].push(todo)
+      todosByStatus[todo.status].push(todo);
     });
   };
   data.onerror = (event) => {
@@ -253,34 +302,3 @@ export function getKanbanTodos(categoryId) {
   };
   return todosByStatus;
 }
-
-// Kanban Drag and Drop
-
-const lists = document.querySelectorAll(".list");
-const statuses = document.querySelectorAll(".status");
-
-let draggedList = null;
-
-lists.forEach((list) => {
-  list.addEventListener("dragstart", () => {
-    draggedList = list;
-    setTimeout(() => (list.style.opacity = "none"), 0);
-  });
-
-  list.addEventListener("dragend", () => {
-    draggedList.style.display = "block";
-    draggedList = null;
-  });
-});
-
-statuses.forEach((status) => {
-  status.addEventListener("dragover", (e) => {
-    e.preventDefault();
-  });
-
-  status.addEventListener("drop", () => {
-    if (draggedList) {
-      status.appendChild(draggedList);
-    }
-  });
-});
