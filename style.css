@@ -138,6 +138,7 @@
     align-items: center;
     gap: var(--space-4, 16px);
     border-radius: var(--rounded-medium);
+    z-index: 20;
   }
   .modal__icon {
     padding: var(--space-4, 16px);
@@ -150,15 +151,41 @@
       stroke: var(--colors-alert-500);
     }
   }
+  .modal__icon--primary {
+    background-color: hsla(201, 87%, 18%, 0.49);
+  }
   .modal__actions {
     display: flex;
     justify-content: stretch;
     gap: var(--space-3);
+    width: 100%;
+  }
+  .modal__message {
+    text-align: center;
+  }
+  .modal__text-input, .modal__select-input {
+    border-radius: var(--rounded-full, 999px);
+    border:none;
+    background: var(--colors-neutral-700, #28292f);
+    padding: var(--space-3, 12px) var(--space-6, 24px);
+    display:block;
+    width:100%;
+    color:var(--colors-neutral-100);
+    font-size: var(--text-base);
+    &:focus {
+      outline:2px solid var(--colors-primary-500);
+    }
+  }
+  option[value=""] {
+    display: none;
   }
   .modal__btn {
     padding: var(--space-3, 12px) var(--space-4, 16px);
     border-radius: var(--rounded-xlarge, 24px);
-    font-weight: medium;
+    font-weight: 600;
+    display: block;
+    flex: 1 0 0;
+    text-align: center;
   }
   .overlay {
     position: fixed;
@@ -166,7 +193,9 @@
     left: 0;
     width: 100vw;
     height: 100vh;
+    z-index: 10;
     background-color: hsla(9, 0%, 10%, 0.18);
+    backdrop-filter: blur(3px);
   }
 
   .toast {
