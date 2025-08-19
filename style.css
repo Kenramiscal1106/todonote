@@ -169,7 +169,8 @@
     text-align: center;
   }
   .modal__text-input,
-  .modal__select-input {
+  .modal__select-input,
+  .modal__datetime-input {
     border-radius: var(--rounded-full, 999px);
     border: none;
     background: var(--colors-neutral-900, #1d1e20ff);
@@ -181,6 +182,9 @@
     &:focus {
       outline: 2px solid var(--colors-primary-500);
     }
+  }
+  .modal__datetime-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
   }
   option[value=""] {
     display: none;
@@ -465,33 +469,26 @@
     align-self: stretch;
   }
 
-  .categories ul {
+  .categories #category-tabs {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: stretch;
     gap: var(--space-2, 8px);
     align-self: stretch;
   }
 
-  .categories li {
+  .categories #category-tabs button {
     display: flex;
     padding: var(--space-2, 8px) var(--space-4, 16px);
-    align-items: center;
     gap: 16px;
-    align-self: stretch;
+    justify-content: start;
   }
 
-  .categories li:hover {
+  .categories #category-tabs button:hover {
     border-radius: var(--rounded-medium, 12px);
     background: var(--colors-neutral-700, #3c3e48);
     transition: background-color 0.4s ease;
     cursor: pointer;
-  }
-
-  .categories ul li:nth-child(1) {
-    border-radius: var(--rounded-medium, 12px);
-    background: var(--colors-neutral-700, #3c3e48);
-    font-weight: 700;
   }
 
   .categories-title svg {
