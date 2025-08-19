@@ -6,6 +6,15 @@ import { renderToast } from "./toast.js";
 import { renderTodo } from "./todos.js";
 
 let idDelete = "";
+// /**
+//  * @type {string}
+//  */
+// export let categoryTab = "";
+
+// /**
+//  * @type {"default" | "table" | "calendar" | "kanban"}
+//  */
+// export let viewTab = "default";
 
 /**
  * @type {IDBDatabase | null}
@@ -44,11 +53,15 @@ request.onsuccess = () => {
   //   categoriesStore.add(newData);
   // }
   const data = categoriesStore.getAll();
+  // const categories = []
 
   data.onsuccess = (event) => {
     renderToast({
       message: "Data successfully loaded",
       type: "success",
+    });
+    event.target.result.forEach((category) => {
+      renderCategoryTab(category);
     });
     // event.target.result.forEach((todo) => {
     //   renderTodo(todo);
@@ -206,30 +219,32 @@ export function updateTodo(newData) {
 /**
  * Gets all the todos
  * @param {string} categoryId
- * @returns {{
+ * @returns {Promise<{
  * id: string,
  * taskName: string,
  * deadline: string,
  * categoryId: string,
  * status: "pending" | "ongoing" | "done"
- * }}
+ * }[]>}
  */
 export function getCategoryTodos(categoryId) {
-  let todos = [];
-  const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
-  const indexSearch = todoStore.index("categoryId");
+  return new Promise((resolve, reject) => {
+    const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
+    const indexSearch = todoStore.index("categoryId");
 
-  const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
+    const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
 
-  data.onsuccess = (event) => {
-    todos = event.target.result;
-  };
-  data.onerror = (event) => {
-    renderToast({
-      type: "alert",
-      message: event.target.error?.message,
-    });
-  };
+    data.onsuccess = (event) => {
+      resolve(event.target.result);
+    };
+    data.onerror = (event) => {
+      reject();
+      renderToast({
+        type: "alert",
+        message: event.target.error?.message,
+      });
+    };
+  });
 }
 /**
  * @param {string} categoryId
