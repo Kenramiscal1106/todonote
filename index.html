@@ -26,7 +26,7 @@
       <div class="categories">
         <div class="categories-title">
           <h2>Categories</h2>
-          <button class="categories-add" >
+          <button class="categories-add">
             <svg
               width="24"
               height="24"
@@ -51,8 +51,7 @@
             </svg>
           </button>
         </div>
-        <ul id="category-tabs">
-        </ul>
+        <div id="category-tabs"></div>
       </div>
       <div class="progress">
         <p>Progress</p>
@@ -868,8 +867,14 @@
       >
         <option value="">Select Category</option>
       </select>
+      <input
+        type="datetime-local"
+        class="modal__datetime-input"
+        name="deadline"
+      />
       <div class="modal__actions">
-        <button class="modal__btn ghost close-modal" type="button">Cancel</button
+        <button class="modal__btn ghost close-modal" type="button">
+          Cancel</button
         ><button class="modal__btn primary" type="submit">Add</button>
       </div>
     </form>
@@ -920,8 +925,11 @@
         name="category-emoji"
       />
       <div class="modal__actions">
-        <button class="modal__btn ghost close-modal" type="button">Cancel</button
-        ><button class="modal__btn modal__btn primary" type="submit">Add</button>
+        <button class="modal__btn ghost close-modal" type="button">
+          Cancel</button
+        ><button class="modal__btn modal__btn primary" type="submit">
+          Add
+        </button>
       </div>
     </form>
     <!-- <div class="modal modal--delete">

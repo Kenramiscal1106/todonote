@@ -5,6 +5,10 @@ import { addCategories, addTodo, getCategories } from "./index.js";
  */
 let currentType = "todo";
 const [todoForm, categoryForm] = document.querySelectorAll("form.modal");
+
+const datetimeInput = document.querySelector("[type='datetime-local']");
+datetimeInput.setAttribute("min", new Date().toISOString().replace(/:\d+.\d+Z$/g, ""))
+
 const overlay = document.querySelector("div.overlay");
 const categoryEvents = document.querySelectorAll(".categories-add");
 const todoEvents = document.querySelectorAll(".todos-add");
@@ -80,7 +84,6 @@ todoForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
   const extractedData = Object.fromEntries(formData.entries());
-  console.log(extractedData);
 
   /**
    * @type {{
@@ -94,7 +97,7 @@ todoForm.addEventListener("submit", (e) => {
   const data = {
     id: crypto.randomUUID(),
     categoryId: extractedData["category-id"],
-    deadline: "",
+    deadline: extractedData["deadline"],
     status: "pending",
     taskName: extractedData["task-name"],
   };
@@ -115,7 +118,7 @@ categoryForm.addEventListener("submit", (e) => {
     return;
   }
   if (!regex.test(emoji)) {
-    alert("That is not an emoji");
+    alert("That character is not allowed");
     return;
   }
 
