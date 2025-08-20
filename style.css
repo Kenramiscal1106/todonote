@@ -104,9 +104,6 @@
     border-radius: 1rem;
     cursor: pointer;
   }
-  body {
-    display: flex;
-  }
 }
 @layer components {
   .button {
@@ -170,7 +167,7 @@
   }
   .modal__text-input,
   .modal__select-input,
-  .modal__datetime-input{
+  .modal__datetime-input {
     border-radius: var(--rounded-full, 999px);
     border: none;
     background: var(--colors-neutral-900, #1d1e20ff);
@@ -268,8 +265,11 @@
     width: min(100%, 20rem);
   }
 
-  .side-bar {
+  .sidebar {
     display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 280px;
     height: 100vh;
     padding: var(--space-6, 24px) var(--space-4, 16px);
@@ -379,13 +379,16 @@
   .panel {
     display: flex;
     width: 100%;
-    padding-top: var(--space-12, 48px);
+    /* padding-top: var(--space-12, 48px); */
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    margin-top: 197px;
+    margin-left: 280px;
+    width: calc(100% - 280px);
     gap: var(--space-4, 16px);
   }
 
-  .kanban {
+  .mode-container--kanban {
     display: flex;
     align-items: flex-start;
     gap: 16px;
@@ -394,7 +397,7 @@
     justify-content: center;
   }
 
-  .kanban .list {
+  .mode-container--kanban .list {
     display: flex;
     padding: var(--space-3, 12px) var(--space-4, 16px);
     align-items: center;
@@ -405,14 +408,14 @@
     cursor: grab;
   }
 
-  .kanban .item {
+  .mode-container--kanban .item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
   }
 
-  .kanban .item p {
+  .mode-container--kanban .item p {
     color: var(--colors-neutral-100, #f9fafa);
     font-family: Inter;
     font-size: var(--text-base, 16px);
@@ -481,8 +484,7 @@
     padding: var(--space-2, 8px) var(--space-4, 16px);
     gap: 16px;
     justify-content: start;
-    color:var(--colors-neutral-500);
-
+    color: var(--colors-neutral-500);
   }
 
   .category:hover:not(.tab--active),
@@ -505,35 +507,35 @@
   }
 
   .header {
-    display: flex;
     padding: var(--space-3, 12px) 24px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-3, 12px);
-    align-self: stretch;
+    padding-top: var(--space-16, 48px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100% - 280px);
+    margin-left: 280px;
   }
-
-  .header .container {
+  .header__container {
     display: flex;
-    width: 100%;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+    max-width: 747px;
+    margin: 0px auto;
   }
-
-  .categories-container .upper {
+  .categories-info__metadata {
     display: flex;
     align-items: center;
+    flex-direction: column;
     gap: var(--space-3, 12px);
   }
 
-  .streak-group {
+  .streak {
     display: flex;
     align-items: center;
   }
 
-  .streak-group .streak-count {
+  .streak .streak__count {
     color: var(--colors-alert-500, #ad402d);
     font-family: Inter;
     font-size: var(--text-sm, 14px);
@@ -542,13 +544,13 @@
     line-height: 130%; /* 18.2px */
   }
 
-  .title-container {
+  .category-info {
     display: flex;
     align-items: center;
     gap: var(--space-3, 12px);
   }
 
-  .title-container p {
+  .category-info p {
     color: var(--colors-neutral-300, #bcbec8);
     font-family: Inter;
     font-size: var(--text-sm, 14px);
@@ -556,8 +558,7 @@
     font-weight: 400;
     line-height: normal;
   }
-
-  .title-container .icon {
+  .category-info__icon {
     color: #fff;
     font-family: Inter;
     font-size: var(--text-3xl, 32px);
@@ -566,27 +567,20 @@
     line-height: normal;
   }
 
-  .title-container .lower {
+  .category-info .lower {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     align-self: stretch;
   }
 
-  .lower .tabs {
+  #view-tabs {
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  .tabs ul {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    list-style: none;
-  }
-
-  .tabs ul li {
+  .view {
     display: flex;
     padding: var(--space-2, 8px) var(--space-3, 12px);
     justify-content: center;
@@ -594,9 +588,10 @@
     gap: var(--space-1, 4px);
   }
 
-  .tabs ul li:nth-child(1) {
+  .view--active {
     border-radius: var(--rounded-xlarge, 24px);
     background: var(--colors-neutral-800, #28292f);
+    font-weight: 700;
   }
 
   .actions {
@@ -611,19 +606,9 @@
     line-height: normal;
   }
 
-  .reorder {
-    display: flex;
-    padding: 6px var(--space-3, 12px);
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-1, 4px);
-    border-radius: var(--rounded-xlarge, 24px);
-    background: var(--colors-neutral-800, #28292f);
-  }
-
   .actions .new {
     display: flex;
-    padding: 6px var(--space-3, 12px);
+    padding: var(--space-3, 12px) var(--space-4, 16px);
     justify-content: center;
     align-items: center;
     gap: var(--space-1, 4px);
@@ -644,14 +629,21 @@
     background-color: var(--colors-neutral-800, #28292f);
     border: none;
   }
-
-  .default {
+  .mode {
+    display: none;
+    padding: var(--space-6);
+  }
+  .mode--visible {
+    display: initial;
+  }
+  .mode__container--default {
     display: flex;
     width: 100%;
-    padding: 0 10vw;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
+    max-width: 747px;
+    margin: auto;
   }
 
   .to-do-item {
@@ -715,7 +707,7 @@
     background: var(--colors-primary-600, #217cad);
   }
 
-  .table {
+  .mode--table {
     width: 100%;
     padding: 0 3vw;
   }
