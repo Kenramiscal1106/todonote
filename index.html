@@ -19,10 +19,10 @@
         <img src="assets/logo.png" alt="" />
         <h1>2DoNote</h1>
       </div>
-      <div class="home">
+      <button class="sidebar__home-tab">
         <img src="assets/home.png" alt="" />
-        <p>Home</p>
-      </div>
+        Home
+      </button>
       <div class="categories">
         <div class="categories-title">
           <h2>Categories</h2>
@@ -858,6 +858,7 @@
         placeholder="Enter task name"
         class="modal__text-input"
         name="task-name"
+        autocomplete="off"
       />
       <select
         name="category-id"
@@ -917,12 +918,15 @@
         class="modal__text-input"
         placeholder="Enter Category Name"
         name="category-name"
+        autocomplete="off"
+
       />
       <input
         type="text"
         class="modal__text-input"
         placeholder="Enter emoji"
         name="category-emoji"
+        autocomplete="off"
       />
       <div class="modal__actions">
         <button class="modal__btn ghost close-modal" type="button">
