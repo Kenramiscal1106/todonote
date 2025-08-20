@@ -1,3 +1,4 @@
+import { getCategoryTodos } from "./index.js";
 
 const viewTabs = document.querySelector("#view-tabs");
 const defaultMode = document.querySelector(".mode");
@@ -21,4 +22,21 @@ viewTab.forEach((element) => {
   })
 })
 
-// console.log(viewTabs.children)
+/**
+ * 
+ * @param {{
+ * id: string,
+ * name: string,
+ * categoryIcon: string,
+ * order: string[]
+ * }} category 
+ */
+export async function renderHeaderElement(category) {
+  const headerTitle = document.querySelector(".categories-info__metadata__title");
+    const headerIcon = document.querySelector(".category-info__icon")
+    const headerNum = document.querySelector(".categories-info__metadata__num-tasks");
+    headerTitle.textContent = category.name;
+    headerIcon.textContent = category.categoryIcon;
+    const todos = await getCategoryTodos(category.id);
+    headerNum.textContent = `${todos.length} tasks`;
+}
