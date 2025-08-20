@@ -589,13 +589,23 @@
     padding: var(--space-2, 8px) var(--space-3, 12px);
     justify-content: center;
     align-items: center;
-    gap: var(--space-1, 4px);
+    transition: background-color 200ms;
+    gap: var(--space-2, 8px);
+    color: var(--colors-neutral-300);
+    border-radius: var(--rounded-xlarge, 24px);
+    & > svg {
+      stroke: var(--colors-neutral-300);
+    }
+    &:hover:not(.view--active) {
+      color: var(--colors-neutral-200);
+      background: var(--colors-neutral-800, #28292f);
+    }
   }
 
   .view--active {
-    border-radius: var(--rounded-xlarge, 24px);
     background: var(--colors-neutral-800, #28292f);
     font-weight: 700;
+    color: var(--colors-neutral-100);
   }
 
   .actions {
@@ -650,7 +660,7 @@
     margin: auto;
   }
 
-  .to-do-item {
+  .todo {
     display: flex;
     padding: var(--space-3, 12px) var(--space-4, 16px);
     justify-content: space-between;
@@ -660,14 +670,14 @@
     background: var(--colors-neutral-800, #28292f);
   }
 
-  .desc {
+  .todo__meta {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
   }
 
-  .desc p {
+  .todo__meta__name {
     color: var(--colors-neutral-100, #f9fafa);
     font-family: Inter;
     font-size: var(--text-xl, 20px);
@@ -676,13 +686,13 @@
     line-height: normal;
   }
 
-  .desc .deadline {
+  .todo__meta__deadline {
     display: flex;
     align-items: center;
     gap: var(--space-1, 4px);
   }
 
-  .deadline p {
+  .todo__meta__deadline p {
     color: var(--colors-alert-400, #e5715c);
     font-family: Inter;
     font-size: var(--text-sm, 14px);
@@ -691,13 +701,13 @@
     line-height: normal;
   }
 
-  .to-do-actions {
+  .todo__actions {
     display: flex;
     align-items: center;
     gap: var(--space-2, 8px);
   }
 
-  .to-do-actions .action {
+  .todo__actions > * {
     display: flex;
     padding: var(--space-2, 8px);
     justify-content: center;
@@ -707,7 +717,7 @@
     background: var(--colors-neutral-600, #595b69);
   }
 
-  #check {
+  .todo__action--done {
     background: var(--colors-primary-600, #217cad);
   }
 

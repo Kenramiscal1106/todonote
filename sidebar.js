@@ -1,3 +1,4 @@
+import { renderHeaderElement } from "./header.js";
 import { getCategories, getCategoryTodos } from "./index.js";
 
 const homeTab = document.querySelector(".sidebar__home-tab");
@@ -22,16 +23,23 @@ export function renderCategoryTab(category) {
   categoryTab.addEventListener("click", handleCategoryChange(category));
 }
 
+/**
+ * 
+ * @param {{
+ * id: string,
+ * name: string,
+ * categoryIcon: string,
+ * order: string[]
+ * }} category 
+ */
 function handleCategoryChange(category) {
   return async (event) => {
     const activeTab = document.querySelector("button.tab--active");
     event.target.classList.add("tab--active");
-    console.log(await getCategoryTodos(category.id));
-
     if (!activeTab) return;
     if (activeTab.dataset.categoryId === category.id) return;
-
     activeTab.classList.remove("tab--active");
+    renderHeaderElement(category);
   };
 }
 

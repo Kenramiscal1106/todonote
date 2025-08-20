@@ -1,3 +1,4 @@
+import { renderContent } from "./content.js";
 import { getCategoryTodos } from "./index.js";
 
 const viewTabs = document.querySelector("#view-tabs");
@@ -39,4 +40,5 @@ export async function renderHeaderElement(category) {
     headerIcon.textContent = category.categoryIcon;
     const todos = await getCategoryTodos(category.id);
     headerNum.textContent = `${todos.length} tasks`;
+    renderContent(todos);
 }
