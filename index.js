@@ -32,28 +32,8 @@ request.onsuccess = () => {
   const categoriesStore = db
     .transaction("Categories", "readwrite")
     .objectStore("Categories");
-
-  // console.log(categoriesStore);
-  // for (let i = 0; i < 4; i++) {
-  //   /**
-  //    * @type {{
-  //    * id: string,
-  //    * name: string,
-  //    * categoryIcon: string,
-  //    * order: string[]
-  //    * }}
-  //    */
-  //   const newData = {
-  //     categoryIcon: "",
-  //     id: crypto.randomUUID(),
-  //     name: "Home",
-  //     order: [],
-  //   };
-
-  //   categoriesStore.add(newData);
-  // }
+    
   const data = categoriesStore.getAll();
-  // const categories = []
 
   data.onsuccess = (event) => {
     renderToast({
@@ -63,9 +43,6 @@ request.onsuccess = () => {
     event.target.result.forEach((category) => {
       renderCategoryTab(category);
     });
-    // event.target.result.forEach((todo) => {
-    //   renderTodo(todo);
-    // });
   };
 
   data.onerror = (event) => {
