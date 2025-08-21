@@ -1,5 +1,5 @@
 import { renderHeaderElement } from "./header.js";
-// import { getCategories, getCategoryTodos } from "./index.js";
+import { getCategoryTodos } from "./index.js";
 
 export let currentCategory = "none";
 
@@ -35,13 +35,15 @@ export function renderCategoryTab(category) {
  * }} category
  */
 function handleCategoryChange(category) {
-  return (event) => {
+  return async (event) => {
     const activeTab = document.querySelector("button.tab--active");
     event.target.classList.add("tab--active");
     if (!activeTab) return;
     currentCategory = category.id;
     if (activeTab.dataset.categoryId === category.id) return;
     activeTab.classList.remove("tab--active");
+    const todos = await getCategoryTodos(category ? category.id : "");
+    console.log(todos.length)
     renderHeaderElement(category);
   };
 }

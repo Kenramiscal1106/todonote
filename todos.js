@@ -1,12 +1,13 @@
-import {  deleteModal } from "./modal.js";
+import { updateTodo } from "./index.js";
+import { deleteModal } from "./modal.js";
 
 /**
  * @param {{
- *  id:ReturnType<typeof crypto.randomUUID>,
- *  taskName:string,
- *  deadline:string,
- *  categoryId: ReturnType<typeof crypto.randomUUID>,
- *  categoryIcon: string
+ * id: string,
+ * taskName: string,
+ * deadline: string,
+ * categoryId: string,
+ * status: "pending" | "ongoing" | "done"
  * }} todo
  */
 export function renderTodo(todo) {
@@ -163,7 +164,15 @@ export function renderTodo(todo) {
   </svg>
   `;
   actionDelete.addEventListener("click", () => {
-    deleteModal("Are you sure you want to delete the todo?", todo.id)
+    deleteModal("Are you sure you want to delete the todo?", todo.id);
+  });
+  actionDone.addEventListener("click", () => {
+    const newData = {
+      ...todo,
+      status: "done"
+    }
+    updateTodo(newData)();
+    defaultContainer.removeChild(mainContainer);
   });
 
   metaContainer.appendChild(metaName);

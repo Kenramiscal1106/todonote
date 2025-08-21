@@ -174,19 +174,31 @@ export function deleteTodo(todoId) {
   };
 }
 
+/**
+ *
+ * @param {{
+ * id: string,
+ * taskName: string,
+ * deadline: string,
+ * categoryId: string,
+ * status: "pending" | "ongoing" | "done"
+ * }} newData
+ * @returns
+ */
 export function updateTodo(newData) {
   return (event) => {
     const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
-    const todoId = event.target.getAttribute("data-task-id");
 
-    const oldData = todoStore.get(todoId);
-    const action = todoStore.put({ ...oldData, newData });
+    const action = todoStore.get(newData.id);
     action.onsuccess = (event) => {
+      console.log("update")
+      todoStore.put(newData);
       renderToast({
         message: "Todo updated successfully",
         type: "success",
       });
     };
+
     action.onerror = (event) => {
       renderToast({
         message: event.target.error?.message,
@@ -217,7 +229,7 @@ export function getCategoryTodos(categoryId) {
     );
 
     data.onsuccess = (event) => {
-      resolve(event.target.result);
+      resolve(event.target.result.filter(todo => todo.status !== "done"));
     };
     data.onerror = (event) => {
       reject();
