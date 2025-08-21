@@ -5,17 +5,6 @@ import { renderCategoryTab } from "./sidebar.js";
 import { renderToast } from "./toast.js";
 import { renderTodo } from "./todos.js";
 
-let idDelete = "";
-// /**
-//  * @type {string}
-//  */
-// export let categoryTab = "";
-
-// /**
-//  * @type {"default" | "table" | "calendar" | "kanban"}
-//  */
-// export let viewTab = "default";
-
 /**
  * @type {IDBDatabase | null}
  */
@@ -28,16 +17,31 @@ const request = window.indexedDB.open("Main", 3);
 
 request.onsuccess = () => {
   db = request.result;
+  const transaction = db.transaction(["Categories", "Todos"], "readonly");
 
-  const categoriesStore = db
-    .transaction("Categories", "readwrite")
-    .objectStore("Categories");
-    
+  const categoriesStore = transaction.objectStore("Categories");
+  const todosStore = transaction.objectStore("Todos");
+
   const data = categoriesStore.getAll();
+  const dataTodo = todosStore.getAll();
+
+  const headerNum = document.querySelector(
+    ".categories-info__metadata__num-tasks"
+  );
+  dataTodo.onsuccess = (event) => {
+    renderToast({
+      message: "Todos successfully loaded",
+      type: "success",
+    });
+    event.target.result.forEach((todo) => {
+      renderTodo(todo);
+    });
+    headerNum.textContent = `${event.target.result.length} task/s`;
+  };
 
   data.onsuccess = (event) => {
     renderToast({
-      message: "Data successfully loaded",
+      message: "Categories successfully loaded",
       type: "success",
     });
     event.target.result.forEach((category) => {
@@ -155,12 +159,12 @@ export function addTodo(data) {
   };
 }
 
-export function deleteTodo(event) {
+/**
+ *
+ * @param {string} todoId
+ */
+export function deleteTodo(todoId) {
   const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
-
-  const todoId = event.target.getAttribute("data-task-id");
-  idDelete = todoId;
-  openModal();
   const action = todoStore.delete(todoId);
   action.onsuccess = () => {
     renderToast({
@@ -168,7 +172,6 @@ export function deleteTodo(event) {
       message: "Todo successfully deleted",
     });
   };
-  document.body.removeChild(event.target.parentElement);
 }
 
 export function updateTodo(newData) {
@@ -209,7 +212,9 @@ export function getCategoryTodos(categoryId) {
     const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
     const indexSearch = todoStore.index("categoryId");
 
-    const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
+    const data = indexSearch.getAll(
+      categoryId === "" ? undefined : IDBKeyRange.only(categoryId)
+    );
 
     data.onsuccess = (event) => {
       resolve(event.target.result);
@@ -223,6 +228,7 @@ export function getCategoryTodos(categoryId) {
     };
   });
 }
+
 /**
  * @param {string} categoryId
  * @returns {Map<string, {

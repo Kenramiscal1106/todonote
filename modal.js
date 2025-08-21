@@ -1,13 +1,25 @@
-import { addCategories, addTodo, getCategories } from "./index.js";
+import { currentView } from "./header.js";
+import { addCategories, addTodo, deleteTodo, getCategories } from "./index.js";
+import { currentCategory } from "./sidebar.js";
+import { renderTodo } from "./todos.js";
 
 /**
  * @type {"todo" | "category" | "delete"}
  */
 let currentType = "todo";
-const [todoForm, categoryForm] = document.querySelectorAll("form.modal");
+
+/**
+ * @type {string}
+ */
+let currentDelete = "";
+const [todoForm, categoryForm, deleteForm] =
+  document.querySelectorAll("form.modal");
 
 const datetimeInput = document.querySelector("[type='datetime-local']");
-datetimeInput.setAttribute("min", new Date().toISOString().replace(/:\d+.\d+Z$/g, ""))
+datetimeInput.setAttribute(
+  "min",
+  new Date().toISOString().replace(/:\d+.\d+Z$/g, "")
+);
 
 const overlay = document.querySelector("div.overlay");
 const categoryEvents = document.querySelectorAll(".categories-add");
@@ -32,7 +44,6 @@ closeElements.forEach((element) => {
   });
 });
 
-
 overlay.addEventListener("click", () => {
   closeModal(currentType);
 });
@@ -40,7 +51,7 @@ overlay.addEventListener("click", () => {
 const select = document.querySelector("#select-categories");
 
 /**
- * @param {"todo" | "category" | "delete"} type
+ * @param {"todo" | "category"} type
  * @param {string} message
  */
 export async function openModal(type, message) {
@@ -57,28 +68,53 @@ export async function openModal(type, message) {
   });
 
   modalSelector.classList.add("modal--open");
-  if (type === "delete") {
-    const messageSelector = document.querySelector("div.modal__message");
-    messageSelector.textContent = message;
-  }
+}
+/**
+ *
+ * @param {() => void} callbackfn
+ * @param {string} message
+ */
+export async function deleteModal(message, id) {
+  currentType = "delete";
+  currentDelete = id;
+  overlay.classList.add("overlay--open");
+  deleteForm.classList.add("modal--open");
+
+  /**
+   * @type {Element}
+   */
+  const messageElement = document.querySelector(".modal__message");
+
+  messageElement.textContent = message;
 }
 
+deleteForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const currentContainer = document.querySelector(
+    `.mode__container--${currentView}`
+  );
+  deleteTodo(currentDelete);
+  closeModal("delete");
+  const targetDelete = document.querySelector(
+    `[data-task-id="${currentDelete}"]`
+  );
+  currentContainer.removeChild(targetDelete);
+});
+
 /**
- * @param {"todo" | "category" | "delete"} type
+ * @param {"todo" | "category" | "delete" | "edit"} type
  */
 export function closeModal(type) {
-  // const options = document.querySelectorAll("option")
-  const options = Array.from(select.children)
-  options.forEach(option => {
-    if (option.textContent!=="Select Category") {
-      select.removeChild(option)
+  const options = Array.from(select.children);
+  options.forEach((option) => {
+    if (option.textContent !== "Select Category") {
+      select.removeChild(option);
     }
-  })
+  });
   const modalSelector = document.querySelector(`.modal--${type}`);
   modalSelector.classList.remove("modal--open");
   overlay.classList.remove("overlay--open");
 }
-
 
 todoForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -103,6 +139,9 @@ todoForm.addEventListener("submit", (e) => {
   };
 
   addTodo(data);
+  if (currentCategory === extractedData["category-id"]) {
+    renderTodo(data);
+  }
   event.target.reset();
   closeModal("todo");
 });

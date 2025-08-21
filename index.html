@@ -93,10 +93,10 @@
     <div class="header">
       <div class="header__container">
         <div class="category-info">
-          <div class="category-info__icon">🏠</div>
+          <div class="category-info__icon">🧑‍🦱</div>
           <div class="categories-info__metadata">
             <div>
-              <h1 class="categories-info__metadata__title">Chores</h1>
+              <h1 class="categories-info__metadata__title">Overview</h1>
               <div class="streak">
                 <svg
                   width="25"
@@ -128,7 +128,7 @@
                 <p class="streak__count">4 days streak</p>
               </div>
             </div>
-            <p class="categories-info__metadata__num-tasks">5 tasks</p>
+            <p class="categories-info__metadata__num-tasks">0 tasks</p>
           </div>
         </div>
         <div class="lower">
@@ -514,12 +514,14 @@
         class="modal__text-input"
         name="task-name"
         autocomplete="off"
+        required
       />
       <select
         name="category-id"
         id="select-categories"
         class="modal__select-input"
         placeholder="Select Category"
+        required
       >
         <option value="">Select Category</option>
       </select>
@@ -574,6 +576,7 @@
         placeholder="Enter Category Name"
         name="category-name"
         autocomplete="off"
+        required
       />
       <input
         type="text"
@@ -581,6 +584,7 @@
         placeholder="Enter emoji"
         name="category-emoji"
         autocomplete="off"
+        required
       />
       <div class="modal__actions">
         <button class="modal__btn ghost close-modal" type="button">
@@ -590,7 +594,7 @@
         </button>
       </div>
     </form>
-    <!-- <div class="modal modal--delete">
+    <form class="modal modal--delete">
 
         <div class="modal__icon modal__icon--alert">
           <svg
@@ -636,6 +640,6 @@
         <button class="modal__btn ghost">No, go back</button>
         <button class="modal__btn alert">Yes, I am sure</button>
       </div>
-    </div>  -->
+    </form> 
   </body>
 </html>

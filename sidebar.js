@@ -1,5 +1,7 @@
 import { renderHeaderElement } from "./header.js";
-import { getCategories, getCategoryTodos } from "./index.js";
+// import { getCategories, getCategoryTodos } from "./index.js";
+
+export let currentCategory = "none";
 
 const homeTab = document.querySelector(".sidebar__home-tab");
 homeTab.classList.add("tab--active");
@@ -13,7 +15,7 @@ export function renderCategoryTab(category) {
   iconSpan.textContent = category.categoryIcon;
   const nameSpan = document.createElement("span");
   nameSpan.textContent = category.name;
-  
+
   categoryTab.appendChild(iconSpan);
   categoryTab.appendChild(nameSpan);
   categoryTab.setAttribute("data-category-id", category.id);
@@ -24,19 +26,20 @@ export function renderCategoryTab(category) {
 }
 
 /**
- * 
+ *
  * @param {{
  * id: string,
  * name: string,
  * categoryIcon: string,
  * order: string[]
- * }} category 
+ * }} category
  */
 function handleCategoryChange(category) {
-  return async (event) => {
+  return (event) => {
     const activeTab = document.querySelector("button.tab--active");
     event.target.classList.add("tab--active");
     if (!activeTab) return;
+    currentCategory = category.id;
     if (activeTab.dataset.categoryId === category.id) return;
     activeTab.classList.remove("tab--active");
     renderHeaderElement(category);
@@ -44,7 +47,9 @@ function handleCategoryChange(category) {
 }
 
 async function handleHome(event) {
+  currentCategory = "none";
   const activeTab = document.querySelector("button.tab--active");
   event.target.classList.add("tab--active");
   activeTab.classList.remove("tab--active");
+  renderHeaderElement();
 }
