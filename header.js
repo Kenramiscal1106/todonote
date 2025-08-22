@@ -1,5 +1,5 @@
 import { renderContent } from "./content.js";
-import { getCategoryTodos } from "./index.js";
+import { getCategory, getCategoryTodos } from "./index.js";
 
 /**
  * @type {string}
@@ -35,15 +35,10 @@ viewTab.forEach((element) => {
 });
 
 /**
- *
- * @param {{
- * id: string,
- * name: string,
- * categoryIcon: string,
- * order: string[]
- * }} category
+ * @param {string} categoryId
  */
-export async function renderHeaderElement(category) {
+export async function renderHeaderElement(categoryId) {
+  const category = typeof categoryId === "undefined" ? null : await getCategory(categoryId);
   headerTitle.textContent = category ? category.name : "Overview";
   headerIcon.textContent = category ? category.categoryIcon : "🧑‍🦱";
   const todos = await getCategoryTodos(category ? category.id : "");

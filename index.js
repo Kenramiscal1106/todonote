@@ -21,9 +21,10 @@ request.onsuccess = () => {
 
   const categoriesStore = transaction.objectStore("Categories");
   const todosStore = transaction.objectStore("Todos");
+  const statusIndex = todosStore.index("status")
 
   const data = categoriesStore.getAll();
-  const dataTodo = todosStore.getAll();
+  const dataTodo = statusIndex.getAll(IDBKeyRange.bound("ongoing", "pending"));
 
   const headerNum = document.querySelector(
     ".categories-info__metadata__num-tasks"
@@ -139,6 +140,36 @@ export function getCategories() {
 }
 
 /**
+ * @returns {Promise<{
+ * id: string,
+ * name: string,
+ * categoryIcon: string,
+ * order: string[]
+ * }>}
+ * @param {string} categoryId 
+ */
+export function getCategory(categoryId) {
+  // let categories = [];
+  return new Promise((resolve, reject) => {
+    const categoriesStore = db
+      .transaction("Categories", "readonly")
+      .objectStore("Categories");
+
+    const action = categoriesStore.get(IDBKeyRange.only(categoryId));
+    action.onsuccess = (event) => {
+      resolve(event.target.result);
+    };
+    action.onerror = (event) => {
+      renderToast({
+        type: "alert",
+        message: event.target.error?.message,
+      });
+      reject(event.target.error?.message);
+    };
+  });
+}
+
+/**
  * @param {{
  * id: string,
  * taskName: string,
@@ -211,6 +242,7 @@ export function updateTodo(newData) {
 /**
  * Gets all the todos
  * @param {string} categoryId
+ * @param {boolean} [all=false] 
  * @returns {Promise<{
  * id: string,
  * taskName: string,
@@ -219,7 +251,7 @@ export function updateTodo(newData) {
  * status: "pending" | "ongoing" | "done"
  * }[]>}
  */
-export function getCategoryTodos(categoryId) {
+export function getCategoryTodos(categoryId, all = false) {
   return new Promise((resolve, reject) => {
     const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
     const indexSearch = todoStore.index("categoryId");
@@ -229,7 +261,7 @@ export function getCategoryTodos(categoryId) {
     );
 
     data.onsuccess = (event) => {
-      resolve(event.target.result.filter(todo => todo.status !== "done"));
+      resolve(event.target.result.filter(todo => all ? true : (todo.status !== "done")));
     };
     data.onerror = (event) => {
       reject();

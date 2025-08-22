@@ -368,7 +368,7 @@
   .progress-status {
     color: var(--colors-neutral-100, #f9fafa);
     font-family: Inter;
-    font-size: var(--text-sm, 14px);
+    font-size: var(--text-base, 14px);
     font-style: normal;
     font-weight: 700;
     line-height: 130%; /* 18.2px */
@@ -378,7 +378,7 @@
     position: ans;
   }
 
-  .progress span {
+  .progress__bar__text {
     color: var(--colors-neutral-400, #979aaa);
     font-family: Inter;
     font-size: var(--text-sm, 14px);
@@ -690,6 +690,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+    gap: var(--space-1);
   }
 
   .todo__meta__name {
@@ -707,7 +708,12 @@
     gap: var(--space-1, 4px);
   }
 
-  .todo__meta__deadline p {
+  .todo__meta__deadline__icon {
+    display:flex;
+    align-items: center;
+  }
+
+  .todo__meta__deadline__text{
     color: var(--colors-alert-400, #e5715c);
     font-family: Inter;
     font-size: var(--text-sm, 14px);

@@ -6,6 +6,8 @@ export let currentCategory = "none";
 const homeTab = document.querySelector(".sidebar__home-tab");
 homeTab.classList.add("tab--active");
 homeTab.addEventListener("click", handleHome);
+const progressBar = document.querySelector(".progress__bar__value");
+const progressValue = document.querySelector(".progress-status");
 
 export function renderCategoryTab(category) {
   const tabContainer = document.querySelector("#category-tabs");
@@ -42,10 +44,28 @@ function handleCategoryChange(category) {
     currentCategory = category.id;
     if (activeTab.dataset.categoryId === category.id) return;
     activeTab.classList.remove("tab--active");
-    const todos = await getCategoryTodos(category ? category.id : "");
-    console.log(todos.length)
-    renderHeaderElement(category);
+    renderHeaderElement(category.id);
+    renderProgressBar();
   };
+}
+export async function renderProgressBar() {
+  const todos = await getCategoryTodos(currentCategory, true);
+  const todosDone = todos.filter((todo) => todo.status === "done");
+  const width =
+    todos.length !== 0 ? `${(todosDone.length / todos.length) * 100}%` : "0%";
+  progressValue.textContent = `${width}`
+  progressBar.animate(
+    [
+      {
+        width,
+      },
+    ],
+    {
+      duration: 400,
+      fill: "forwards",
+      easing: "ease-in-out",
+    }
+  );
 }
 
 async function handleHome(event) {

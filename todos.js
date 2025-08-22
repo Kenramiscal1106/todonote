@@ -1,5 +1,7 @@
+import { renderHeaderElement } from "./header.js";
 import { updateTodo } from "./index.js";
 import { deleteModal } from "./modal.js";
+import { currentCategory, renderProgressBar } from "./sidebar.js";
 
 /**
  * @param {{
@@ -20,6 +22,8 @@ export function renderTodo(todo) {
   const metaContainer = document.createElement("div");
   const metaName = document.createElement("div");
   const metaDeadline = document.createElement("div");
+  const metaIcon = document.createElement("div");
+  const metaDeadlineText = document.createElement("div");
   const actionsContainer = document.createElement("div");
   const actionDone = document.createElement("button");
   const actionEdit = document.createElement("button");
@@ -31,17 +35,19 @@ export function renderTodo(todo) {
     const beforeMS = deadlineMS - nowMS;
     // console.log(deadlineMS > nowMS);
     if (beforeMS > HOUR * MINUTE * SECOND) {
-      metaDeadline.textContent = `${Math.floor(
+      metaDeadlineText.textContent = `${Math.floor(
         beforeMS / (HOUR * MINUTE * SECOND)
       )} hour/s left`;
     } else if (beforeMS > MINUTE * SECOND) {
-      metaDeadline.textContent = `${Math.floor(
+      metaDeadlineText.textContent = `${Math.floor(
         beforeMS / (MINUTE * SECOND)
       )} minute/s left`;
     } else if (beforeMS > SECOND) {
-      metaDeadline.textContent = `${Math.floor(
+      metaDeadlineText.textContent = `${Math.floor(
         beforeMS / SECOND
       )} second/s left`;
+    } else {
+      metaDeadlineText.textContent = "Todo is overdue "
     }
   }
 
@@ -49,17 +55,19 @@ export function renderTodo(todo) {
   metaContainer.classList.add("todo__meta");
   metaName.classList.add("todo__meta__name");
   metaDeadline.classList.add("todo__meta__deadline");
+  metaIcon.classList.add("todo__meta__deadline__icon")
+  metaDeadlineText.classList.add("todo__meta__deadline__text")
   actionsContainer.classList.add("todo__actions");
   actionDone.classList.add("todo__action--done");
   actionEdit.classList.add("todo__action--edit");
   actionDelete.classList.add("todo__action--delete");
   mainContainer.setAttribute("data-task-id", todo.id);
 
-  metaDeadline.innerHTML = `
+  metaIcon.innerHTML = `
     <svg
       class="clock"
-      width="19"
-      height="18"
+      width="24"
+      height="24"
       viewBox="0 0 19 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -172,8 +180,13 @@ export function renderTodo(todo) {
       status: "done"
     }
     updateTodo(newData)();
+    renderHeaderElement(currentCategory);
     defaultContainer.removeChild(mainContainer);
+    renderProgressBar();
   });
+
+  metaDeadline.appendChild(metaIcon);
+  metaDeadline.appendChild(metaDeadlineText);
 
   metaContainer.appendChild(metaName);
   metaContainer.appendChild(metaDeadline);
