@@ -1,6 +1,6 @@
-import { currentView } from "./header.js";
+import { currentView, renderHeaderElement } from "./header.js";
 import { addCategories, addTodo, deleteTodo, getCategories } from "./index.js";
-import { currentCategory } from "./sidebar.js";
+import { currentCategory, renderProgressBar } from "./sidebar.js";
 import { renderTodo } from "./todos.js";
 
 /**
@@ -54,7 +54,7 @@ const select = document.querySelector("#select-categories");
  * @param {"todo" | "category"} type
  * @param {string} message
  */
-export async function openModal(type, message) {
+export async function openModal(type) {
   currentType = type;
   const modalSelector = document.querySelector(`.modal--${type}`);
   overlay.classList.add("overlay--open");
@@ -99,6 +99,7 @@ deleteForm.addEventListener("submit", (e) => {
     `[data-task-id="${currentDelete}"]`
   );
   currentContainer.removeChild(targetDelete);
+  renderProgressBar()
 });
 
 /**
@@ -121,6 +122,8 @@ todoForm.addEventListener("submit", (e) => {
   const formData = new FormData(e.target);
   const extractedData = Object.fromEntries(formData.entries());
 
+  renderProgressBar()
+
   /**
    * @type {{
    * id: string,
@@ -139,11 +142,9 @@ todoForm.addEventListener("submit", (e) => {
   };
 
   addTodo(data);
-  if (currentCategory === extractedData["category-id"]) {
-    renderTodo(data);
-  }
   event.target.reset();
   closeModal("todo");
+  renderHeaderElement(currentCategory === "" ? undefined : currentCategory)
 });
 
 categoryForm.addEventListener("submit", (e) => {

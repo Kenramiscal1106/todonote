@@ -189,7 +189,9 @@ export function renderTodo(todo) {
   metaDeadline.appendChild(metaDeadlineText);
 
   metaContainer.appendChild(metaName);
-  metaContainer.appendChild(metaDeadline);
+  if (todo.deadline !== "") {
+    metaContainer.appendChild(metaDeadline);
+  }
 
   actionsContainer.appendChild(actionDone);
   actionsContainer.appendChild(actionEdit);

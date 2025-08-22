@@ -1,7 +1,6 @@
 "use strict";
 
-import { openModal } from "./modal.js";
-import { renderCategoryTab } from "./sidebar.js";
+import { renderCategoryTab, renderProgressBar } from "./sidebar.js";
 import { renderToast } from "./toast.js";
 import { renderTodo } from "./todos.js";
 
@@ -26,6 +25,7 @@ request.onsuccess = () => {
   const data = categoriesStore.getAll();
   const dataTodo = statusIndex.getAll(IDBKeyRange.bound("ongoing", "pending"));
 
+  renderProgressBar()
   const headerNum = document.querySelector(
     ".categories-info__metadata__num-tasks"
   );

@@ -1,7 +1,7 @@
 import { renderHeaderElement } from "./header.js";
 import { getCategoryTodos } from "./index.js";
 
-export let currentCategory = "none";
+export let currentCategory = "";
 
 const homeTab = document.querySelector(".sidebar__home-tab");
 homeTab.classList.add("tab--active");
@@ -69,9 +69,10 @@ export async function renderProgressBar() {
 }
 
 async function handleHome(event) {
-  currentCategory = "none";
+  currentCategory = "";
   const activeTab = document.querySelector("button.tab--active");
   event.target.classList.add("tab--active");
   activeTab.classList.remove("tab--active");
   renderHeaderElement();
+  renderProgressBar();
 }

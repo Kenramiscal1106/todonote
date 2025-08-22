@@ -43,5 +43,6 @@ export async function renderHeaderElement(categoryId) {
   headerIcon.textContent = category ? category.categoryIcon : "🧑‍🦱";
   const todos = await getCategoryTodos(category ? category.id : "");
   headerNum.textContent = `${todos.length} task/s`;
+  console.log(todos);
   renderContent(todos);
 }
