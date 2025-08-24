@@ -1,5 +1,66 @@
-// Kanban Drag and Drop
-import { getKanbanTodos } from "./index.js";
+import { currentCategory } from "./sidebar.js";
+import { getKanbanTodos as getTodosFromIndex } from "./index.js";
+
+let db;
+
+const request = indexedDB.open("Main", 3);
+
+request.onsuccess = async (event) => {
+  db = event.target.result;
+
+  try {
+    const categoryIds = await getAllCategoryIds();
+    console.log("Existing categories:", categoryIds);
+
+    const todosByStatus = await getKanbanTodos(currentCategory);
+    console.log("Todos loaded:", todosByStatus);
+
+    Object.values(todosByStatus).flat().forEach(renderKanbanItem);
+  } catch (err) {
+    console.error("Error loading todos:", err);
+  }
+};
+
+request.onerror = (event) => {
+  console.error("Failed to open database:", event.target.error);
+};
+
+function getAllCategoryIds() {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction("Todos", "readonly");
+    const store = transaction.objectStore("Todos");
+
+    const request = store.getAll();
+
+    request.onsuccess = (event) => {
+      const todos = event.target.result;
+      const categoryIds = [...new Set(todos.map((todo) => todo.categoryId))];
+      resolve(categoryIds);
+    };
+
+    request.onerror = (event) => reject(event.target.error);
+  });
+}
+
+export function getKanbanTodos(categoryId) {
+  return new Promise((resolve, reject) => {
+    const todosByStatus = { pending: [], ongoing: [], done: [] };
+    const transaction = db.transaction("Todos", "readonly");
+    const store = transaction.objectStore("Todos");
+    const index = store.index("categoryId");
+
+    const request = index.getAll(IDBKeyRange.only(categoryId));
+
+    request.onsuccess = (event) => {
+      event.target.result.forEach((todo) => {
+        todosByStatus[todo.status].push(todo);
+      });
+      resolve(todosByStatus);
+    };
+
+    request.onerror = (event) => reject(event.target.error);
+  });
+}
 
 /**
  * @param {{
@@ -8,16 +69,31 @@ import { getKanbanTodos } from "./index.js";
  * deadline: string,
  * categoryId: string,
  * status: "pending" | "ongoing" | "done"
- * }} item
+ * }} kanbanItem
  */
-export function renderKanbanItem(item) {
-  const defaultContainer = document.querySelector(".mode-container--kanban");
 
+export function renderKanbanItem(kanbanItem) {
+  const defaultContainer = document.querySelector(".mode-container--kanban");
+  const doneContainer = document.querySelector("#done");
+  const pendingContainer = document.querySelector("#pending");
+  const ongoingContainer = document.querySelector("#ongoing");
+
+  const list = document.createElement("div");
   const item = document.createElement("div");
+  const kanbanTask = document.createElement("p");
   const timeLeft = document.createElement("div");
+  const kanbanTime = document.createElement("p");
+
+  list.appendChild(item);
 
   item.classList.add("item");
+  kanbanTask.classList.add("kanban_task");
   timeLeft.classList.add("time_left");
+  kanbanTime.classList.add("kanban_time");
+
+  item.appendChild(kanbanTask);
+  item.appendChild(timeLeft);
+  timeLeft.appendChild(kanbanTime);
 
   timeLeft.innerHTML = `
     <svg
@@ -42,8 +118,21 @@ export function renderKanbanItem(item) {
       stroke-linejoin="round"
     />
   </svg>`;
+
+  kanbanTask.textContent = "";
+
+  const now = new Date();
+
+  if (kanbanItem.status == "pending") {
+    pendingContainer.appendChild(list);
+  } else if (kanbanItem.status == "ongoing") {
+    ongoingContainer.appendChild(list);
+  } else if (kanbanItem.status == "done") {
+    doneContainer.appendChild(list);
+  }
 }
 
+// Drag and Drop
 const lists = document.querySelectorAll(".list");
 const statuses = document.querySelectorAll(".status");
 
