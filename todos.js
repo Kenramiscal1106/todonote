@@ -178,7 +178,9 @@ export function renderTodo(todo) {
     };
     clearInterval(interval);
     updateTodo(newData)();
-    mainContainer.removeChild(metaDeadline);
+    if (todo.deadline !== "") {
+      mainContainer.removeChild(metaContainer);
+    }
     mainContainer.classList.add("todo--done");
     renderHeaderElement(currentCategory);
     renderProgressBar();
