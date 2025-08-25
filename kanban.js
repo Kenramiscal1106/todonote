@@ -3,27 +3,35 @@ import { getKanbanTodos as getTodosFromIndex } from "./index.js";
 
 let db;
 
-const request = indexedDB.open("Main", 3);
+document
+  .querySelector('[data-tab="kanban"]')
+  .addEventListener("click", openKanban);
 
-request.onsuccess = async (event) => {
-  db = event.target.result;
+async function openKanban() {
+  const request = indexedDB.open("Main", 3);
 
-  try {
-    const categoryIds = await getAllCategoryIds();
-    console.log("Existing categories:", categoryIds);
+  request.onsuccess = async (event) => {
+    db = event.target.result;
 
-    const todosByStatus = await getKanbanTodos(currentCategory);
-    console.log("Todos loaded:", todosByStatus);
+    try {
+      const categoryIds = await getAllCategoryIds();
+      console.log("Existing categories:", categoryIds);
 
-    Object.values(todosByStatus).flat().forEach(renderKanbanItem);
-  } catch (err) {
-    console.error("Error loading todos:", err);
-  }
-};
+      const activeCategory = currentCategory || categoryIds[1];
 
-request.onerror = (event) => {
-  console.error("Failed to open database:", event.target.error);
-};
+      const todosByStatus = await getKanbanTodos(activeCategory);
+      console.log("Todos loaded:", todosByStatus);
+
+      Object.values(todosByStatus).flat().forEach(renderKanbanItem);
+    } catch (err) {
+      console.error("Error loading todos:", err);
+    }
+  };
+
+  request.onerror = (event) => {
+    console.error("Failed to open database:", event.target.error);
+  };
+}
 
 function getAllCategoryIds() {
   return new Promise((resolve, reject) => {
@@ -62,18 +70,7 @@ export function getKanbanTodos(categoryId) {
   });
 }
 
-/**
- * @param {{
- * id: string,
- * taskName: string,
- * deadline: string,
- * categoryId: string,
- * status: "pending" | "ongoing" | "done"
- * }} kanbanItem
- */
-
 export function renderKanbanItem(kanbanItem) {
-  const defaultContainer = document.querySelector(".mode-container--kanban");
   const doneContainer = document.querySelector("#done");
   const pendingContainer = document.querySelector("#pending");
   const ongoingContainer = document.querySelector("#ongoing");
@@ -119,9 +116,7 @@ export function renderKanbanItem(kanbanItem) {
     />
   </svg>`;
 
-  kanbanTask.textContent = "";
-
-  const now = new Date();
+  kanbanTask.textContent = kanbanItem.taskName || "";
 
   if (kanbanItem.status == "pending") {
     pendingContainer.appendChild(list);
