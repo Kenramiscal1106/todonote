@@ -20,9 +20,10 @@ async function openKanban() {
       const activeCategory = currentCategory || categoryIds[1];
 
       const todosByStatus = await getKanbanTodos(activeCategory);
-      console.log("Todos loaded:", todosByStatus);
-
+      clearKanbanItems();
       Object.values(todosByStatus).flat().forEach(renderKanbanItem);
+
+      console.log("Todos loaded:", todosByStatus);
     } catch (err) {
       console.error("Error loading todos:", err);
     }
@@ -31,6 +32,16 @@ async function openKanban() {
   request.onerror = (event) => {
     console.error("Failed to open database:", event.target.error);
   };
+}
+
+function clearKanbanItems() {
+  const doneContainer = document.querySelector("#done");
+  const pendingContainer = document.querySelector("#pending");
+  const ongoingContainer = document.querySelector("#ongoing");
+
+  doneContainer.querySelectorAll(".list").forEach((item) => item.remove());
+  pendingContainer.querySelectorAll(".list").forEach((item) => item.remove());
+  ongoingContainer.querySelectorAll(".list").forEach((item) => item.remove());
 }
 
 function getAllCategoryIds() {
