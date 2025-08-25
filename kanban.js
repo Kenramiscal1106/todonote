@@ -100,6 +100,7 @@ export function renderKanbanItem(kanbanItem) {
   timeLeft.classList.add("time-left");
   kanbanTime.classList.add("kanban-time");
 
+  list.dataset.id = kanbanItem.id;
   list.draggable = true;
   list.style.display = "block";
   item.appendChild(kanbanTask);
@@ -163,7 +164,44 @@ container.addEventListener("dragend", (e) => {
 const statuses = document.querySelectorAll(".status");
 statuses.forEach((status) => {
   status.addEventListener("dragover", (e) => e.preventDefault());
-  status.addEventListener("drop", () => {
-    if (draggedList) status.appendChild(draggedList);
+
+  status.addEventListener("drop", async () => {
+    if (draggedList) {
+      const todoId = draggedList.dataset.id;
+      const newStatus = status.id;
+
+      status.appendChild(draggedList);
+
+      // Update IndexedDB
+      try {
+        await updateTodoStatus(todoId, newStatus);
+        console.log(`Todo ${todoId} status updated to ${newStatus}`);
+      } catch (err) {
+        console.error("Failed to update todo status:", err);
+      }
+    }
   });
 });
+
+function updateTodoStatus(todoId, newStatus) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction("Todos", "readwrite");
+    const store = transaction.objectStore("Todos");
+
+    const request = store.get(todoId);
+
+    request.onsuccess = (event) => {
+      const todo = event.target.result;
+      if (!todo) return reject("Todo not found");
+
+      todo.status = newStatus;
+
+      const updateRequest = store.put(todo);
+
+      updateRequest.onsuccess = () => resolve();
+      updateRequest.onerror = (e) => reject(e.target.error);
+    };
+
+    request.onerror = (e) => reject(e.target.error);
+  });
+}
