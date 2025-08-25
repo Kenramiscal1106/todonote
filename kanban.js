@@ -83,11 +83,14 @@ export function renderKanbanItem(kanbanItem) {
 
   list.appendChild(item);
 
+  list.classList.add("list");
   item.classList.add("item");
-  kanbanTask.classList.add("kanban_task");
-  timeLeft.classList.add("time_left");
-  kanbanTime.classList.add("kanban_time");
+  kanbanTask.classList.add("kanban-task");
+  timeLeft.classList.add("time-left");
+  kanbanTime.classList.add("kanban-time");
 
+  list.draggable = true;
+  list.style.display = "block";
   item.appendChild(kanbanTask);
   item.appendChild(timeLeft);
   timeLeft.appendChild(kanbanTime);
@@ -128,31 +131,28 @@ export function renderKanbanItem(kanbanItem) {
 }
 
 // Drag and Drop
-const lists = document.querySelectorAll(".list");
-const statuses = document.querySelectorAll(".status");
+const container = document.querySelector(".mode-container--kanban");
 
 let draggedList = null;
 
-lists.forEach((list) => {
-  list.addEventListener("dragstart", () => {
-    draggedList = list;
-    setTimeout(() => (list.style.opacity = "none"), 0);
-  });
-
-  list.addEventListener("dragend", () => {
-    draggedList.style.display = "block";
-    draggedList = null;
-  });
+container.addEventListener("dragstart", (e) => {
+  if (e.target.classList.contains("list")) {
+    draggedList = e.target;
+    setTimeout(() => (draggedList.style.opacity = "none"), 0);
+  }
 });
 
-statuses.forEach((status) => {
-  status.addEventListener("dragover", (e) => {
-    e.preventDefault();
-  });
+container.addEventListener("dragend", (e) => {
+  if (e.target.classList.contains("list")) {
+    draggedList.style.display = "block";
+    draggedList = null;
+  }
+});
 
+const statuses = document.querySelectorAll(".status");
+statuses.forEach((status) => {
+  status.addEventListener("dragover", (e) => e.preventDefault());
   status.addEventListener("drop", () => {
-    if (draggedList) {
-      status.appendChild(draggedList);
-    }
+    if (draggedList) status.appendChild(draggedList);
   });
 });
