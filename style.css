@@ -117,10 +117,13 @@
       }
     }
     &.ghost {
-      border: 2px solid var(--colors-neutral-700);
+      background-color: var(--colors-neutral-700);
+      &:active {
+        background-color: var(--colors-neutral-600);
+      }
     }
     &.alert {
-      background-color: var(--colors-alert-600);
+      background-color: var(--colors-alert-500);
     }
   }
   .modal {
@@ -276,7 +279,8 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-6, 24px);
-    background: rgba(40, 41, 47, 0.62);
+    background: var(--colors-neutral-800);
+    z-index: 80;
   }
 
   .brand-name {
@@ -512,7 +516,7 @@
   .tab--active {
     font-weight: bold;
     border-radius: var(--rounded-medium, 12px);
-    background: var(--colors-neutral-800, #3c3e48);
+    background: var(--colors-neutral-700, #3c3e48);
     cursor: pointer;
     color: var(--colors-neutral-100);
   }
@@ -586,13 +590,6 @@
     line-height: normal;
   }
 
-  .category-info .lower {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    align-self: stretch;
-  }
-
   #view-tabs {
     display: flex;
     align-items: center;
@@ -635,7 +632,7 @@
     line-height: normal;
   }
 
-  .actions .new {
+  .action__btn-new {
     display: flex;
     padding: var(--space-3, 12px) var(--space-4, 16px);
     justify-content: center;
@@ -648,7 +645,7 @@
   .lower {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     align-self: stretch;
   }
 
@@ -722,6 +719,15 @@
     line-height: normal;
   }
 
+  .todo--done {
+    opacity:0.5;
+    & .todo__meta__name {
+      text-decoration: line-through;
+    }
+    & .todo__actions {
+      visibility: hidden;
+    }
+  }
   .todo__actions {
     display: flex;
     align-items: center;
@@ -787,5 +793,15 @@
   td:hover {
     background-color: #181313;
     cursor: pointer;
+  }
+  @media screen and (max-width: 747px) {
+    .header {
+      margin-left:0;
+      width:100%;
+    }
+    .panel {
+      margin-left:0;
+      width:100%;
+    }
   }
 }

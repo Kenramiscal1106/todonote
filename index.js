@@ -23,7 +23,7 @@ request.onsuccess = () => {
   const statusIndex = todosStore.index("status")
 
   const data = categoriesStore.getAll();
-  const dataTodo = statusIndex.getAll(IDBKeyRange.bound("ongoing", "pending"));
+  const dataTodo = todosStore.getAll();
 
   renderProgressBar()
   const headerNum = document.querySelector(
@@ -222,7 +222,6 @@ export function updateTodo(newData) {
 
     const action = todoStore.get(newData.id);
     action.onsuccess = (event) => {
-      console.log("update")
       todoStore.put(newData);
       renderToast({
         message: "Todo updated successfully",

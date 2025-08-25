@@ -41,8 +41,7 @@ export async function renderHeaderElement(categoryId) {
   const category = typeof categoryId === "undefined" ? null : await getCategory(categoryId);
   headerTitle.textContent = category ? category.name : "Overview";
   headerIcon.textContent = category ? category.categoryIcon : "🧑‍🦱";
-  const todos = await getCategoryTodos(category ? category.id : "");
+  const todos = await getCategoryTodos(category ? category.id : "", true);
   headerNum.textContent = `${todos.length} task/s`;
-  console.log(todos);
   renderContent(todos);
 }

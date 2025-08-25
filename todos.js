@@ -33,7 +33,6 @@ export function renderTodo(todo) {
     const deadlineMS = Date.parse(todo.deadline);
     const nowMS = Date.now();
     const beforeMS = deadlineMS - nowMS;
-    // console.log(deadlineMS > nowMS);
     if (beforeMS > HOUR * MINUTE * SECOND) {
       metaDeadlineText.textContent = `${Math.floor(
         beforeMS / (HOUR * MINUTE * SECOND)
@@ -47,7 +46,7 @@ export function renderTodo(todo) {
         beforeMS / SECOND
       )} second/s left`;
     } else {
-      metaDeadlineText.textContent = "Todo is overdue "
+      metaDeadlineText.textContent = "Todo is overdue ";
     }
   }
 
@@ -55,8 +54,8 @@ export function renderTodo(todo) {
   metaContainer.classList.add("todo__meta");
   metaName.classList.add("todo__meta__name");
   metaDeadline.classList.add("todo__meta__deadline");
-  metaIcon.classList.add("todo__meta__deadline__icon")
-  metaDeadlineText.classList.add("todo__meta__deadline__text")
+  metaIcon.classList.add("todo__meta__deadline__icon");
+  metaDeadlineText.classList.add("todo__meta__deadline__text");
   actionsContainer.classList.add("todo__actions");
   actionDone.classList.add("todo__action--done");
   actionEdit.classList.add("todo__action--edit");
@@ -90,9 +89,7 @@ export function renderTodo(todo) {
   `;
   updateDeadline();
   metaName.textContent = todo.taskName;
-  setInterval(() => {
-    updateDeadline();
-  }, 1000);
+  const interval = setInterval(updateDeadline, 1000);
   actionDone.innerHTML = `
   <svg
     width="19"
@@ -177,11 +174,13 @@ export function renderTodo(todo) {
   actionDone.addEventListener("click", () => {
     const newData = {
       ...todo,
-      status: "done"
-    }
+      status: "done",
+    };
+    clearInterval(interval);
     updateTodo(newData)();
+    mainContainer.removeChild(metaDeadline);
+    mainContainer.classList.add("todo--done");
     renderHeaderElement(currentCategory);
-    defaultContainer.removeChild(mainContainer);
     renderProgressBar();
   });
 
@@ -189,14 +188,20 @@ export function renderTodo(todo) {
   metaDeadline.appendChild(metaDeadlineText);
 
   metaContainer.appendChild(metaName);
-  if (todo.deadline !== "") {
-    metaContainer.appendChild(metaDeadline);
-  }
 
   actionsContainer.appendChild(actionDone);
   actionsContainer.appendChild(actionEdit);
   actionsContainer.appendChild(actionDelete);
 
+  if (todo.status === "done") {
+    mainContainer.classList.add("todo--done");
+    clearInterval(interval);
+  } else {
+    if (todo.deadline !== "") {
+      metaContainer.appendChild(metaDeadline);
+
+    }
+  }
   mainContainer.appendChild(metaContainer);
   mainContainer.appendChild(actionsContainer);
   // console.log(mainContainer);

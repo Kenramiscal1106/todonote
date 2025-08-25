@@ -39,7 +39,7 @@ export function renderCategoryTab(category) {
 function handleCategoryChange(category) {
   return async (event) => {
     const activeTab = document.querySelector("button.tab--active");
-    event.target.classList.add("tab--active");
+    event.currentTarget.classList.add("tab--active");
     if (!activeTab) return;
     currentCategory = category.id;
     if (activeTab.dataset.categoryId === category.id) return;
@@ -71,7 +71,8 @@ export async function renderProgressBar() {
 async function handleHome(event) {
   currentCategory = "";
   const activeTab = document.querySelector("button.tab--active");
-  event.target.classList.add("tab--active");
+  event.stopPropagation();
+  event.currentTarget.classList.add("tab--active");
   activeTab.classList.remove("tab--active");
   renderHeaderElement();
   renderProgressBar();
