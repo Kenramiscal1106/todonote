@@ -304,7 +304,7 @@
     line-height: 130%; /* 20.8px */
     cursor: pointer;
   }
-  
+
   .brand-name img {
     width: 19.526px;
     height: 24px;
@@ -347,9 +347,9 @@
       var(--colors-primary-400, #6db3d9) 100%
     );
     position: absolute;
-    top:0;
-    left:0;
-    height:100%;
+    top: 0;
+    left: 0;
+    height: 100%;
     transition: width 0.4s;
   }
   .progress > *:not(.progress__bar) {
@@ -529,6 +529,7 @@
     left: 0;
     width: calc(100% - 280px);
     margin-left: 280px;
+    background-color: #1d1e20;
   }
   .header__container {
     display: flex;
@@ -709,11 +710,11 @@
   }
 
   .todo__meta__deadline__icon {
-    display:flex;
+    display: flex;
     align-items: center;
   }
 
-  .todo__meta__deadline__text{
+  .todo__meta__deadline__text {
     color: var(--colors-alert-400, #e5715c);
     font-family: Inter;
     font-size: var(--text-sm, 14px);

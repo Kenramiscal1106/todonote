@@ -20,12 +20,12 @@ request.onsuccess = () => {
 
   const categoriesStore = transaction.objectStore("Categories");
   const todosStore = transaction.objectStore("Todos");
-  const statusIndex = todosStore.index("status")
+  const statusIndex = todosStore.index("status");
 
   const data = categoriesStore.getAll();
   const dataTodo = statusIndex.getAll(IDBKeyRange.bound("ongoing", "pending"));
 
-  renderProgressBar()
+  renderProgressBar();
   const headerNum = document.querySelector(
     ".categories-info__metadata__num-tasks"
   );
@@ -146,7 +146,7 @@ export function getCategories() {
  * categoryIcon: string,
  * order: string[]
  * }>}
- * @param {string} categoryId 
+ * @param {string} categoryId
  */
 export function getCategory(categoryId) {
   // let categories = [];
@@ -222,7 +222,7 @@ export function updateTodo(newData) {
 
     const action = todoStore.get(newData.id);
     action.onsuccess = (event) => {
-      console.log("update")
+      console.log("update");
       todoStore.put(newData);
       renderToast({
         message: "Todo updated successfully",
@@ -242,7 +242,7 @@ export function updateTodo(newData) {
 /**
  * Gets all the todos
  * @param {string} categoryId
- * @param {boolean} [all=false] 
+ * @param {boolean} [all=false]
  * @returns {Promise<{
  * id: string,
  * taskName: string,
@@ -261,7 +261,11 @@ export function getCategoryTodos(categoryId, all = false) {
     );
 
     data.onsuccess = (event) => {
-      resolve(event.target.result.filter(todo => all ? true : (todo.status !== "done")));
+      resolve(
+        event.target.result.filter((todo) =>
+          all ? true : todo.status !== "done"
+        )
+      );
     };
     data.onerror = (event) => {
       reject();
