@@ -27,13 +27,13 @@ const todoEvents = document.querySelectorAll(".todos-add");
 
 categoryEvents.forEach((target) => {
   target.addEventListener("click", () => {
-    openModal("category", "amfdasfadgasd");
+    openModal("category");
   });
 });
 
 todoEvents.forEach((target) => {
   target.addEventListener("click", () => {
-    openModal("todo", "amfdasfadgasd");
+    openModal("todo");
   });
 });
 
