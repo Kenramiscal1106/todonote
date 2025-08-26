@@ -20,12 +20,12 @@ request.onsuccess = () => {
 
   const categoriesStore = transaction.objectStore("Categories");
   const todosStore = transaction.objectStore("Todos");
-  const statusIndex = todosStore.index("status")
+  const statusIndex = todosStore.index("status");
 
   const data = categoriesStore.getAll();
   const dataTodo = todosStore.getAll();
 
-  renderProgressBar()
+  renderProgressBar();
   const headerNum = document.querySelector(
     ".categories-info__metadata__num-tasks"
   );
@@ -146,7 +146,7 @@ export function getCategories() {
  * categoryIcon: string,
  * order: string[]
  * }>}
- * @param {string} categoryId 
+ * @param {string} categoryId
  */
 export function getCategory(categoryId) {
   // let categories = [];
@@ -241,7 +241,7 @@ export function updateTodo(newData) {
 /**
  * Gets all the todos
  * @param {string} categoryId
- * @param {boolean} [all=false] 
+ * @param {boolean} [all=false]
  * @returns {Promise<{
  * id: string,
  * taskName: string,
@@ -260,7 +260,11 @@ export function getCategoryTodos(categoryId, all = false) {
     );
 
     data.onsuccess = (event) => {
-      resolve(event.target.result.filter(todo => all ? true : (todo.status !== "done")));
+      resolve(
+        event.target.result.filter((todo) =>
+          all ? true : todo.status !== "done"
+        )
+      );
     };
     data.onerror = (event) => {
       reject();
@@ -274,47 +278,52 @@ export function getCategoryTodos(categoryId, all = false) {
 
 /**
  * @param {string} categoryId
- * @returns {Map<string, {
+ * @returns {Promise<Map<string, {
  * id: string,
  * taskName: string,
  * deadline: string,
  * categoryId: string,
  * status: "pending" | "ongoing" | "done"
- * }[]>}
+ * }[]>>}
  */
 export function getCalendarTodos(categoryId) {
-  /**
-   * @type {Map<string, {
-   * id: string,
-   * taskName: string,
-   * deadline: string,
-   * categoryId: string,
-   * status: "pending" | "ongoing" | "done"
-   * }[]>}
-   */
-  const todosMap = new Map();
-  const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
-  const indexSearch = todoStore.index("categoryId");
+  return new Promise((resolve) => {
+    /**
+     * @type {Map<string, {
+     * id: string,
+     * taskName: string,
+     * deadline: string,
+     * categoryId: string,
+     * status: "pending" | "ongoing" | "done"
+     * }[]>}
+     */
+    const todosMap = new Map();
+    const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
+    const indexSearch = todoStore.index("categoryId");
 
-  const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
+    const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
 
-  data.onsuccess = (event) => {
-    event.target.result.forEach((todo) => {
-      if (todosMap.has(todo.deadline)) {
-        const dateTodo = todosMap.get(todo.deadline);
-        dateTodo.push(todo);
-        return;
-      }
-      todosMap.set(todo.deadline, todo);
-    });
-  };
-  data.onerror = (event) => {
-    renderToast({
-      type: "alert",
-      message: event.target.error?.message,
-    });
-  };
-  return todosMap;
+    data.onsuccess = (event) => {
+      event.target.result.forEach((todo) => {
+        if (todosMap.has(todo.deadline)) {
+          const dateTodo = todosMap.get(todo.deadline);
+          // console.log(dateTodo)
+          dateTodo.push(todo);
+          todosMap.set(todo.deadline, dateTodo)
+          return;
+        }
+        todosMap.set(todo.deadline, [todo]);
+      });
+      resolve(todosMap);
+    };
+    data.onerror = (event) => {
+      renderToast({
+        type: "alert",
+        message: event.target.error?.message,
+      });
+    };
+    
+  });
 }
 /**
  *

@@ -52,8 +52,11 @@ export async function renderProgressBar() {
   const todos = await getCategoryTodos(currentCategory, true);
   const todosDone = todos.filter((todo) => todo.status === "done");
   const width =
-    todos.length !== 0 ? `${Math.round((todosDone.length / todos.length) * 100)}%` : "0%";
-  progressValue.textContent = `${width}`
+    todos.length !== 0
+      ? `${Math.round((todosDone.length / todos.length) * 100)}%`
+      : "0%";
+
+  progressValue.textContent = `${width}`;
   progressBar.animate(
     [
       {
