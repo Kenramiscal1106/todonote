@@ -7,19 +7,19 @@ function isLeapYear() {
 }
 
 export const MONTH_DATA = [
-  { month: "January", days: 31 },
-  { month: "February", days: isLeapYear() ? 29 : 28 },
-  { month: "March", days: 31 },
-  { month: "April", days: 30 },
-  { month: "May", days: 31 },
-  { month: "June", days: 30 },
-  { month: "July", days: 31 },
-  { month: "August", days: 31 },
-  { month: "September", days: 30 },
-  { month: "October", days: 31 },
-  { month: "November", days: 30 },
-  { month: "December", days: 31 },
+  { month: "January", date: 31 },
+  { month: "February", date: isLeapYear() ? 29 : 28 },
+  { month: "March", date: 31 },
+  { month: "April", date: 30 },
+  { month: "May", date: 31 },
+  { month: "June", date: 30 },
+  { month: "July", date: 31 },
+  { month: "August", date: 31 },
+  { month: "September", date: 30 },
+  { month: "October", date: 31 },
+  { month: "November", date: 30 },
+  { month: "December", date: 31 },
 ];
 
-
+export const DAYS = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
 
