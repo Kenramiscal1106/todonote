@@ -26,12 +26,22 @@ viewTab.forEach((element) => {
     const targetMode = document.querySelector(
       `div.mode--${element.dataset.tab}`
     );
-    function action() {
+    function switchTab(delayed) {
       const activeMode = document.querySelector(".mode--visible");
       const activeTab = document.querySelector(".view--active");
-      activeMode.classList.remove("mode--visible");
+      if (delayed) {
+        activeMode.classList.add("mode--transition");
+        setTimeout(() => {
+          activeMode.classList.remove("mode--visible");
+          targetMode.classList.add("mode--visible");
+          activeMode.classList.remove("mode--transition");
+        }, 500);
+
+      } else {
+        activeMode.classList.remove("mode--visible");
+        targetMode.classList.add("mode--visible");
+      }
       activeTab.classList.remove("view--active");
-      targetMode.classList.add("mode--visible");
       element.classList.add("view--active");
     }
     if (element.dataset.tab === "default") {
@@ -40,15 +50,9 @@ viewTab.forEach((element) => {
       headerContainer.classList.remove("header__container--contained");
     }
     if (currentView === "default" || element.dataset.tab === "default") {
-      const activeMode = document.querySelector(".mode--visible");
-      activeMode.classList.add("mode--transition");
-      console.log("runs")
-      setTimeout(() => {
-        action()
-        activeMode.classList.remove("mode--transition")
-      }, 500);
+      switchTab(true)
     } else {
-      action()
+      switchTab(false);
     }
     currentView = element.dataset.tab;
   });
