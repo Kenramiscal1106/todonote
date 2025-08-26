@@ -197,7 +197,7 @@
     flex: 1 0 0;
     text-align: center;
   }
-  .overlay {
+  .overlay, .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -207,6 +207,9 @@
     background-color: hsla(9, 0%, 10%, 0.18);
     backdrop-filter: blur(3px);
     display: none;
+  }
+  .sidebar-overlay {
+    z-index:5; 
   }
   .overlay--open {
     display: block;
@@ -280,7 +283,7 @@
     align-items: flex-start;
     gap: var(--space-6, 24px);
     background: var(--colors-neutral-800);
-    z-index: 5;
+    z-index: 6;
   }
 
   .brand-name {
@@ -499,18 +502,38 @@
   .category,
   .sidebar__home-tab {
     display: flex;
-    padding: var(--space-2, 8px) var(--space-4, 16px);
-    gap: 16px;
-    justify-content: start;
+    padding: var(--space-3) var(--space-4, 16px);
     color: var(--colors-neutral-500);
+    justify-content: flex-start;
   }
-
+  .category {
+    padding: var(--space-1) var(--space-4, 16px);
+    justify-content: space-between;
+  }
+  .category__info {
+    display: flex;
+    gap: var(--space-3);
+  }
+  .category__delete-btn {
+    transition: stroke 0.2s, background-color 0.2s;
+    opacity: 0;
+    padding:var(--space-1);
+    border-radius: var(--rounded-small);
+    stroke: var(--colors-neutral-400);
+    &:hover {
+      background-color:var(--colors-neutral-600);
+      stroke: var(--colors-neutral-200);
+    }
+  }
   .category:hover:not(.tab--active),
   .sidebar__home-tab:hover:not(.tab--active) {
     border-radius: var(--rounded-medium, 12px);
-    background: var(--colors-neutral-800, #3c3e48);
+    background: var(--colors-neutral-700, #3c3e48);
     transition: background-color 0.2s ease;
     cursor: pointer;
+    & .category__delete-btn {
+      opacity:1;
+    }
   }
   .tab--active {
     font-weight: bold;
@@ -518,6 +541,9 @@
     background: var(--colors-neutral-700, #3c3e48);
     cursor: pointer;
     color: var(--colors-neutral-100);
+    & .category__delete-btn {
+      opacity:1;
+    }
   }
 
   .categories-title svg {
@@ -533,7 +559,7 @@
     width: calc(100% - 280px);
     margin-left: 280px;
     background-color: var(--colors-neutral-900);
-    z-index: 7;
+    z-index: 4;
   }
   .header__container {
     display: flex;
@@ -798,7 +824,7 @@
   .tstatus {
     font-weight: bold;
   }
-  @media screen and (max-width: 747px) {
+  @media screen and (max-width: 947px) {
     .header {
       margin-left:0;
       width:100%;
@@ -806,6 +832,24 @@
     .panel {
       margin-left:0;
       width:100%;
+    }
+    .sidebar {
+      transition: left 0.2s ease;
+      left:-280px;
+    }
+    .sidebar--open {
+      left: 0px;
+    }
+    .sidebar-trigger {
+      position:fixed;
+      top: var(--space-2);
+      left:var(--space-2);
+      padding:var(--space-4);
+      z-index:5;
+      background-color: var(--colors-neutral-800);
+      &:active {
+        background-color:var(--colors-neutral-700);
+      }
     }
   }
 }

@@ -207,6 +207,45 @@ export function deleteTodo(todoId) {
 
 /**
  *
+ * @param {string} categoryId
+ */
+export async function deleteCategory(categoryId) {
+  return new Promise ((resolve, reject) => {
+    const transaction = db.transaction(["Todos", "Categories"], "readwrite");
+    const todoStore = transaction.objectStore("Todos");
+    const categoryStore = transaction.objectStore("Categories");
+    const indexSearch = todoStore.index("categoryId");
+  
+    const indexCursorRequest = indexSearch.openCursor(
+      IDBKeyRange.only(categoryId)
+    );
+    categoryStore.delete(categoryId);
+  
+    indexCursorRequest.onsuccess = function (event) {
+      const cursor = event.target.result;
+      if (cursor) {
+        const deleteRequest = cursor.delete();
+        deleteRequest.onsuccess = function () {
+          renderToast({
+            type: "success",
+            message: "Category successfully deleted",
+          });
+          console.log("Record deleted successfully.");
+        };
+        deleteRequest.onerror = function () {
+          console.error("Error deleting record.");
+        };
+        cursor.continue(); // Move to the next record if needed
+      } else {
+        console.log("No more records to delete or record not found.");
+      }
+      resolve();
+    };
+  })
+}
+
+/**
+ *
  * @param {{
  * id: string,
  * taskName: string,
@@ -309,7 +348,7 @@ export function getCalendarTodos(categoryId) {
           const dateTodo = todosMap.get(todo.deadline);
           // console.log(dateTodo)
           dateTodo.push(todo);
-          todosMap.set(todo.deadline, dateTodo)
+          todosMap.set(todo.deadline, dateTodo);
           return;
         }
         todosMap.set(todo.deadline, [todo]);
@@ -322,7 +361,6 @@ export function getCalendarTodos(categoryId) {
         message: event.target.error?.message,
       });
     };
-    
   });
 }
 /**

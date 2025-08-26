@@ -1,12 +1,11 @@
 import { currentView, renderHeaderElement } from "./header.js";
-import { addCategories, addTodo, deleteTodo, getCategories } from "./index.js";
+import { addCategories, addTodo, deleteCategory, deleteTodo, getCategories } from "./index.js";
 import { currentCategory, renderProgressBar } from "./sidebar.js";
 
 const [todoForm, categoryForm, deleteForm] =
   document.querySelectorAll("form.modal");
 
 const datetimeInput = document.querySelector("[type='datetime-local']");
-
 
 const overlay = document.querySelector("div.overlay");
 const categoryEvents = document.querySelectorAll(".categories-add");
@@ -16,17 +15,14 @@ const todoEvents = document.querySelectorAll(".todos-add");
  * @type {KeyframeEffect}
  */
 const modalKeyframe = [
-  {scale: 0.95, opacity:0.5},
-  {scale: 1, opacity: 1}
-]
+  { scale: 0.95, opacity: 0.5 },
+  { scale: 1, opacity: 1 },
+];
 
 /**
  * @type {KeyframeEffect}
  */
-const overlayKeyframe = [
-  {opacity: 0},
-  {opacity:1}
-]
+const overlayKeyframe = [{ opacity: 0 }, { opacity: 1 }];
 
 /**
  * @type {"todo" | "category" | "delete"}
@@ -37,6 +33,10 @@ let currentType = "todo";
  * @type {string}
  */
 let currentDelete = "";
+/**
+ * @type {"todo" | "category"}
+ */
+let deleteMode = "todo";
 
 datetimeInput.setAttribute(
   "min",
@@ -77,18 +77,18 @@ export async function openModal(type) {
   const modalSelector = document.querySelector(`.modal--${type}`);
   modalSelector.animate(modalKeyframe, {
     duration: 150,
-    easing: "ease-in-out"
-  })
+    easing: "ease-in-out",
+  });
   overlay.animate(overlayKeyframe, {
     duration: 150,
-    easing: "ease-in-out"
-  })
+    easing: "ease-in-out",
+  });
   if (type === "category") {
     overlay.classList.add("overlay--open");
     modalSelector.classList.add("modal--open");
     return;
   }
-  
+
   const categories = await getCategories();
   if (categories.length === 0) {
     alert("There are no categories available yet");
@@ -105,15 +105,24 @@ export async function openModal(type) {
 }
 /**
  *
- * @param {() => void} callbackfn
  * @param {string} message
+ * @param {string} id
+ * @param {boolean} [category=false]
  */
-export async function deleteModal(message, id) {
+export async function deleteModal(message, id, category = false) {
   currentType = "delete";
   currentDelete = id;
+  deleteMode = category ? "category" : "todo";
   overlay.classList.add("overlay--open");
   deleteForm.classList.add("modal--open");
-
+  deleteForm.animate(modalKeyframe, {
+    duration: 150,
+    easing: "ease-in-out",
+  });
+  overlay.animate(overlayKeyframe, {
+    duration: 150,
+    easing: "ease-in-out",
+  });
   /**
    * @type {Element}
    */
@@ -124,6 +133,13 @@ export async function deleteModal(message, id) {
 
 deleteForm.addEventListener("submit", (e) => {
   e.preventDefault();
+  if (deleteMode === "category") {
+    deleteCategory(currentDelete).then(() =>{
+      window.location.reload();
+    })
+    return
+    // window.location.reload();
+  }
   const currentContainer = document.querySelector(
     `.mode__container--${currentView}`
   );
@@ -147,20 +163,23 @@ export function closeModal(type) {
     }
   });
   const modalSelector = document.querySelector(`.modal--${type}`);
-  modalSelector.animate(modalKeyframe, {
-    duration: 150,
-    direction: "reverse"
-  }).finished.then(() => {
-    modalSelector.classList.remove("modal--open");
-    modalSelector.reset();
-  })
-  overlay.animate(overlayKeyframe, {
-    duration: 150,
-    direction: "reverse"
-  }).finished.then(() => {
-    overlay.classList.remove("overlay--open");
-  })
-
+  modalSelector
+    .animate(modalKeyframe, {
+      duration: 150,
+      direction: "reverse",
+    })
+    .finished.then(() => {
+      modalSelector.classList.remove("modal--open");
+      modalSelector.reset();
+    });
+  overlay
+    .animate(overlayKeyframe, {
+      duration: 150,
+      direction: "reverse",
+    })
+    .finished.then(() => {
+      overlay.classList.remove("overlay--open");
+    });
 }
 
 todoForm.addEventListener("submit", (e) => {
