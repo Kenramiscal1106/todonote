@@ -1,11 +1,18 @@
 import { DAYS, MONTH_DATA } from "./constants.js";
+import { getCalendarTodos } from "./index.js";
+import { currentCategory } from "./sidebar.js";
 // import { getCalendarTodos } from "./index.js";
 // import { currentCategory } from "./sidebar.js";
 // import { isWithinDay } from "./utilities.js";
 
-export function renderCalendar() {
-  const calendarContainer = document.querySelector(".mode--calendar");
+export async function renderCalendar() {
+  const calendarTodos = await getCalendarTodos(currentCategory);
+  console.log(calendarTodos);
   // during month
+  const calendarContainer = document.querySelector(".mode--calendar");
+  if (calendarContainer.firstChild) {
+    calendarContainer.removeChild(calendarContainer.firstChild);
+  }
   const calendarWrapper = document.createElement("table");
   const thead = document.createElement("thead");
   const tbody = document.createElement("tbody");
@@ -36,8 +43,22 @@ export function renderCalendar() {
   for (let i = 0; i < monthData.date; i++) {
     currentDate.setDate(i + 1);
     const day = currentDate.getDay();
-    const targetCell = document.querySelector(`[data-row="${currentRow}"][data-column="${day+1}"]`)
+    const targetCell = document.querySelector(
+      `[data-row="${currentRow}"][data-column="${day + 1}"]`
+    );
+    const taskContainer = document.createElement("div");
     targetCell.textContent = i + 1;
+    targetCell.appendChild(taskContainer);
+    const tasksKey = currentDate.toISOString().replace(/T.+/g, "");
+    const tasks = calendarTodos.has(tasksKey)
+      ? calendarTodos.get(tasksKey)
+      : [];
+    tasks.length !== 0 && tasks.forEach((task) => {
+      const mainContainer = document.createElement("div");
+      mainContainer.textContent = task.taskName;
+      taskContainer.appendChild(mainContainer);
+    });
+    taskContainer.setAttribute("data-monthdate", currentDate.getDate());
     if (day === 6) {
       currentRow++;
     } else {
@@ -45,8 +66,6 @@ export function renderCalendar() {
     }
   }
 }
-
-renderCalendar();
 
 /**
  *
@@ -74,4 +93,26 @@ function generateCalendarMeta() {
   }
   rows += unfactoredDays / columns;
   return [monthData, columns, rows];
+}
+
+/**
+ *
+ * @param {{
+ * id: string,
+ * taskName: string,
+ * deadline: string,
+ * categoryId: string,
+ * status: "pending" | "ongoing" | "done"
+ * }} todo
+ */
+function renderCalendarTask(todo) {
+  const mainContainer = document.querySelector("div");
+  mainContainer.textContent = todo.taskName;
+  const taskDate = new Date(todo.deadline);
+  console.log(taskDate.getDate());
+  const taskContainer = document.querySelector(
+    `[data-monthdate="${taskDate.getDate()}"]`
+  );
+  console.log(taskContainer);
+  taskContainer.appendChild(mainContainer);
 }
