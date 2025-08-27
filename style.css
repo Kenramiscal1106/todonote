@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 
 :root {
   --space-1: 4px;
@@ -90,7 +90,7 @@
   }
 
   *:not(svg > *) {
-    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont,
       "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
       "Helvetica Neue", sans-serif;
     box-sizing: border-box;
@@ -197,7 +197,8 @@
     flex: 1 0 0;
     text-align: center;
   }
-  .overlay, .sidebar-overlay {
+  .overlay,
+  .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -209,7 +210,7 @@
     display: none;
   }
   .sidebar-overlay {
-    z-index:5; 
+    z-index: 5;
   }
   .overlay--open {
     display: block;
@@ -304,14 +305,14 @@
 
   .sidebar__home-tab p {
     color: var(--colors-neutral-300, #bcbec8);
-    font-family: Inter;
+
     font-size: var(--text-base, 16px);
     font-style: normal;
     font-weight: 400;
     line-height: 130%; /* 20.8px */
     cursor: pointer;
   }
-  
+
   .brand-name img {
     width: 19.526px;
     height: 24px;
@@ -319,7 +320,7 @@
 
   .brand-name h1 {
     color: #fff;
-    font-family: Inter;
+
     font-size: var(--text-lg, 18px);
     font-style: normal;
     font-weight: 700;
@@ -354,9 +355,9 @@
       var(--colors-primary-400, #6db3d9) 100%
     );
     position: absolute;
-    top:0;
-    left:0;
-    height:100%;
+    top: 0;
+    left: 0;
+    height: 100%;
     transition: width 0.4s;
   }
   .progress > *:not(.progress__bar) {
@@ -365,7 +366,7 @@
 
   .progress p {
     color: #fff;
-    font-family: Inter;
+
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
@@ -374,7 +375,7 @@
 
   .progress-status {
     color: var(--colors-neutral-100, #f9fafa);
-    font-family: Inter;
+
     font-size: var(--text-base, 14px);
     font-style: normal;
     font-weight: 700;
@@ -387,7 +388,7 @@
 
   .progress__bar__text {
     color: var(--colors-neutral-400, #979aaa);
-    font-family: Inter;
+
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 400;
@@ -438,7 +439,7 @@
 
   .mode-container--kanban .item p {
     color: var(--colors-neutral-100, #f9fafa);
-    font-family: Inter;
+
     font-size: var(--text-base, 16px);
     font-style: normal;
     font-weight: 500;
@@ -517,11 +518,11 @@
   .category__delete-btn {
     transition: stroke 0.2s, background-color 0.2s;
     opacity: 0;
-    padding:var(--space-1);
+    padding: var(--space-1);
     border-radius: var(--rounded-small);
     stroke: var(--colors-neutral-400);
     &:hover {
-      background-color:var(--colors-neutral-600);
+      background-color: var(--colors-neutral-600);
       stroke: var(--colors-neutral-200);
     }
   }
@@ -532,7 +533,7 @@
     transition: background-color 0.2s ease;
     cursor: pointer;
     & .category__delete-btn {
-      opacity:1;
+      opacity: 1;
     }
   }
   .tab--active {
@@ -542,7 +543,7 @@
     cursor: pointer;
     color: var(--colors-neutral-100);
     & .category__delete-btn {
-      opacity:1;
+      opacity: 1;
     }
   }
 
@@ -567,7 +568,7 @@
     align-items: flex-start;
     gap: 10px;
     margin: 0px auto;
-    max-width:1024px;
+    max-width: 1024px;
     transition: max-width 0.5s ease;
   }
   .header__container--contained {
@@ -591,7 +592,7 @@
   }
   .streak .streak__count {
     color: var(--colors-alert-500, #ad402d);
-    font-family: Inter;
+
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 500;
@@ -606,7 +607,7 @@
 
   .category-info p {
     color: var(--colors-neutral-300, #bcbec8);
-    font-family: Inter;
+
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 400;
@@ -614,7 +615,7 @@
   }
   .category-info__icon {
     color: #fff;
-    font-family: Inter;
+
     font-size: var(--text-3xl, 32px);
     font-style: normal;
     font-weight: 500;
@@ -656,7 +657,7 @@
     align-items: center;
     gap: var(--space-1, 4px);
     color: var(--colors-neutral-100, #f9fafa);
-    font-family: Inter;
+
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -695,7 +696,7 @@
     display: initial;
   }
   .mode--transition {
-    opacity:0;
+    opacity: 0;
   }
   .mode__container--default {
     display: flex;
@@ -727,7 +728,7 @@
 
   .todo__meta__name {
     color: var(--colors-neutral-100, #f9fafa);
-    font-family: Inter;
+
     font-size: var(--text-xl, 20px);
     font-style: normal;
     font-weight: 500;
@@ -741,13 +742,13 @@
   }
 
   .todo__meta__deadline__icon {
-    display:flex;
+    display: flex;
     align-items: center;
   }
 
-  .todo__meta__deadline__text{
+  .todo__meta__deadline__text {
     color: var(--colors-alert-400, #e5715c);
-    font-family: Inter;
+
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 400;
@@ -755,7 +756,7 @@
   }
 
   .todo--done {
-    opacity:0.5;
+    opacity: 0.5;
     & .todo__meta__name {
       text-decoration: line-through;
     }
@@ -794,30 +795,32 @@
   }
 
   table {
-    width:100%;
+    width: 100%;
     max-width: 1024px;
     border-collapse: collapse;
     margin: 0px auto;
   }
 
-  table, th, td {
-    border:1px solid var(--colors-neutral-700);
+  table,
+  th,
+  td {
+    border: 1px solid var(--colors-neutral-700);
   }
 
   th,
   td {
     padding: 12px;
     text-align: left;
-    width: calc(100%/7);
+    width: calc(100% / 7);
     font-size: 0.75rem;
   }
-  
+
   th {
     background-color: var(--colors-neutral-800);
-    text-align:center;  
+    text-align: center;
     font-weight: 600;
     &:first-child {
-      color:var(--colors-alert-400);
+      color: var(--colors-alert-400);
     }
   }
 
@@ -826,29 +829,29 @@
   }
   @media screen and (max-width: 947px) {
     .header {
-      margin-left:0;
-      width:100%;
+      margin-left: 0;
+      width: 100%;
     }
     .panel {
-      margin-left:0;
-      width:100%;
+      margin-left: 0;
+      width: 100%;
     }
     .sidebar {
       transition: left 0.2s ease;
-      left:-280px;
+      left: -280px;
     }
     .sidebar--open {
       left: 0px;
     }
     .sidebar-trigger {
-      position:fixed;
+      position: fixed;
       top: var(--space-2);
-      left:var(--space-2);
-      padding:var(--space-4);
-      z-index:5;
+      left: var(--space-2);
+      padding: var(--space-4);
+      z-index: 5;
       background-color: var(--colors-neutral-800);
       &:active {
-        background-color:var(--colors-neutral-700);
+        background-color: var(--colors-neutral-700);
       }
     }
   }

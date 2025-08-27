@@ -150,6 +150,7 @@ deleteForm.addEventListener("submit", (e) => {
   );
   currentContainer.removeChild(targetDelete);
   renderProgressBar();
+  renderHeaderElement(currentCategory);
 });
 
 /**
