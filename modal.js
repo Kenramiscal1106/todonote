@@ -1,3 +1,4 @@
+import { addContent } from "./content.js";
 import { currentView, renderHeaderElement } from "./header.js";
 import { addCategories, addTodo, deleteCategory, deleteTodo, getCategories } from "./index.js";
 import { currentCategory, renderProgressBar } from "./sidebar.js";
@@ -208,6 +209,7 @@ todoForm.addEventListener("submit", (e) => {
   };
 
   addTodo(data);
+  addContent(data); 
   event.currentTarget.reset();
   closeModal("todo");
   renderHeaderElement(currentCategory === "" ? undefined : currentCategory);

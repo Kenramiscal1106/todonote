@@ -1,3 +1,4 @@
+import { renderContent } from "./content.js";
 import { renderHeaderElement } from "./header.js";
 import { getCategoryTodos } from "./index.js";
 import { deleteModal } from "./modal.js";
@@ -13,15 +14,18 @@ const sidebarTrigger = document.querySelector(".sidebar-trigger");
 
 const sidebarOverlay = document.querySelector(".sidebar-overlay");
 const sidebar = document.querySelector(".sidebar");
-sidebarTrigger.addEventListener("click", () => {
-  // sidebar.classList.add("active")
-  sidebar.classList.add("sidebar--open")
-  sidebarOverlay.classList.add("overlay--open")
-})
-sidebarOverlay.addEventListener("click", () => {
+
+function openSidebar() {
+  sidebar.classList.add("sidebar--open");
+  sidebarOverlay.classList.add("overlay--open");
+}
+function closeSidebar() {
   sidebarOverlay.classList.remove("overlay--open");
-  sidebar.classList.remove("sidebar--open")
-})
+  sidebar.classList.remove("sidebar--open");
+}
+
+sidebarTrigger.addEventListener("click", openSidebar);
+sidebarOverlay.addEventListener("click", closeSidebar);
 
 /**
  *
@@ -54,13 +58,17 @@ export function renderCategoryTab(category) {
 
   categoryInfo.classList.add("category__info");
   categoryTab.classList.add("category");
-  deleteButton.classList.add("category__delete-btn")
+  deleteButton.classList.add("category__delete-btn");
   tabContainer.appendChild(categoryTab);
   categoryTab.addEventListener("click", handleCategoryChange(category));
   deleteButton.addEventListener("click", (e) => {
     e.stopPropagation();
-    deleteModal("All todos, along with the category itself, will be deletee. Are you sure you want to continue", category.id, true)
-  })
+    deleteModal(
+      "All todos, along with the category itself, will be deletee. Are you sure you want to continue",
+      category.id,
+      true
+    );
+  });
 }
 
 /**
@@ -81,7 +89,9 @@ function handleCategoryChange(category) {
     if (activeTab.dataset.categoryId === category.id) return;
     activeTab.classList.remove("tab--active");
     renderHeaderElement(category.id);
+    renderContent();
     renderProgressBar();
+    closeSidebar();
   };
 }
 export async function renderProgressBar() {
@@ -114,5 +124,7 @@ async function handleHome(event) {
   event.currentTarget.classList.add("tab--active");
   activeTab.classList.remove("tab--active");
   renderHeaderElement();
+  renderContent();
   renderProgressBar();
+  closeSidebar();
 }

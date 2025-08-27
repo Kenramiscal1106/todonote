@@ -568,7 +568,7 @@
     align-items: flex-start;
     gap: 10px;
     margin: 0px auto;
-    max-width: 1024px;
+    max-width: 1280px;
     transition: max-width 0.5s ease;
   }
   .header__container--contained {
@@ -796,22 +796,28 @@
 
   table {
     width: 100%;
-    max-width: 1024px;
+    max-width: 1280px;
     border-collapse: collapse;
     margin: 0px auto;
+    height: calc(100vh - 240px);
+    table-layout: fixed;
   }
 
   table,
   th,
   td {
-    border: 1px solid var(--colors-neutral-700);
+    border: 2px solid var(--colors-neutral-700);
+    vertical-align: top;
   }
-
+/* 
+  td {
+    min-height: 4rem;
+    height:4rem;
+  } */
   th,
   td {
     padding: 12px;
     text-align: left;
-    width: calc(100% / 7);
     font-size: 0.75rem;
   }
 

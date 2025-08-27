@@ -230,14 +230,12 @@ export async function deleteCategory(categoryId) {
             type: "success",
             message: "Category successfully deleted",
           });
-          console.log("Record deleted successfully.");
         };
         deleteRequest.onerror = function () {
           console.error("Error deleting record.");
         };
         cursor.continue(); // Move to the next record if needed
       } else {
-        console.log("No more records to delete or record not found.");
       }
       resolve();
     };
@@ -340,18 +338,18 @@ export function getCalendarTodos(categoryId) {
     const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
     const indexSearch = todoStore.index("categoryId");
 
-    const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
+    const data = indexSearch.getAll(categoryId === '' ? undefined : IDBKeyRange.only(categoryId));
 
     data.onsuccess = (event) => {
       event.target.result.forEach((todo) => {
-        if (todosMap.has(todo.deadline)) {
-          const dateTodo = todosMap.get(todo.deadline);
-          // console.log(dateTodo)
+        const key = todo.deadline.replace(/T.+/g, "");
+        if (todosMap.has(key)) {
+          const dateTodo = todosMap.get(key);
           dateTodo.push(todo);
-          todosMap.set(todo.deadline, dateTodo);
+          todosMap.set(key, dateTodo);
           return;
         }
-        todosMap.set(todo.deadline, [todo]);
+        todosMap.set(key, [todo]);
       });
       resolve(todosMap);
     };
