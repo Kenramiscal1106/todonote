@@ -3,7 +3,7 @@ import { renderHeaderElement } from "./header.js";
 import { getCategoryTodos } from "./index.js";
 import { deleteModal } from "./modal.js";
 
-export let currentCategory = "";
+export let currentCategory = localStorage.getItem("current-category") || "";
 
 const homeTab = document.querySelector(".sidebar__home-tab");
 homeTab.classList.add("tab--active");
@@ -64,7 +64,7 @@ export function renderCategoryTab(category) {
   deleteButton.addEventListener("click", (e) => {
     e.stopPropagation();
     deleteModal(
-      "All todos, along with the category itself, will be deletee. Are you sure you want to continue",
+      "All todos, along with the category itself, will be deleted. Are you sure you want to continue?",
       category.id,
       true
     );
@@ -86,6 +86,7 @@ function handleCategoryChange(category) {
     event.currentTarget.classList.add("tab--active");
     if (!activeTab) return;
     currentCategory = category.id;
+    localStorage.setItem("current-category", category.id);
     if (activeTab.dataset.categoryId === category.id) return;
     activeTab.classList.remove("tab--active");
     renderHeaderElement(category.id);

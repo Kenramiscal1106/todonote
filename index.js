@@ -1,5 +1,7 @@
 "use strict";
 
+import { renderContent } from "./content.js";
+import { renderHeaderElement } from "./header.js";
 import { renderCategoryTab, renderProgressBar } from "./sidebar.js";
 import { renderToast } from "./toast.js";
 import { renderTodo } from "./todos.js";
@@ -20,32 +22,22 @@ request.onsuccess = () => {
 
   const categoriesStore = transaction.objectStore("Categories");
   const todosStore = transaction.objectStore("Todos");
-  const statusIndex = todosStore.index("status");
 
   const data = categoriesStore.getAll();
-  const dataTodo = todosStore.getAll();
-
+  renderContent();
   renderProgressBar();
-  const headerNum = document.querySelector(
-    ".categories-info__metadata__num-tasks"
-  );
-  dataTodo.onsuccess = (event) => {
-    renderToast({
-      message: "Todos successfully loaded",
-      type: "success",
-    });
-    event.target.result.forEach((todo) => {
-      renderTodo(todo);
-    });
-    headerNum.textContent = `${event.target.result.length} task/s`;
-  };
+  renderHeaderElement();
 
   data.onsuccess = (event) => {
     renderToast({
       message: "Categories successfully loaded",
       type: "success",
     });
-    event.target.result.forEach((category) => {
+    const categories = event.target.result;
+    if (categories.length === 0) {
+      document.querySelector(".categories-empty").classList.add("categories-empty--active");
+    }
+    categories.forEach((category) => {
       renderCategoryTab(category);
     });
   };
@@ -180,18 +172,17 @@ export function getCategory(categoryId) {
  */
 export function addTodo(data) {
   return new Promise((resolve, reject) => {
-
     const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
-  
+
     const action = todoStore.add(data);
     action.onsuccess = () => {
-      resolve()
+      resolve();
       renderToast({
         message: "Todo successfully added",
         type: "success",
       });
     };
-  })
+  });
 }
 
 /**
@@ -265,7 +256,7 @@ export async function deleteCategory(categoryId) {
 export function updateTodo(newData) {
   return new Promise((resolve, reject) => {
     const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
-  
+
     const action = todoStore.get(newData.id);
     action.onsuccess = (event) => {
       todoStore.put(newData);
@@ -273,17 +264,17 @@ export function updateTodo(newData) {
         message: "Todo updated successfully",
         type: "success",
       });
-      resolve()
+      resolve();
     };
-  
+
     action.onerror = (event) => {
       renderToast({
         message: event.target.error?.message,
         type: "alert",
       });
-      reject(event.target.error?.message)
+      reject(event.target.error?.message);
     };
-  })
+  });
 }
 
 /**

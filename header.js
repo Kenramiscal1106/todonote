@@ -57,12 +57,10 @@ viewTab.forEach((tab) => {
   });
 });
 
-/**
- * @param {string} categoryId
- */
-export async function renderHeaderElement(categoryId) {
+
+export async function renderHeaderElement() {
   const category =
-    typeof categoryId === "undefined" ? null : await getCategory(categoryId);
+    typeof currentCategory === "undefined" ? null : await getCategory(currentCategory);
   headerTitle.textContent = category ? category.name : "Overview";
   headerIcon.textContent = category ? category.categoryIcon : "🧑‍🦱";
   const todos = await getCategoryTodos(category ? category.id : "", true);

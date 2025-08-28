@@ -174,6 +174,7 @@ deleteForm.addEventListener("submit", (e) => {
   e.preventDefault();
   if (deleteMode === "category") {
     deleteCategory(currentDelete).then(() => {
+      localStorage.setItem("current-category", "");
       window.location.reload();
     });
     return;
@@ -282,6 +283,7 @@ categoryForm.addEventListener("submit", (e) => {
     name: extractedData["category-name"],
     order: [],
   });
+  document.querySelector(".categories-empty").classList.remove("categories-empty--active");
   event.currentTarget.reset();
   closeModal("category");
 });

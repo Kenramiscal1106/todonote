@@ -31,5 +31,6 @@ export function addContent(todo) {
   switch (currentView) {
     case "default":
       renderTodo(todo);
+      break;
   }
 }

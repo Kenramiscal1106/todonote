@@ -426,7 +426,7 @@
 
   .mode-container--kanban .list {
     display: flex;
-    padding: var(--space-3, 12px) var(--space-4, 16px);
+    padding: var(--space-3, 12px) var(--space-3, 16px);
     align-items: center;
     align-self: stretch;
     border-radius: var(--rounded-small, 8px);
@@ -460,12 +460,15 @@
   .status {
     display: flex;
     width: 366px;
-    padding: var(--space-6, 24px) var(--space-4, 16px);
+    padding: var(--space-3, 24px) var(--space-3, 16px);
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-3, 12px);
     border-radius: var(--rounded-small, 8px);
     background: var(--colors-neutral-800);
+  }
+  .status > h2 {
+    font-size: var(--text-xl);
   }
 
   .categories {
@@ -476,10 +479,33 @@
     align-self: stretch;
   }
 
-  .categories-add {
+  .categories-empty {
+    padding: var(--space-4);
+    background-color: var(--colors-neutral-900);
     border-radius: var(--rounded-small);
+    display:none;
+    flex-direction: column;
+    align-items: center;
+    text-align:center;
+  }
+
+  .categories-empty--active {
+    display:flex;
+  }
+
+  button.categories-add {
+    border-radius: var(--rounded-full);
+    color:var(--colors-neutral-100);
+    stroke:currentColor;
+    font-size:var(--text-sm);
+    font-weight:bold;
+    padding: var(--space-2) var(--space-4);
+  }
+  a.categories-add {
+    color:var(--colors-primary-500);
+    cursor:pointer;
     &:hover {
-      background-color: var(--colors-neutral-700);
+      color:var(--colors-primary-400);
     }
   }
 
@@ -509,6 +535,9 @@
   .category {
     padding: var(--space-1) var(--space-4, 16px);
     justify-content: space-between;
+    &:hover .category__delete-btn {
+      opacity: 1;
+    }
   }
   .category__info {
     display: flex;
@@ -531,9 +560,6 @@
     background: var(--colors-neutral-700, #3c3e48);
     transition: background-color 0.2s ease;
     cursor: pointer;
-    & .category__delete-btn {
-      opacity: 1;
-    }
   }
   .tab--active {
     font-weight: bold;
@@ -541,9 +567,6 @@
     background: var(--colors-neutral-700, #3c3e48);
     cursor: pointer;
     color: var(--colors-neutral-100);
-    & .category__delete-btn {
-      opacity: 1;
-    }
   }
 
   .categories-title svg {
@@ -555,7 +578,7 @@
     padding-top: var(--space-16, 48px);
     position: sticky;
     top: 0;
-    right: 0;
+    left: 0;
     width: 100%;
     padding-left: calc(280px + var(--space-6));
     background-color: var(--colors-neutral-900);
@@ -699,7 +722,6 @@
     opacity: 0;
   }
   .mode--calendar {
-    overflow-x: auto;
     padding: 0 var(--space-8);
   }
   .mode__container--default {
@@ -722,6 +744,20 @@
     background: var(--colors-neutral-800, #28292f);
   }
 
+  .todos-empty {
+    display:none;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    font-size:var(--text-xl);
+    & * {
+      font-size:initial;
+      font-weight:bold;
+    }
+  }
+  .todos-empty--active {
+    display:flex;
+  }
   .todo__meta {
     display: flex;
     flex-direction: column;
@@ -743,16 +779,16 @@
     display: flex;
     align-items: center;
     gap: var(--space-1, 4px);
+    color: var(--colors-neutral-400);
   }
 
   .todo__meta__deadline__icon {
     display: flex;
     align-items: center;
+    stroke: currentColor;
   }
 
   .todo__meta__deadline__text {
-    color: var(--colors-alert-400, #e5715c);
-
     font-size: var(--text-sm, 14px);
     font-style: normal;
     font-weight: 400;

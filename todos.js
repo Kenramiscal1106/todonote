@@ -13,12 +13,16 @@ import { currentCategory, renderProgressBar } from "./sidebar.js";
  * }} todo
  */
 export function renderTodo(todo) {
+  document.querySelector(".todos-empty").classList.remove("todos-empty--active");
+
   const defaultContainer = document.querySelector(".mode__container--default");
 
   const HOUR = 60,
     MINUTE = 60,
     SECOND = 1000;
-  const mainContainer = document.querySelector(`[data-task-id="${todo.id}"]`) || document.createElement("div");
+  const mainContainer =
+    document.querySelector(`[data-task-id="${todo.id}"]`) ||
+    document.createElement("div");
   const metaContainer = document.createElement("div");
   const metaName = document.createElement("div");
   const metaDeadline = document.createElement("div");
@@ -182,12 +186,11 @@ export function renderTodo(todo) {
       mainContainer.classList.add("todo--done");
       renderHeaderElement(currentCategory);
       renderProgressBar();
-    })
+    });
   });
   actionEdit.addEventListener("click", () => {
-    openModal("edit", todo)
-  })
-
+    openModal("edit", todo);
+  });
 
   metaDeadline.appendChild(metaIcon);
   metaDeadline.appendChild(metaDeadlineText);
@@ -204,7 +207,6 @@ export function renderTodo(todo) {
   } else {
     if (todo.deadline !== "") {
       metaContainer.appendChild(metaDeadline);
-
     }
   }
   mainContainer.appendChild(metaContainer);
