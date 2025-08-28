@@ -52,6 +52,14 @@ let deleteMode = "todo";
  */
 let currentEdit = "";
 
+
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeModal(currentType);
+  }
+})
+
 datetimeInput.setAttribute(
   "min",
   new Date().toISOString().replace(/:\d+.\d+Z$/g, "")
