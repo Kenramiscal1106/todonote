@@ -47,7 +47,7 @@ export function renderTodo(todo) {
         beforeMS / SECOND
       )} second/s left`;
     } else {
-      metaDeadlineText.textContent = "Todo is overdue "
+      metaDeadlineText.textContent = "Todo is overdue ";
     }
   }
 
@@ -55,8 +55,8 @@ export function renderTodo(todo) {
   metaContainer.classList.add("todo__meta");
   metaName.classList.add("todo__meta__name");
   metaDeadline.classList.add("todo__meta__deadline");
-  metaIcon.classList.add("todo__meta__deadline__icon")
-  metaDeadlineText.classList.add("todo__meta__deadline__text")
+  metaIcon.classList.add("todo__meta__deadline__icon");
+  metaDeadlineText.classList.add("todo__meta__deadline__text");
   actionsContainer.classList.add("todo__actions");
   actionDone.classList.add("todo__action--done");
   actionEdit.classList.add("todo__action--edit");
@@ -177,8 +177,8 @@ export function renderTodo(todo) {
   actionDone.addEventListener("click", () => {
     const newData = {
       ...todo,
-      status: "done"
-    }
+      status: "done",
+    };
     updateTodo(newData)();
     renderHeaderElement(currentCategory);
     defaultContainer.removeChild(mainContainer);

@@ -1,54 +1,66 @@
 import { currentCategory } from "./sidebar.js";
-import { getKanbanTodos as getTodosFromIndex } from "./index.js";
 
-let db;
+let db = null;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await initDatabase();
+  refreshKanban();
+});
 
 document
   .querySelector('[data-tab="kanban"]')
-  .addEventListener("click", openKanban);
+  .addEventListener("click", refreshKanban);
 
-async function openKanban() {
-  const request = indexedDB.open("Main", 3);
+async function initDatabase() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("Main", 3);
 
-  request.onsuccess = async (event) => {
-    db = event.target.result;
+    request.onsuccess = (event) => {
+      db = event.target.result;
+      resolve();
+    };
 
-    try {
-      const categoryIds = await getAllCategoryIds();
-      console.log("Existing categories:", categoryIds);
+    request.onerror = (event) => {
+      console.error("Failed to open database:", event.target.error);
+      reject(event.target.error);
+    };
+  });
+}
 
-      const activeCategory = currentCategory || categoryIds[1];
+async function refreshKanban() {
+  if (!db) {
+    console.warn("Database not ready yet.");
+    return;
+  }
 
-      const todosByStatus = await getKanbanTodos(activeCategory);
-      clearKanbanItems();
-      Object.values(todosByStatus).flat().forEach(renderKanbanItem);
+  try {
+    const categoryIds = await getAllCategoryIds();
+    console.log("Existing categories:", categoryIds);
 
-      console.log("Todos loaded:", todosByStatus);
-    } catch (err) {
-      console.error("Error loading todos:", err);
-    }
-  };
+    const activeCategory = currentCategory || categoryIds[0];
 
-  request.onerror = (event) => {
-    console.error("Failed to open database:", event.target.error);
-  };
+    const todosByStatus = await getKanbanTodos(activeCategory);
+    clearKanbanItems();
+    Object.values(todosByStatus).flat().forEach(renderKanbanItem);
+
+    console.log("Todos loaded:", todosByStatus);
+  } catch (err) {
+    console.error("Error loading todos:", err);
+  }
 }
 
 function clearKanbanItems() {
-  const doneContainer = document.querySelector("#done");
-  const pendingContainer = document.querySelector("#pending");
-  const ongoingContainer = document.querySelector("#ongoing");
-
-  doneContainer.querySelectorAll(".list").forEach((item) => item.remove());
-  pendingContainer.querySelectorAll(".list").forEach((item) => item.remove());
-  ongoingContainer.querySelectorAll(".list").forEach((item) => item.remove());
+  ["#done", "#pending", "#ongoing"].forEach((selector) => {
+    document
+      .querySelectorAll(`${selector} .list`)
+      .forEach((item) => item.remove());
+  });
 }
 
 function getAllCategoryIds() {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("Todos", "readonly");
     const store = transaction.objectStore("Todos");
-
     const request = store.getAll();
 
     request.onsuccess = (event) => {
@@ -82,9 +94,11 @@ export function getKanbanTodos(categoryId) {
 }
 
 export function renderKanbanItem(kanbanItem) {
-  const doneContainer = document.querySelector("#done");
-  const pendingContainer = document.querySelector("#pending");
-  const ongoingContainer = document.querySelector("#ongoing");
+  const containerMap = {
+    pending: document.querySelector("#pending"),
+    ongoing: document.querySelector("#ongoing"),
+    done: document.querySelector("#done"),
+  };
 
   const list = document.createElement("div");
   const item = document.createElement("div");
@@ -93,7 +107,6 @@ export function renderKanbanItem(kanbanItem) {
   const kanbanTime = document.createElement("p");
 
   list.appendChild(item);
-
   list.classList.add("list");
   item.classList.add("item");
   kanbanTask.classList.add("kanban-task");
@@ -102,67 +115,45 @@ export function renderKanbanItem(kanbanItem) {
 
   list.dataset.id = kanbanItem.id;
   list.draggable = true;
-  list.style.display = "block";
   item.appendChild(kanbanTask);
   item.appendChild(timeLeft);
   timeLeft.appendChild(kanbanTime);
 
   timeLeft.innerHTML = `
-    <svg
-    width="18"
-    height="19"
-    viewBox="0 0 18 19"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M9 17C13.1421 17 16.5 13.6422 16.5 9.50005C16.5 5.35791 13.1421 2.00005 9 2.00005C4.85786 2.00005 1.5 5.35791 1.5 9.50005C1.5 13.6422 4.85786 17 9 17Z"
-      stroke="#E5715C"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M9 5V9.5L12 11"
-      stroke="#E5715C"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>`;
+    <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 17C13.1421 17 16.5 13.6422 16.5 9.50005C16.5 5.35791 13.1421 
+      2.00005 9 2.00005C4.85786 2.00005 1.5 5.35791 1.5 9.50005C1.5 13.6422 
+      4.85786 17 9 17Z" stroke="#E5715C" stroke-width="1.5"
+      stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M9 5V9.5L12 11" stroke="#E5715C" stroke-width="1.5"
+      stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
 
   kanbanTask.textContent = kanbanItem.taskName || "";
 
-  if (kanbanItem.status == "pending") {
-    pendingContainer.appendChild(list);
-  } else if (kanbanItem.status == "ongoing") {
-    ongoingContainer.appendChild(list);
-  } else if (kanbanItem.status == "done") {
-    doneContainer.appendChild(list);
-  }
+  containerMap[kanbanItem.status]?.appendChild(list);
 }
 
 // Drag and Drop
 const container = document.querySelector(".mode-container--kanban");
-
 let draggedList = null;
 
 container.addEventListener("dragstart", (e) => {
   if (e.target.classList.contains("list")) {
     draggedList = e.target;
-    setTimeout(() => (draggedList.style.opacity = "none"), 0);
+    setTimeout(() => (draggedList.style.opacity = "0.5"), 0);
   }
 });
 
 container.addEventListener("dragend", (e) => {
   if (e.target.classList.contains("list")) {
-    draggedList.style.display = "block";
+    draggedList.style.opacity = "1";
     draggedList = null;
   }
 });
 
-const statuses = document.querySelectorAll(".status");
-statuses.forEach((status) => {
+document.querySelectorAll(".status").forEach((status) => {
   status.addEventListener("dragover", (e) => e.preventDefault());
 
   status.addEventListener("drop", async () => {
@@ -172,10 +163,15 @@ statuses.forEach((status) => {
 
       status.appendChild(draggedList);
 
-      // Update IndexedDB
       try {
         await updateTodoStatus(todoId, newStatus);
+        document.dispatchEvent(
+          new CustomEvent("todos-updated", { detail: { source: "kanban" } })
+        );
+
+        await refreshKanban?.();
         console.log(`Todo ${todoId} status updated to ${newStatus}`);
+        await refreshKanban();
       } catch (err) {
         console.error("Failed to update todo status:", err);
       }
