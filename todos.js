@@ -1,6 +1,6 @@
 import { renderHeaderElement } from "./header.js";
 import { updateTodo } from "./index.js";
-import { deleteModal } from "./modal.js";
+import { deleteModal, openModal } from "./modal.js";
 import { currentCategory, renderProgressBar } from "./sidebar.js";
 
 /**
@@ -18,7 +18,7 @@ export function renderTodo(todo) {
   const HOUR = 60,
     MINUTE = 60,
     SECOND = 1000;
-  const mainContainer = document.createElement("div");
+  const mainContainer = document.querySelector(`[data-task-id="${todo.id}"]`) || document.createElement("div");
   const metaContainer = document.createElement("div");
   const metaName = document.createElement("div");
   const metaDeadline = document.createElement("div");
@@ -73,14 +73,12 @@ export function renderTodo(todo) {
     >
       <path
         d="M9.5 16.5C13.6421 16.5 17 13.1422 17 9.00005C17 4.85791 13.6421 1.50005 9.5 1.50005C5.35786 1.50005 2 4.85791 2 9.00005C2 13.1422 5.35786 16.5 9.5 16.5Z"
-        stroke="#E5715C"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
         d="M9.5 4.5V9L12.5 10.5"
-        stroke="#E5715C"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -177,14 +175,19 @@ export function renderTodo(todo) {
       status: "done",
     };
     clearInterval(interval);
-    updateTodo(newData)();
-    if (todo.deadline !== "") {
-      mainContainer.removeChild(metaContainer);
-    }
-    mainContainer.classList.add("todo--done");
-    renderHeaderElement(currentCategory);
-    renderProgressBar();
+    updateTodo(newData).then(() => {
+      if (todo.deadline !== "") {
+        metaContainer.removeChild(metaDeadline);
+      }
+      mainContainer.classList.add("todo--done");
+      renderHeaderElement(currentCategory);
+      renderProgressBar();
+    })
   });
+  actionEdit.addEventListener("click", () => {
+    openModal("edit", todo)
+  })
+
 
   metaDeadline.appendChild(metaIcon);
   metaDeadline.appendChild(metaDeadlineText);

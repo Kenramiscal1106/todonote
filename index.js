@@ -179,15 +179,19 @@ export function getCategory(categoryId) {
  * }} data
  */
 export function addTodo(data) {
-  const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
+  return new Promise((resolve, reject) => {
 
-  const action = todoStore.add(data);
-  action.onsuccess = () => {
-    renderToast({
-      message: "Todo successfully added",
-      type: "success",
-    });
-  };
+    const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
+  
+    const action = todoStore.add(data);
+    action.onsuccess = () => {
+      resolve()
+      renderToast({
+        message: "Todo successfully added",
+        type: "success",
+      });
+    };
+  })
 }
 
 /**
@@ -205,22 +209,27 @@ export function deleteTodo(todoId) {
   };
 }
 
+export function clearDone() {
+  const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
+  // const status = todoStore.index("status").
+}
+
 /**
  *
  * @param {string} categoryId
  */
 export async function deleteCategory(categoryId) {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const transaction = db.transaction(["Todos", "Categories"], "readwrite");
     const todoStore = transaction.objectStore("Todos");
     const categoryStore = transaction.objectStore("Categories");
     const indexSearch = todoStore.index("categoryId");
-  
+
     const indexCursorRequest = indexSearch.openCursor(
       IDBKeyRange.only(categoryId)
     );
     categoryStore.delete(categoryId);
-  
+
     indexCursorRequest.onsuccess = function (event) {
       const cursor = event.target.result;
       if (cursor) {
@@ -239,7 +248,7 @@ export async function deleteCategory(categoryId) {
       }
       resolve();
     };
-  })
+  });
 }
 
 /**
@@ -254,9 +263,9 @@ export async function deleteCategory(categoryId) {
  * @returns
  */
 export function updateTodo(newData) {
-  return (event) => {
+  return new Promise((resolve, reject) => {
     const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
-
+  
     const action = todoStore.get(newData.id);
     action.onsuccess = (event) => {
       todoStore.put(newData);
@@ -264,15 +273,17 @@ export function updateTodo(newData) {
         message: "Todo updated successfully",
         type: "success",
       });
+      resolve()
     };
-
+  
     action.onerror = (event) => {
       renderToast({
         message: event.target.error?.message,
-        type: "error",
+        type: "alert",
       });
+      reject(event.target.error?.message)
     };
-  };
+  })
 }
 
 /**
@@ -338,7 +349,9 @@ export function getCalendarTodos(categoryId) {
     const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
     const indexSearch = todoStore.index("categoryId");
 
-    const data = indexSearch.getAll(categoryId === '' ? undefined : IDBKeyRange.only(categoryId));
+    const data = indexSearch.getAll(
+      categoryId === "" ? undefined : IDBKeyRange.only(categoryId)
+    );
 
     data.onsuccess = (event) => {
       event.target.result.forEach((todo) => {
