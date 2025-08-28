@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="icons/logo.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="icons/icon.png" type="image/x-icon" />
     <title>2DoNote</title>
     <link rel="stylesheet" href="style.css" />
     <script src="index.js" type="module" defer></script>
@@ -76,72 +76,42 @@
           <div class="categories-info__metadata">
             <div>
               <h1 class="categories-info__metadata__title">Overview</h1>
-              <!-- <div class="streak">
-                <svg
-                  width="25"
-                  height="25"
-                  viewBox="0 0 25 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M11.6758 12.03C12.2223 11.263 12.1613 10.4553 11.7824 9.00235C11.033 6.12883 11.3314 4.55383 13.9148 2.68916L15.1756 1.77905L15.4806 3.30389C15.8047 4.92441 16.337 5.92671 17.7036 7.85464L17.8124 8.00815C19.781 10.7854 20.5 12.4596 20.5 15.5C20.5 19.1884 16.7714 22.5 12.5 22.5C8.22843 22.5 4.50002 19.1888 4.50002 15.5C4.50002 15.4311 4.50009 15.4331 4.48841 15.1285C4.39805 12.7718 4.83383 10.9274 6.59709 8.93586C6.96963 8.51509 7.3931 8.11068 7.86965 7.72371L8.92164 6.86946L9.42768 8.12658C9.8016 9.05547 10.2397 9.78567 10.7346 10.3215C11.1538 10.7754 11.4648 11.3461 11.6758 12.03ZM6.48694 15.0518C6.41443 13.1606 6.73714 11.7947 8.09451 10.2617C8.12376 10.2286 8.15345 10.1957 8.18357 10.1628C8.50649 10.7411 8.86659 11.2467 9.26541 11.6785C9.66908 12.1156 9.93132 12.9023 10.0019 14.0608L10.1123 15.8741L11.5853 14.8108C14.1686 12.9462 14.467 11.3712 13.7177 8.49766C13.3108 6.93739 13.2705 6.12118 13.9554 5.30052C14.3747 6.46759 15.0086 7.51111 16.072 9.01125L16.1808 9.1647C17.9318 11.635 18.5 12.9582 18.5 15.5C18.5 18.0275 15.7162 20.5 12.5 20.5C9.28362 20.5 6.50002 18.0279 6.50002 15.5C6.50002 15.3915 6.50044 15.4039 6.48694 15.0518Z"
-                    fill="url(#paint0_linear_136_197)"
-                  />
-                  <defs>
-                    <linearGradient
-                      id="paint0_linear_136_197"
-                      x1="15.5"
-                      y1="-1.5"
-                      x2="7.00002"
-                      y2="23"
-                      gradientUnits="userSpaceOnUse"
-                    >
-                      <stop stop-color="#FF62A1" />
-                      <stop offset="1" stop-color="#A00205" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                <p class="streak__count">4 days streak</p>
-              </div> -->
+              <div class="actions">
+                <button class="button action__btn-new todos-add primary">
+                  <svg
+                    width="19"
+                    height="18"
+                    viewBox="0 0 19 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14.75 2.25H4.25C3.42157 2.25 2.75 2.92157 2.75 3.75V14.25C2.75 15.0784 3.42157 15.75 4.25 15.75H14.75C15.5784 15.75 16.25 15.0784 16.25 14.25V3.75C16.25 2.92157 15.5784 2.25 14.75 2.25Z"
+                      stroke="#F9FAFA"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9.5 6V12"
+                      stroke="#F9FAFA"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M6.5 9H12.5"
+                      stroke="#F9FAFA"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  New
+                </button>
+              </div>
             </div>
             <p class="categories-info__metadata__num-tasks">0 tasks</p>
-          </div>
-          <div class="actions">
-            <button class="button action__btn-new todos-add primary">
-              <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M14.75 2.25H4.25C3.42157 2.25 2.75 2.92157 2.75 3.75V14.25C2.75 15.0784 3.42157 15.75 4.25 15.75H14.75C15.5784 15.75 16.25 15.0784 16.25 14.25V3.75C16.25 2.92157 15.5784 2.25 14.75 2.25Z"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M9.5 6V12"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M6.5 9H12.5"
-                  stroke="#F9FAFA"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              New
-            </button>
           </div>
         </div>
         <div class="lower">
@@ -272,14 +242,12 @@
                   >
                     <path
                       d="M9 17C13.1421 17 16.5 13.6422 16.5 9.50005C16.5 5.35791 13.1421 2.00005 9 2.00005C4.85786 2.00005 1.5 5.35791 1.5 9.50005C1.5 13.6422 4.85786 17 9 17Z"
-                      stroke="#E5715C"
                       stroke-width="1.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     />
                     <path
                       d="M9 5V9.5L12 11"
-                      stroke="#E5715C"
                       stroke-width="1.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -302,14 +270,12 @@
                   >
                     <path
                       d="M9 17C13.1421 17 16.5 13.6422 16.5 9.50005C16.5 5.35791 13.1421 2.00005 9 2.00005C4.85786 2.00005 1.5 5.35791 1.5 9.50005C1.5 13.6422 4.85786 17 9 17Z"
-                      stroke="#E5715C"
                       stroke-width="1.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     />
                     <path
                       d="M9 5V9.5L12 11"
-                      stroke="#E5715C"
                       stroke-width="1.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -335,14 +301,12 @@
                   >
                     <path
                       d="M9 17C13.1421 17 16.5 13.6422 16.5 9.50005C16.5 5.35791 13.1421 2.00005 9 2.00005C4.85786 2.00005 1.5 5.35791 1.5 9.50005C1.5 13.6422 4.85786 17 9 17Z"
-                      stroke="#E5715C"
                       stroke-width="1.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     />
                     <path
                       d="M9 5V9.5L12 11"
-                      stroke="#E5715C"
                       stroke-width="1.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -368,14 +332,12 @@
                   >
                     <path
                       d="M9 17C13.1421 17 16.5 13.6422 16.5 9.50005C16.5 5.35791 13.1421 2.00005 9 2.00005C4.85786 2.00005 1.5 5.35791 1.5 9.50005C1.5 13.6422 4.85786 17 9 17Z"
-                      stroke="#E5715C"
                       stroke-width="1.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     />
                     <path
                       d="M9 5V9.5L12 11"
-                      stroke="#E5715C"
                       stroke-width="1.5"
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -464,6 +426,90 @@
         type="datetime-local"
         class="modal__datetime-input"
         name="deadline"
+      />
+      <div class="modal__actions">
+        <button class="modal__btn ghost close-modal" type="button">
+          Cancel</button
+        ><button class="modal__btn primary" type="submit">Add</button>
+      </div>
+    </form>
+    <form class="modal modal--edit">
+      <div class="modal__icon modal__icon--primary">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 6H21"
+            stroke="#3D99C9"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8 12H21"
+            stroke="#3D99C9"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8 18H21"
+            stroke="#3D99C9"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 6H3.01"
+            stroke="#3D99C9"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 12H3.01"
+            stroke="#3D99C9"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M3 18H3.01"
+            stroke="#3D99C9"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+      <h2>Edit Todo</h2>
+      <input
+        type="text"
+        placeholder="Enter task name"
+        class="modal__text-input"
+        id="task-name-edit"
+        name="task-name"
+        autocomplete="off"
+        required
+      />
+      <select
+        name="category-id"
+        id="select-categories-edit"
+        class="modal__select-input"
+        placeholder="Select Category"
+        required
+      >
+        <option value="">Select Category</option>
+      </select>
+      <input
+        type="datetime-local"
+        class="modal__datetime-input"
+        name="deadline"
+        id="deadline-edit"
       />
       <div class="modal__actions">
         <button class="modal__btn ghost close-modal" type="button">
