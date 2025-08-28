@@ -1,9 +1,17 @@
 import { addContent } from "./content.js";
 import { currentView, renderHeaderElement } from "./header.js";
-import { addCategories, addTodo, deleteCategory, deleteTodo, getCategories } from "./index.js";
+import {
+  addCategories,
+  addTodo,
+  deleteCategory,
+  deleteTodo,
+  getCategories,
+  updateTodo,
+} from "./index.js";
 import { currentCategory, renderProgressBar } from "./sidebar.js";
+import { renderToast } from "./toast.js";
 
-const [todoForm, categoryForm, deleteForm] =
+const [todoForm, editForm, categoryForm, deleteForm] =
   document.querySelectorAll("form.modal");
 
 const datetimeInput = document.querySelector("[type='datetime-local']");
@@ -26,7 +34,7 @@ const modalKeyframe = [
 const overlayKeyframe = [{ opacity: 0 }, { opacity: 1 }];
 
 /**
- * @type {"todo" | "category" | "delete"}
+ * @type {"todo" | "category" | "delete" | "edit"}
  */
 let currentType = "todo";
 
@@ -38,6 +46,11 @@ let currentDelete = "";
  * @type {"todo" | "category"}
  */
 let deleteMode = "todo";
+
+/**
+ * @type {string}
+ */
+let currentEdit = "";
 
 datetimeInput.setAttribute(
   "min",
@@ -68,12 +81,14 @@ overlay.addEventListener("click", () => {
 });
 
 const select = document.querySelector("#select-categories");
+const editSelect = document.querySelector("#select-categories-edit");
 
 /**
- * @param {"todo" | "category"} type
+ * @param {"todo" | "category" | "edit"} type
  * @param {string} message
+ * @param {*} [todo=undefined]
  */
-export async function openModal(type) {
+export async function openModal(type, todo) {
   currentType = type;
   const modalSelector = document.querySelector(`.modal--${type}`);
   modalSelector.animate(modalKeyframe, {
@@ -96,11 +111,34 @@ export async function openModal(type) {
     return;
   }
   overlay.classList.add("overlay--open");
+
+  if (type === "edit") {
+    if (typeof todo === "undefined")
+      throw new Error("second argument of openModal undefined");
+    currentEdit = todo.id;
+    const nameInput = document.querySelector("input#task-name-edit");
+    const deadlineInput = document.querySelector("input#deadline-edit");
+    deadlineInput.value = todo.deadline;
+    nameInput.value = todo.taskName;
+    const categoryOption = document.querySelector(
+      `select#select-categories-edit[value="${todo.categoryId}"`
+    );
+    console.log(categoryOption);
+    // categoryOption.selected = true;
+  }
   categories.forEach((category) => {
     const option = document.createElement("option");
     option.setAttribute("value", category.id);
     option.textContent = category.categoryIcon + " " + category.name;
-    select.appendChild(option);
+    if (type === "todo") {
+      select.appendChild(option);
+      return;
+    }
+    if (category.id === todo.categoryId) {
+      option.selected = true;
+    }
+    editSelect.appendChild(option);
+    // console.log(option)
   });
   modalSelector.classList.add("modal--open");
 }
@@ -135,10 +173,10 @@ export async function deleteModal(message, id, category = false) {
 deleteForm.addEventListener("submit", (e) => {
   e.preventDefault();
   if (deleteMode === "category") {
-    deleteCategory(currentDelete).then(() =>{
+    deleteCategory(currentDelete).then(() => {
       window.location.reload();
-    })
-    return
+    });
+    return;
     // window.location.reload();
   }
   const currentContainer = document.querySelector(
@@ -162,6 +200,12 @@ export function closeModal(type) {
   options.forEach((option) => {
     if (option.textContent !== "Select Category") {
       select.removeChild(option);
+    }
+  });
+  const editOptions = Array.from(editSelect.children);
+  editOptions.forEach((option) => {
+    if (option.textContent !== "Select Category") {
+      editSelect.removeChild(option);
     }
   });
   const modalSelector = document.querySelector(`.modal--${type}`);
@@ -208,11 +252,13 @@ todoForm.addEventListener("submit", (e) => {
     taskName: extractedData["task-name"],
   };
 
-  addTodo(data);
-  addContent(data); 
-  event.currentTarget.reset();
-  closeModal("todo");
-  renderHeaderElement(currentCategory === "" ? undefined : currentCategory);
+  addTodo(data).then(() => {
+    console.log("adding data")
+    addContent(data);
+    closeModal("todo");
+    event.currentTarget.reset();
+    renderHeaderElement(currentCategory === "" ? undefined : currentCategory);
+  })
 });
 
 categoryForm.addEventListener("submit", (e) => {
@@ -238,4 +284,33 @@ categoryForm.addEventListener("submit", (e) => {
   });
   event.currentTarget.reset();
   closeModal("category");
+});
+
+editForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  const formData = new FormData(editForm);
+  const extractedData = Object.fromEntries(formData.entries());
+
+  renderProgressBar();
+  /**
+   * @type {{
+   * id: string,
+   * taskName: string,
+   * deadline: string,
+   * categoryId: string,
+   * status: "pending" | "ongoing" | "done"
+   * }}
+   */
+  const data = {
+    id: currentEdit,
+    categoryId: extractedData["category-id"],
+    deadline: extractedData["deadline"],
+    status: "pending",
+    taskName: extractedData["task-name"],
+  };
+  updateTodo(data).then(() => window.location.reload()).catch((error) => renderToast({
+    type: "alert",
+    message: error
+  }))
 });
