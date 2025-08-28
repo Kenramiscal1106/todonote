@@ -27,6 +27,7 @@ export async function renderCalendar() {
   });
   const [monthData, columns, rows] = generateCalendarMeta();
   const currentDate = new Date();
+  const dateToday = currentDate.getDate();
 
   for (let i = 0; i < rows; i++) {
     const trElement = document.createElement("tr");
@@ -46,6 +47,9 @@ export async function renderCalendar() {
     const targetCell = document.querySelector(
       `[data-row="${currentRow}"][data-column="${day + 1}"]`
     );
+    if (dateToday === i + 1) {
+      targetCell.classList.add("cell--active");
+    }
     const taskContainer = document.createElement("div");
     targetCell.textContent = i + 1;
     targetCell.appendChild(taskContainer);
@@ -53,11 +57,13 @@ export async function renderCalendar() {
     const tasks = calendarTodos.has(tasksKey)
       ? calendarTodos.get(tasksKey)
       : [];
-    tasks.length !== 0 && tasks.forEach((task) => {
-      const mainContainer = document.createElement("div");
-      mainContainer.textContent = task.taskName;
-      taskContainer.appendChild(mainContainer);
-    });
+    tasks.length !== 0 &&
+      tasks.forEach((task) => {
+        const mainContainer = document.createElement("div");
+        mainContainer.classList.add("task-item");
+        mainContainer.textContent = task.taskName;
+        taskContainer.appendChild(mainContainer);
+      });
     taskContainer.setAttribute("data-monthdate", currentDate.getDate());
     if (day === 6) {
       currentRow++;
@@ -107,6 +113,7 @@ function generateCalendarMeta() {
  */
 function renderCalendarTask(todo) {
   const mainContainer = document.querySelector("div");
+  mainContainer.setAttribute("data-calendar-task-id", todo.id);
   mainContainer.textContent = todo.taskName;
   const taskDate = new Date(todo.deadline);
   console.log(taskDate.getDate());
