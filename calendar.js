@@ -6,8 +6,11 @@ import { currentCategory } from "./sidebar.js";
 // import { isWithinDay } from "./utilities.js";
 
 export async function renderCalendar() {
+  document
+    .querySelector(".todos-empty")
+    .classList.remove("todos-empty--active");
+
   const calendarTodos = await getCalendarTodos(currentCategory);
-  console.log(calendarTodos);
   // during month
   const calendarContainer = document.querySelector(".mode--calendar");
   if (calendarContainer.firstChild) {
@@ -35,7 +38,7 @@ export async function renderCalendar() {
     for (let j = 0; j < columns; j++) {
       const tdElement = document.createElement("td");
       tdElement.setAttribute("data-row", i + 1);
-      tdElement.setAttribute("data-column", j + 1);
+      tdElement.setAttribute("data-column", j);
       trElement.appendChild(tdElement);
     }
   }
@@ -45,7 +48,7 @@ export async function renderCalendar() {
     currentDate.setDate(i + 1);
     const day = currentDate.getDay();
     const targetCell = document.querySelector(
-      `[data-row="${currentRow}"][data-column="${day + 1}"]`
+      `[data-row="${currentRow}"][data-column="${day}"]`
     );
     if (dateToday === i + 1) {
       targetCell.classList.add("cell--active");
@@ -53,7 +56,10 @@ export async function renderCalendar() {
     const taskContainer = document.createElement("div");
     targetCell.textContent = i + 1;
     targetCell.appendChild(taskContainer);
-    const tasksKey = currentDate.toISOString().replace(/T.+/g, "");
+
+    const tasksKey = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() < 10 ? "0" : ""
+    }${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
     const tasks = calendarTodos.has(tasksKey)
       ? calendarTodos.get(tasksKey)
       : [];
@@ -116,10 +122,8 @@ function renderCalendarTask(todo) {
   mainContainer.setAttribute("data-calendar-task-id", todo.id);
   mainContainer.textContent = todo.taskName;
   const taskDate = new Date(todo.deadline);
-  console.log(taskDate.getDate());
   const taskContainer = document.querySelector(
     `[data-monthdate="${taskDate.getDate()}"]`
   );
-  console.log(taskContainer);
   taskContainer.appendChild(mainContainer);
 }

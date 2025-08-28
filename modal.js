@@ -131,8 +131,6 @@ export async function openModal(type, todo) {
     const categoryOption = document.querySelector(
       `select#select-categories-edit[value="${todo.categoryId}"`
     );
-    console.log(categoryOption);
-    // categoryOption.selected = true;
   }
   categories.forEach((category) => {
     const option = document.createElement("option");
@@ -146,7 +144,6 @@ export async function openModal(type, todo) {
       option.selected = true;
     }
     editSelect.appendChild(option);
-    // console.log(option)
   });
   modalSelector.classList.add("modal--open");
 }
@@ -262,7 +259,6 @@ todoForm.addEventListener("submit", (e) => {
   };
 
   addTodo(data).then(() => {
-    console.log("adding data")
     addContent(data);
     closeModal("todo");
     event.currentTarget.reset();

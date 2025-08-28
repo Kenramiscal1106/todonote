@@ -7,11 +7,9 @@ import { renderTodo } from "./todos.js";
 export function renderContent() {
   switch (currentView) {
     case "default":
-      console.log("default renders");
       renderDefault();
       break;
     case "calendar":
-      console.log("calendar renders");
       renderCalendar();
       break;
   }
