@@ -250,7 +250,7 @@ todoForm.addEventListener("submit", (e) => {
    * taskName: string,
    * deadline: string,
    * categoryId: string,
-   * status: "pending" | "ongoing" | "done"
+   * status: "pending" | "in-progress" | "done"
    * }}
    */
   const data = {
@@ -312,7 +312,7 @@ editForm.addEventListener("submit", (e) => {
    * taskName: string,
    * deadline: string,
    * categoryId: string,
-   * status: "pending" | "ongoing" | "done"
+   * status: "pending" | "in-progress" | "done"
    * }}
    */
   const data = {

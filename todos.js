@@ -9,7 +9,7 @@ import { currentCategory, renderProgressBar } from "./sidebar.js";
  * taskName: string,
  * deadline: string,
  * categoryId: string,
- * status: "pending" | "ongoing" | "done"
+ * status: "pending" | "in-progress" | "done"
  * }} todo
  */
 export function renderTodo(todo) {

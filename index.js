@@ -167,7 +167,7 @@ export function getCategory(categoryId) {
  * taskName: string,
  * deadline: string,
  * categoryId: string,
- * status: "pending" | "ongoing" | "done"
+ * status: "pending" | "in-progress" | "done"
  * }} data
  */
 export function addTodo(data) {
@@ -249,7 +249,7 @@ export async function deleteCategory(categoryId) {
  * taskName: string,
  * deadline: string,
  * categoryId: string,
- * status: "pending" | "ongoing" | "done"
+ * status: "pending" | "in-progress" | "done"
  * }} newData
  * @returns
  */
@@ -286,7 +286,7 @@ export function updateTodo(newData) {
  * taskName: string,
  * deadline: string,
  * categoryId: string,
- * status: "pending" | "ongoing" | "done"
+ * status: "pending" | "in-progress" | "done"
  * }[]>}
  */
 export function getCategoryTodos(categoryId, all = false) {
@@ -322,7 +322,7 @@ export function getCategoryTodos(categoryId, all = false) {
  * taskName: string,
  * deadline: string,
  * categoryId: string,
- * status: "pending" | "ongoing" | "done"
+ * status: "pending" | "in-progress" | "done"
  * }[]>>}
  */
 export function getCalendarTodos(categoryId) {
@@ -333,7 +333,7 @@ export function getCalendarTodos(categoryId) {
      * taskName: string,
      * deadline: string,
      * categoryId: string,
-     * status: "pending" | "ongoing" | "done"
+     * status: "pending" | "in-progress" | "done"
      * }[]>}
      */
     const todosMap = new Map();
@@ -373,7 +373,7 @@ export function getKanbanTodos(categoryId) {
   return new Promise((resolve, reject) => {
     const todosByStatus = {
       pending: [],
-      ongoing: [],
+      "in-progress": [],
       done: [],
     };
     const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");

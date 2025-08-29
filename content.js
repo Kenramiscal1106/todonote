@@ -22,7 +22,7 @@ export function renderContent() {
  * taskName: string,
  * deadline: string,
  * categoryId: string,
- * status: "pending" | "ongoing" | "done"
+ * status: "pending" | "in-progress" | "done"
  * }} todo
  */
 export function addContent(todo) {

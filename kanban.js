@@ -43,7 +43,7 @@ async function refreshKanban() {
 }
 
 function clearKanbanItems() {
-  ["#done", "#pending", "#ongoing"].forEach((selector) => {
+  ["#done", "#pending", "#in-progress"].forEach((selector) => {
     document
       .querySelectorAll(`${selector} .list`)
       .forEach((item) => item.remove());
@@ -69,7 +69,7 @@ function getAllCategoryIds() {
 export function renderKanbanItem(kanbanItem) {
   const containerMap = {
     pending: document.querySelector("#pending"),
-    ongoing: document.querySelector("#ongoing"),
+    "in-progress": document.querySelector("#in-progress"),
     done: document.querySelector("#done"),
   };
 
