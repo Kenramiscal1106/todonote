@@ -115,7 +115,10 @@ export async function openModal(type, todo) {
 
   const categories = await getCategories();
   if (categories.length === 0) {
-    alert("There are no categories available yet");
+    renderToast({
+      type: "alert",
+      message: "There are no categories available yet"
+    })
     return;
   }
   overlay.classList.add("overlay--open");
@@ -272,11 +275,17 @@ categoryForm.addEventListener("submit", (e) => {
   const regex = /\p{Emoji_Presentation}/gu;
   const emoji = extractedData["category-emoji"];
   if (emoji.length === 0) {
-    alert("No emoji found");
+    renderToast({
+      type: "alert",
+      message: "No emoji found"
+    })
     return;
   }
   if (!regex.test(emoji) && emoji.length > 2) {
-    alert("That character is not allowed");
+    renderToast({
+      type: "alert",
+      message: "That character is not allowed"
+    })
     return;
   }
 

@@ -268,7 +268,7 @@
     flex-direction: column;
     gap: var(--space-3);
     position: fixed;
-    bottom: var(--space-4);
+    top: var(--space-4);
     right: var(--space-4);
     z-index: 100;
     width: min(100%, 20rem);
@@ -419,9 +419,9 @@
     padding: 0 1rem;
     justify-content: center;
     > * {
-      flex-grow:1;
-      flex-shrink:0;
-      flex-basis:366px;
+      flex-grow: 1;
+      flex-shrink: 0;
+      flex-basis: 366px;
     }
   }
   .mode--kanban {
@@ -486,29 +486,29 @@
     padding: var(--space-4);
     background-color: var(--colors-neutral-900);
     border-radius: var(--rounded-small);
-    display:none;
+    display: none;
     flex-direction: column;
     align-items: center;
-    text-align:center;
+    text-align: center;
   }
 
   .categories-empty--active {
-    display:flex;
+    display: flex;
   }
 
   button.categories-add {
     border-radius: var(--rounded-full);
-    color:var(--colors-neutral-100);
-    stroke:currentColor;
-    font-size:var(--text-sm);
-    font-weight:bold;
+    color: var(--colors-neutral-100);
+    stroke: currentColor;
+    font-size: var(--text-sm);
+    font-weight: bold;
     padding: var(--space-2) var(--space-4);
   }
   a.categories-add {
-    color:var(--colors-primary-500);
-    cursor:pointer;
+    color: var(--colors-primary-500);
+    cursor: pointer;
     &:hover {
-      color:var(--colors-primary-400);
+      color: var(--colors-primary-400);
     }
   }
 
@@ -748,18 +748,18 @@
   }
 
   .todos-empty {
-    display:none;
+    display: none;
     flex-direction: column;
     align-items: center;
     gap: var(--space-4);
-    font-size:var(--text-xl);
+    font-size: var(--text-xl);
     & * {
-      font-size:initial;
-      font-weight:bold;
+      font-size: initial;
+      font-weight: bold;
     }
   }
   .todos-empty--active {
-    display:flex;
+    display: flex;
   }
   .todo__meta {
     display: flex;
@@ -863,17 +863,17 @@
   }
   div[data-monthdate] {
     margin-top: var(--space-2);
-    display:flex;
+    display: flex;
     flex-direction: column;
-    gap:var(--space-1);
+    gap: var(--space-1);
   }
   .cell--active {
-    color:var(--colors-alert-500);
-    font-weight:bold;
+    color: var(--colors-alert-500);
+    font-weight: bold;
   }
   .task-item {
-    color:var(--colors-neutral-100);
-    font-weight:normal;
+    color: var(--colors-neutral-100);
+    font-weight: normal;
   }
   /* 
   td {
@@ -915,6 +915,10 @@
     .sidebar--open {
       left: 0px;
     }
+    #toast-drawer {
+      bottom: var(--space-4);
+      top:initial;
+    }
     .sidebar-trigger {
       position: fixed;
       top: var(--space-2);
@@ -932,8 +936,7 @@
       flex-wrap: wrap;
     }
     .mode-container--kanban {
-      flex-wrap:wrap;
-
+      flex-wrap: wrap;
     }
   }
 }
