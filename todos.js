@@ -1,6 +1,6 @@
 import { renderHeaderElement } from "./header.js";
 import { updateTodo } from "./index.js";
-import { deleteModal } from "./modal.js";
+import { deleteModal, openModal } from "./modal.js";
 import { currentCategory, renderProgressBar } from "./sidebar.js";
 
 /**
@@ -13,12 +13,16 @@ import { currentCategory, renderProgressBar } from "./sidebar.js";
  * }} todo
  */
 export function renderTodo(todo) {
+  document.querySelector(".todos-empty").classList.remove("todos-empty--active");
+
   const defaultContainer = document.querySelector(".mode__container--default");
 
   const HOUR = 60,
     MINUTE = 60,
     SECOND = 1000;
-  const mainContainer = document.createElement("div");
+  const mainContainer =
+    document.querySelector(`[data-task-id="${todo.id}"]`) ||
+    document.createElement("div");
   const metaContainer = document.createElement("div");
   const metaName = document.createElement("div");
   const metaDeadline = document.createElement("div");
@@ -33,7 +37,6 @@ export function renderTodo(todo) {
     const deadlineMS = Date.parse(todo.deadline);
     const nowMS = Date.now();
     const beforeMS = deadlineMS - nowMS;
-    // console.log(deadlineMS > nowMS);
     if (beforeMS > HOUR * MINUTE * SECOND) {
       metaDeadlineText.textContent = `${Math.floor(
         beforeMS / (HOUR * MINUTE * SECOND)
@@ -74,14 +77,12 @@ export function renderTodo(todo) {
     >
       <path
         d="M9.5 16.5C13.6421 16.5 17 13.1422 17 9.00005C17 4.85791 13.6421 1.50005 9.5 1.50005C5.35786 1.50005 2 4.85791 2 9.00005C2 13.1422 5.35786 16.5 9.5 16.5Z"
-        stroke="#E5715C"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
         d="M9.5 4.5V9L12.5 10.5"
-        stroke="#E5715C"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -90,9 +91,7 @@ export function renderTodo(todo) {
   `;
   updateDeadline();
   metaName.textContent = todo.taskName;
-  setInterval(() => {
-    updateDeadline();
-  }, 1000);
+  const interval = setInterval(updateDeadline, 1000);
   actionDone.innerHTML = `
   <svg
     width="19"
@@ -179,24 +178,37 @@ export function renderTodo(todo) {
       ...todo,
       status: "done",
     };
-    updateTodo(newData)();
-    renderHeaderElement(currentCategory);
-    defaultContainer.removeChild(mainContainer);
-    renderProgressBar();
+    clearInterval(interval);
+    updateTodo(newData).then(() => {
+      if (todo.deadline !== "") {
+        metaContainer.removeChild(metaDeadline);
+      }
+      mainContainer.classList.add("todo--done");
+      renderHeaderElement(currentCategory);
+      renderProgressBar();
+    });
+  });
+  actionEdit.addEventListener("click", () => {
+    openModal("edit", todo);
   });
 
   metaDeadline.appendChild(metaIcon);
   metaDeadline.appendChild(metaDeadlineText);
 
   metaContainer.appendChild(metaName);
-  if (todo.deadline !== "") {
-    metaContainer.appendChild(metaDeadline);
-  }
 
   actionsContainer.appendChild(actionDone);
   actionsContainer.appendChild(actionEdit);
   actionsContainer.appendChild(actionDelete);
 
+  if (todo.status === "done") {
+    mainContainer.classList.add("todo--done");
+    clearInterval(interval);
+  } else {
+    if (todo.deadline !== "") {
+      metaContainer.appendChild(metaDeadline);
+    }
+  }
   mainContainer.appendChild(metaContainer);
   mainContainer.appendChild(actionsContainer);
   // console.log(mainContainer);

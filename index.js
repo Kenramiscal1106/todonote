@@ -1,5 +1,7 @@
 "use strict";
 
+import { renderContent } from "./content.js";
+import { renderHeaderElement } from "./header.js";
 import { renderCategoryTab, renderProgressBar } from "./sidebar.js";
 import { renderToast } from "./toast.js";
 import { renderTodo } from "./todos.js";
@@ -20,32 +22,22 @@ request.onsuccess = () => {
 
   const categoriesStore = transaction.objectStore("Categories");
   const todosStore = transaction.objectStore("Todos");
-  const statusIndex = todosStore.index("status");
 
   const data = categoriesStore.getAll();
-  const dataTodo = statusIndex.getAll(IDBKeyRange.bound("ongoing", "pending"));
-
+  renderContent();
   renderProgressBar();
-  const headerNum = document.querySelector(
-    ".categories-info__metadata__num-tasks"
-  );
-  dataTodo.onsuccess = (event) => {
-    renderToast({
-      message: "Todos successfully loaded",
-      type: "success",
-    });
-    event.target.result.forEach((todo) => {
-      renderTodo(todo);
-    });
-    headerNum.textContent = `${event.target.result.length} task/s`;
-  };
+  renderHeaderElement();
 
   data.onsuccess = (event) => {
     renderToast({
       message: "Categories successfully loaded",
       type: "success",
     });
-    event.target.result.forEach((category) => {
+    const categories = event.target.result;
+    if (categories.length === 0) {
+      document.querySelector(".categories-empty").classList.add("categories-empty--active");
+    }
+    categories.forEach((category) => {
       renderCategoryTab(category);
     });
   };
@@ -179,15 +171,18 @@ export function getCategory(categoryId) {
  * }} data
  */
 export function addTodo(data) {
-  const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
+  return new Promise((resolve, reject) => {
+    const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
 
-  const action = todoStore.add(data);
-  action.onsuccess = () => {
-    renderToast({
-      message: "Todo successfully added",
-      type: "success",
-    });
-  };
+    const action = todoStore.add(data);
+    action.onsuccess = () => {
+      resolve();
+      renderToast({
+        message: "Todo successfully added",
+        type: "success",
+      });
+    };
+  });
 }
 
 /**
@@ -205,6 +200,48 @@ export function deleteTodo(todoId) {
   };
 }
 
+export function clearDone() {
+  const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
+  // const status = todoStore.index("status").
+}
+
+/**
+ *
+ * @param {string} categoryId
+ */
+export async function deleteCategory(categoryId) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(["Todos", "Categories"], "readwrite");
+    const todoStore = transaction.objectStore("Todos");
+    const categoryStore = transaction.objectStore("Categories");
+    const indexSearch = todoStore.index("categoryId");
+
+    const indexCursorRequest = indexSearch.openCursor(
+      IDBKeyRange.only(categoryId)
+    );
+    categoryStore.delete(categoryId);
+
+    indexCursorRequest.onsuccess = function (event) {
+      const cursor = event.target.result;
+      if (cursor) {
+        const deleteRequest = cursor.delete();
+        deleteRequest.onsuccess = function () {
+          renderToast({
+            type: "success",
+            message: "Category successfully deleted",
+          });
+        };
+        deleteRequest.onerror = function () {
+          console.error("Error deleting record.");
+        };
+        cursor.continue(); // Move to the next record if needed
+      } else {
+      }
+      resolve();
+    };
+  });
+}
+
 /**
  *
  * @param {{
@@ -217,26 +254,26 @@ export function deleteTodo(todoId) {
  * @returns
  */
 export function updateTodo(newData) {
-  return (event) => {
+  return new Promise((resolve, reject) => {
     const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
 
     const action = todoStore.get(newData.id);
-    action.onsuccess = (event) => {
-      console.log("update");
       todoStore.put(newData);
       renderToast({
         message: "Todo updated successfully",
         type: "success",
       });
+      resolve();
     };
 
     action.onerror = (event) => {
       renderToast({
         message: event.target.error?.message,
-        type: "error",
+        type: "alert",
       });
+      reject(event.target.error?.message);
     };
-  };
+  });
 }
 
 /**
@@ -279,47 +316,53 @@ export function getCategoryTodos(categoryId, all = false) {
 
 /**
  * @param {string} categoryId
- * @returns {Map<string, {
+ * @returns {Promise<Map<string, {
  * id: string,
  * taskName: string,
  * deadline: string,
  * categoryId: string,
  * status: "pending" | "ongoing" | "done"
- * }[]>}
+ * }[]>>}
  */
 export function getCalendarTodos(categoryId) {
-  /**
-   * @type {Map<string, {
-   * id: string,
-   * taskName: string,
-   * deadline: string,
-   * categoryId: string,
-   * status: "pending" | "ongoing" | "done"
-   * }[]>}
-   */
-  const todosMap = new Map();
-  const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
-  const indexSearch = todoStore.index("categoryId");
+  return new Promise((resolve) => {
+    /**
+     * @type {Map<string, {
+     * id: string,
+     * taskName: string,
+     * deadline: string,
+     * categoryId: string,
+     * status: "pending" | "ongoing" | "done"
+     * }[]>}
+     */
+    const todosMap = new Map();
+    const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
+    const indexSearch = todoStore.index("categoryId");
 
-  const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
+    const data = indexSearch.getAll(
+      categoryId === "" ? undefined : IDBKeyRange.only(categoryId)
+    );
 
-  data.onsuccess = (event) => {
-    event.target.result.forEach((todo) => {
-      if (todosMap.has(todo.deadline)) {
-        const dateTodo = todosMap.get(todo.deadline);
-        dateTodo.push(todo);
-        return;
-      }
-      todosMap.set(todo.deadline, todo);
-    });
-  };
-  data.onerror = (event) => {
-    renderToast({
-      type: "alert",
-      message: event.target.error?.message,
-    });
-  };
-  return todosMap;
+    data.onsuccess = (event) => {
+      event.target.result.forEach((todo) => {
+        const key = todo.deadline.replace(/T.+/g, "");
+        if (todosMap.has(key)) {
+          const dateTodo = todosMap.get(key);
+          dateTodo.push(todo);
+          todosMap.set(key, dateTodo);
+          return;
+        }
+        todosMap.set(key, [todo]);
+      });
+      resolve(todosMap);
+    };
+    data.onerror = (event) => {
+      renderToast({
+        type: "alert",
+        message: event.target.error?.message,
+      });
+    };
+  });
 }
 /**
  *
