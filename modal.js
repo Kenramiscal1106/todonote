@@ -276,7 +276,7 @@ categoryForm.addEventListener("submit", (e) => {
     alert("No emoji found");
     return;
   }
-  if (!regex.test(emoji)) {
+  if (!regex.test(emoji) && emoji.length > 2) {
     alert("That character is not allowed");
     return;
   }
