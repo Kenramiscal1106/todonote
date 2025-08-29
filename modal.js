@@ -236,7 +236,7 @@ export function closeModal(type) {
 
 todoForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const formData = new FormData(e.target);
+  const formData = new FormData(e.currentTarget);
   const extractedData = Object.fromEntries(formData.entries());
 
   renderProgressBar();
@@ -261,7 +261,6 @@ todoForm.addEventListener("submit", (e) => {
   addTodo(data).then(() => {
     addContent(data);
     closeModal("todo");
-    event.currentTarget.reset();
     renderHeaderElement(currentCategory === "" ? undefined : currentCategory);
   })
 });
@@ -288,7 +287,6 @@ categoryForm.addEventListener("submit", (e) => {
     order: [],
   });
   document.querySelector(".categories-empty").classList.remove("categories-empty--active");
-  event.currentTarget.reset();
   closeModal("category");
 });
 

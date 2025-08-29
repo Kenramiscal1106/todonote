@@ -1,15 +1,16 @@
-import { currentCategory } from "./sidebar.js";
+import { getKanbanTodos, updateTodoStatus } from "./index.js";
+import { currentCategory, renderProgressBar } from "./sidebar.js";
 
 let db = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
   await initDatabase();
-  refreshKanban();
 });
 
-document
-  .querySelector('[data-tab="kanban"]')
-  .addEventListener("click", refreshKanban);
+document.querySelector('[data-tab="kanban"]').addEventListener("click", () => {
+  console.log("triggers");
+  refreshKanban();
+});
 
 async function initDatabase() {
   return new Promise((resolve, reject) => {
@@ -28,25 +29,17 @@ async function initDatabase() {
 }
 
 async function refreshKanban() {
-  if (!db) {
-    console.warn("Database not ready yet.");
-    return;
-  }
+  console.log("triggers refresh")
+  const todosByStatus = await getKanbanTodos(currentCategory);
+  clearKanbanItems();
+  Object.values(todosByStatus)
+    .flat()
+    .forEach((todos) => {
+      console.log(todos);
+      renderKanbanItem(todos);
+    });
 
-  try {
-    const categoryIds = await getAllCategoryIds();
-    console.log("Existing categories:", categoryIds);
-
-    const activeCategory = currentCategory || categoryIds[0];
-
-    const todosByStatus = await getKanbanTodos(activeCategory);
-    clearKanbanItems();
-    Object.values(todosByStatus).flat().forEach(renderKanbanItem);
-
-    console.log("Todos loaded:", todosByStatus);
-  } catch (err) {
-    console.error("Error loading todos:", err);
-  }
+  // console.log("Todos loaded:", todosByStatus);
 }
 
 function clearKanbanItems() {
@@ -73,26 +66,6 @@ function getAllCategoryIds() {
   });
 }
 
-export function getKanbanTodos(categoryId) {
-  return new Promise((resolve, reject) => {
-    const todosByStatus = { pending: [], ongoing: [], done: [] };
-    const transaction = db.transaction("Todos", "readonly");
-    const store = transaction.objectStore("Todos");
-    const index = store.index("categoryId");
-
-    const request = index.getAll(IDBKeyRange.only(categoryId));
-
-    request.onsuccess = (event) => {
-      event.target.result.forEach((todo) => {
-        todosByStatus[todo.status].push(todo);
-      });
-      resolve(todosByStatus);
-    };
-
-    request.onerror = (event) => reject(event.target.error);
-  });
-}
-
 export function renderKanbanItem(kanbanItem) {
   const containerMap = {
     pending: document.querySelector("#pending"),
@@ -113,21 +86,33 @@ export function renderKanbanItem(kanbanItem) {
   timeLeft.classList.add("time-left");
   kanbanTime.classList.add("kanban-time");
 
-  list.dataset.id = kanbanItem.id;
+  list.setAttribute("data-id", kanbanItem.id);
+  console.log(list);
   list.draggable = true;
   item.appendChild(kanbanTask);
   item.appendChild(timeLeft);
   timeLeft.appendChild(kanbanTime);
 
   timeLeft.innerHTML = `
-    <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
-      xmlns="http://www.w3.org/2000/svg">
-      <path d="M9 17C13.1421 17 16.5 13.6422 16.5 9.50005C16.5 5.35791 13.1421 
-      2.00005 9 2.00005C4.85786 2.00005 1.5 5.35791 1.5 9.50005C1.5 13.6422 
-      4.85786 17 9 17Z" stroke="#E5715C" stroke-width="1.5"
-      stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M9 5V9.5L12 11" stroke="#E5715C" stroke-width="1.5"
-      stroke-linecap="round" stroke-linejoin="round"/>
+    <svg
+      width="18"
+      height="19"
+      viewBox="0 0 18 19"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9 17C13.1421 17 16.5 13.6422 16.5 9.50005C16.5 5.35791 13.1421 2.00005 9 2.00005C4.85786 2.00005 1.5 5.35791 1.5 9.50005C1.5 13.6422 4.85786 17 9 17Z"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M9 5V9.5L12 11"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
     </svg>`;
 
   kanbanTask.textContent = kanbanItem.taskName || "";
@@ -160,7 +145,6 @@ document.querySelectorAll(".status").forEach((status) => {
     if (draggedList) {
       const todoId = draggedList.dataset.id;
       const newStatus = status.id;
-
       status.appendChild(draggedList);
 
       try {
@@ -168,36 +152,12 @@ document.querySelectorAll(".status").forEach((status) => {
         document.dispatchEvent(
           new CustomEvent("todos-updated", { detail: { source: "kanban" } })
         );
+        renderProgressBar();
 
-        await refreshKanban?.();
         console.log(`Todo ${todoId} status updated to ${newStatus}`);
-        await refreshKanban();
       } catch (err) {
         console.error("Failed to update todo status:", err);
       }
     }
   });
 });
-
-function updateTodoStatus(todoId, newStatus) {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction("Todos", "readwrite");
-    const store = transaction.objectStore("Todos");
-
-    const request = store.get(todoId);
-
-    request.onsuccess = (event) => {
-      const todo = event.target.result;
-      if (!todo) return reject("Todo not found");
-
-      todo.status = newStatus;
-
-      const updateRequest = store.put(todo);
-
-      updateRequest.onsuccess = () => resolve();
-      updateRequest.onerror = (e) => reject(e.target.error);
-    };
-
-    request.onerror = (e) => reject(e.target.error);
-  });
-}

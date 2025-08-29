@@ -1,6 +1,7 @@
 import { renderCalendar } from "./calendar.js";
 import { renderDefault } from "./default.js";
 import { currentView } from "./header.js";
+import { renderKanbanItem } from "./kanban.js";
 import { currentCategory } from "./sidebar.js";
 import { renderTodo } from "./todos.js";
 
@@ -30,5 +31,7 @@ export function addContent(todo) {
     case "default":
       renderTodo(todo);
       break;
+    case "kanban":
+      renderKanbanItem(todo)
   }
 }
