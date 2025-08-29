@@ -258,6 +258,7 @@ export function updateTodo(newData) {
     const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
 
     const action = todoStore.get(newData.id);
+    action.onsuccess = (event) => {
       todoStore.put(newData);
       renderToast({
         message: "Todo updated successfully",
