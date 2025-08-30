@@ -131,6 +131,7 @@ function generateCalendarMeta() {
  * }} todo
  */
 export function renderCalendarTask(todo) {
+  if (todo.deadline === "") return;
   const mainContainer = document.createElement("div");
   mainContainer.setAttribute("data-calendar-task-id", todo.id);
   mainContainer.classList.add("task-item")
