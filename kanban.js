@@ -148,7 +148,7 @@ document.querySelectorAll(".status").forEach((status) => {
       status.appendChild(draggedList);
 
       // Glare animation
-      status.classList.add("glare-effect");
+      draggedList.classList.add("glare-effect");
       setTimeout(() => status.classList.remove("glare-effect"), 600);
 
       try {
