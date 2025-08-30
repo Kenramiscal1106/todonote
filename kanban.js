@@ -29,7 +29,7 @@ async function initDatabase() {
 }
 
 async function refreshKanban() {
-  console.log("triggers refresh")
+  console.log("triggers refresh");
   const todosByStatus = await getKanbanTodos(currentCategory);
   clearKanbanItems();
   Object.values(todosByStatus)
@@ -146,6 +146,10 @@ document.querySelectorAll(".status").forEach((status) => {
       const todoId = draggedList.dataset.id;
       const newStatus = status.id;
       status.appendChild(draggedList);
+
+      // Glare animation
+      status.classList.add("glare-effect");
+      setTimeout(() => status.classList.remove("glare-effect"), 600);
 
       try {
         await updateTodoStatus(todoId, newStatus);
