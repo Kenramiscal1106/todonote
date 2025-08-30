@@ -4,7 +4,7 @@ import { renderContent } from "./content.js";
 import { renderHeaderElement } from "./header.js";
 import { renderCategoryTab, renderProgressBar } from "./sidebar.js";
 import { renderToast } from "./toast.js";
-import { renderTodo } from "./todos.js";
+// import { renderTodo } from "./todos.js";
 
 /**
  * @type {IDBDatabase | null}
@@ -15,6 +15,67 @@ let db;
  * @type {IDBDatabase | null}
  */
 const request = window.indexedDB.open("Main", 3);
+
+/**
+ * @type {"default" | "calendar" | "kanban"}
+ */
+export let currentView = "default";
+
+document.addEventListener("viewchange", ({ detail }) => {
+  const targetMode = document.querySelector(`div.mode--${detail.tab}`);
+  const headerContainer = document.querySelector(".header__container");
+
+  function switchTab(delayed) {
+    const activeMode = document.querySelector(".mode--visible");
+    const activeTab = document.querySelector(".view--active");
+    if (delayed) {
+      activeMode.classList.add("mode--transition");
+      setTimeout(() => {
+        activeMode.classList.remove("mode--visible");
+        targetMode.classList.add("mode--visible");
+        activeMode.classList.remove("mode--transition");
+      }, 500);
+    } else {
+      activeMode.classList.remove("mode--visible");
+      targetMode.classList.add("mode--visible");
+    }
+    activeTab.classList.remove("view--active");
+  }
+  if (detail.tab === "default") {
+    headerContainer.classList.add("header__container--contained");
+  } else {
+    headerContainer.classList.remove("header__container--contained");
+  }
+  if (currentView === "default" || detail.tab === "default") {
+    switchTab(true);
+  } else {
+    switchTab(false);
+  }
+  currentView = detail.tab;
+  renderContent();
+});
+
+document.addEventListener("todoschange", ({ detail }) => {
+  console.log(detail);
+  /**
+   * @type {"added" | "edited" | "deleted"}
+   */
+  let verb = "";
+  switch (detail.type) {
+    case "add":
+      verb = "added"
+      break;
+    case "update":
+      verb = "updated"
+      break;
+    case "delete":
+      verb = "deleted"
+  }
+  renderToast({
+    message: "Todo successfully " + verb,
+    type: "success",
+  });
+});
 
 request.onsuccess = () => {
   db = request.result;
@@ -35,7 +96,9 @@ request.onsuccess = () => {
     });
     const categories = event.target.result;
     if (categories.length === 0) {
-      document.querySelector(".categories-empty").classList.add("categories-empty--active");
+      document
+        .querySelector(".categories-empty")
+        .classList.add("categories-empty--active");
     }
     categories.forEach((category) => {
       renderCategoryTab(category);
@@ -176,12 +239,14 @@ export function addTodo(data) {
 
     const action = todoStore.add(data);
     action.onsuccess = () => {
+      document.dispatchEvent(
+        new CustomEvent("todoschange", { detail: { type: "add" } })
+      );
       resolve();
-      renderToast({
-        message: "Todo successfully added",
-        type: "success",
-      });
     };
+    action.onerror = (event) => {
+      reject()
+    }
   });
 }
 
@@ -193,10 +258,9 @@ export function deleteTodo(todoId) {
   const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
   const action = todoStore.delete(todoId);
   action.onsuccess = () => {
-    renderToast({
-      type: "success",
-      message: "Todo successfully deleted",
-    });
+    document.dispatchEvent(
+      new CustomEvent("todoschange", {detail: {type: "delete"}})
+    )
   };
 }
 
@@ -257,13 +321,12 @@ export function updateTodo(newData) {
   return new Promise((resolve, reject) => {
     const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
 
-    const action = todoStore.get(newData.id);
+    const action = todoStore.put(newData);
     action.onsuccess = (event) => {
+      document.dispatchEvent(
+        new CustomEvent("todoschange", {detail: {type: "update"} })
+      )
       todoStore.put(newData);
-      renderToast({
-        message: "Todo updated successfully",
-        type: "success",
-      });
       resolve();
     };
 
@@ -378,9 +441,9 @@ export function getKanbanTodos(categoryId) {
     };
     const todoStore = db.transaction("Todos", "readonly").objectStore("Todos");
     const indexSearch = todoStore.index("categoryId");
-  
+
     const data = indexSearch.getAll(IDBKeyRange.only(categoryId));
-  
+
     data.onsuccess = (event) => {
       event.target.result.forEach((todo) => {
         todosByStatus[todo.status].push(todo);
@@ -393,7 +456,7 @@ export function getKanbanTodos(categoryId) {
         message: event.target.error?.message,
       });
     };
-  })
+  });
 }
 
 export function updateTodoStatus(todoId, newStatus) {

@@ -7,11 +7,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   await initDatabase();
 });
 
-document.querySelector('[data-tab="kanban"]').addEventListener("click", () => {
-  console.log("triggers");
-  refreshKanban();
-});
-
 async function initDatabase() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open("Main", 3);
@@ -28,7 +23,7 @@ async function initDatabase() {
   });
 }
 
-async function refreshKanban() {
+export async function refreshKanban() {
   console.log("triggers refresh")
   const todosByStatus = await getKanbanTodos(currentCategory);
   clearKanbanItems();

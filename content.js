@@ -1,7 +1,7 @@
 import { renderCalendar } from "./calendar.js";
 import { renderDefault } from "./default.js";
-import { currentView } from "./header.js";
-import { renderKanbanItem } from "./kanban.js";
+import { currentView } from "./index.js";
+import { refreshKanban, renderKanbanItem } from "./kanban.js";
 import { currentCategory } from "./sidebar.js";
 import { renderTodo } from "./todos.js";
 
@@ -12,6 +12,9 @@ export function renderContent() {
       break;
     case "calendar":
       renderCalendar();
+      break;
+    case "kanban":
+      refreshKanban();
       break;
   }
 }
