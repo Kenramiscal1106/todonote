@@ -99,10 +99,11 @@
       <div class="progress">
         <p>Progress</p>
         <div class="progress__bar">
-          <div class="progress__bar__value"></div>
+          <div class="progress__bar__in-progress"></div>
+          <div class="progress__bar__done"></div>
         </div>
         <div class="progress__bar__text">
-          <span class="progress-status">77%</span> done
+          <span class="progress-status">n%</span> done
         </div>
       </div>
     </div>
@@ -113,76 +114,6 @@
           <div class="categories-info__metadata">
             <div>
               <h1 class="categories-info__metadata__title">Overview</h1>
-              <div class="actions">
-                <button class="button action__btn-new todos-add primary">
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M6 4H15.75"
-                      stroke="#F9FAFA"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M6 9H16"
-                      stroke="#F9FAFA"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M6 14H9"
-                      stroke="#F9FAFA"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M2.25 4H2.2575"
-                      stroke="#F9FAFA"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M2.25 9H2.2575"
-                      stroke="#F9FAFA"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M2 14H2.0075"
-                      stroke="#F9FAFA"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M14 12L14 16"
-                      stroke="#F9FAFA"
-                      stroke-width="1.125"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M12 14H16"
-                      stroke="#F9FAFA"
-                      stroke-width="1.125"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-
-                  Add To-do
-                </button>
-              </div>
             </div>
             <p class="categories-info__metadata__num-tasks">0 tasks</p>
           </div>
@@ -289,33 +220,270 @@
               Kanban
             </button>
           </div>
+          <div class="actions">
+            <button class="button action__btn todos-add primary">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 4H15.75"
+                  stroke="#F9FAFA"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M6 9H16"
+                  stroke="#F9FAFA"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M6 14H9"
+                  stroke="#F9FAFA"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M2.25 4H2.2575"
+                  stroke="#F9FAFA"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M2.25 9H2.2575"
+                  stroke="#F9FAFA"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M2 14H2.0075"
+                  stroke="#F9FAFA"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M14 12L14 16"
+                  stroke="#F9FAFA"
+                  stroke-width="1.125"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12 14H16"
+                  stroke="#F9FAFA"
+                  stroke-width="1.125"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <div>Add To-do</div>
+            </button>
+            <button class="button action__btn ghost clear-done">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 20 21"
+                fill="none"
+                stroke="#F9FAFA"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2.5 5.5H4.16667H17.5"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M15.8334 5.49996V17.1666C15.8334 17.6087 15.6578 18.0326 15.3452 18.3451C15.0326 18.6577 14.6087 18.8333 14.1667 18.8333H5.83335C5.39133 18.8333 4.9674 18.6577 4.65484 18.3451C4.34228 18.0326 4.16669 17.6087 4.16669 17.1666V5.49996M6.66669 5.49996V3.83329C6.66669 3.39127 6.84228 2.96734 7.15484 2.65478C7.4674 2.34222 7.89133 2.16663 8.33335 2.16663H11.6667C12.1087 2.16663 12.5326 2.34222 12.8452 2.65478C13.1578 2.96734 13.3334 3.39127 13.3334 3.83329V5.49996"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M8.33331 9.66663V14.6666"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M11.6667 9.66663V14.6666"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <div>Clear All Done</div>
+            </button>
+          </div>
         </div>
-        <hr />
+        <!-- <hr /> -->
       </div>
     </div>
     <div class="panel">
       <div class="mode mode--default">
         <div class="mode__container--default"></div>
       </div>
-      <div class="mode mode--calendar"></div>
+      <div class="mode mode--calendar">
+        <div class="mode__container--calendar"></div>
+      </div>
       <div class="mode mode--kanban">
         <div class="mode-container--kanban">
-          <div class="status" id="done">
-            <h2>Done</h2>
-            <!-- <div class="list" data-task-id="dc6cb2c8-e6a2-4d41-80da-d1b3dc8e9f8f" draggable="true">  -->
-          </div>
           <div class="status" id="pending">
-            <h2>Pending</h2>
+            <div>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.66669 5H17.5"
+                  stroke="#BCBEC8"
+                  stroke-width="1.66667"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M6.66669 10H17.5"
+                  stroke="#BCBEC8"
+                  stroke-width="1.66667"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M6.66669 15H17.5"
+                  stroke="#BCBEC8"
+                  stroke-width="1.66667"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M2.5 5H2.50833"
+                  stroke="#BCBEC8"
+                  stroke-width="1.66667"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M2.5 10H2.50833"
+                  stroke="#BCBEC8"
+                  stroke-width="1.66667"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M2.5 15H2.50833"
+                  stroke="#BCBEC8"
+                  stroke-width="1.66667"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+
+              <h3>To-do</h3>
+            </div>
           </div>
-          <div class="status" id="ongoing">
-            <h2>Ongoing</h2>
+          <div class="status" id="in-progress">
+            <div>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  clip-path="url(#paint0_angular_286_1213_clip_path)"
+                  data-figma-skip-parse="true"
+                >
+                  <g transform="matrix(0.0055 0.0045 -0.0045 0.0055 12 11.5)">
+                    <foreignObject
+                      x="-2430.69"
+                      y="-2430.69"
+                      width="4861.39"
+                      height="4861.39"
+                      ><div
+                        xmlns="http://www.w3.org/1999/xhtml"
+                        style="
+                          background: conic-gradient(
+                            from 90deg,
+                            rgba(89, 91, 104, 1) 0deg,
+                            rgba(89, 91, 104, 0) 360deg
+                          );
+                          height: 100%;
+                          width: 100%;
+                          opacity: 1;
+                        "
+                      ></div
+                    ></foreignObject>
+                  </g>
+                </g>
+                <path
+                  d="M13 2C13 1.44772 12.5523 1 12 1C11.4477 1 11 1.44772 11 2H12H13ZM11 6C11 6.55228 11.4477 7 12 7C12.5523 7 13 6.55228 13 6H12H11ZM13 18C13 17.4477 12.5523 17 12 17C11.4477 17 11 17.4477 11 18H12H13ZM11 22C11 22.5523 11.4477 23 12 23C12.5523 23 13 22.5523 13 22H12H11ZM5.63711 4.22289C5.24658 3.83237 4.61342 3.83237 4.22289 4.22289C3.83237 4.61342 3.83237 5.24658 4.22289 5.63711L4.93 4.93L5.63711 4.22289ZM7.05289 8.46711C7.44342 8.85763 8.07658 8.85763 8.46711 8.46711C8.85763 8.07658 8.85763 7.44342 8.46711 7.05289L7.76 7.76L7.05289 8.46711ZM16.9471 15.5329C16.5566 15.1424 15.9234 15.1424 15.5329 15.5329C15.1424 15.9234 15.1424 16.5566 15.5329 16.9471L16.24 16.24L16.9471 15.5329ZM18.3629 19.7771C18.7534 20.1676 19.3866 20.1676 19.7771 19.7771C20.1676 19.3866 20.1676 18.7534 19.7771 18.3629L19.07 19.07L18.3629 19.7771ZM2 11C1.44772 11 1 11.4477 1 12C1 12.5523 1.44772 13 2 13V12V11ZM6 13C6.55228 13 7 12.5523 7 12C7 11.4477 6.55228 11 6 11V12V13ZM18 11C17.4477 11 17 11.4477 17 12C17 12.5523 17.4477 13 18 13V12V11ZM22 13C22.5523 13 23 12.5523 23 12C23 11.4477 22.5523 11 22 11V12V13ZM4.22289 18.3629C3.83237 18.7534 3.83237 19.3866 4.22289 19.7771C4.61342 20.1676 5.24658 20.1676 5.63711 19.7771L4.93 19.07L4.22289 18.3629ZM8.46711 16.9471C8.85763 16.5566 8.85763 15.9234 8.46711 15.5329C8.07658 15.1424 7.44342 15.1424 7.05289 15.5329L7.76 16.24L8.46711 16.9471ZM15.5329 7.05289C15.1424 7.44342 15.1424 8.07658 15.5329 8.46711C15.9234 8.85763 16.5566 8.85763 16.9471 8.46711L16.24 7.76L15.5329 7.05289ZM19.7771 5.63711C20.1676 5.24658 20.1676 4.61342 19.7771 4.22289C19.3866 3.83237 18.7534 3.83237 18.3629 4.22289L19.07 4.93L19.7771 5.63711ZM12 2H11V6H12H13V2H12ZM12 18H11V22H12H13V18H12ZM4.93 4.93L4.22289 5.63711L7.05289 8.46711L7.76 7.76L8.46711 7.05289L5.63711 4.22289L4.93 4.93ZM16.24 16.24L15.5329 16.9471L18.3629 19.7771L19.07 19.07L19.7771 18.3629L16.9471 15.5329L16.24 16.24ZM2 12V13H6V12V11H2V12ZM18 12V13H22V12V11H18V12ZM4.93 19.07L5.63711 19.7771L8.46711 16.9471L7.76 16.24L7.05289 15.5329L4.22289 18.3629L4.93 19.07ZM16.24 7.76L16.9471 8.46711L19.7771 5.63711L19.07 4.93L18.3629 4.22289L15.5329 7.05289L16.24 7.76Z"
+                  data-figma-gradient-fill="{&#34;type&#34;:&#34;GRADIENT_ANGULAR&#34;,&#34;stops&#34;:[{&#34;color&#34;:{&#34;r&#34;:0.34959998726844788,&#34;g&#34;:0.35828572511672974,&#34;b&#34;:0.41040000319480896,&#34;a&#34;:1.0},&#34;position&#34;:0.0},{&#34;color&#34;:{&#34;r&#34;:0.34959998726844788,&#34;g&#34;:0.35828572511672974,&#34;b&#34;:0.41040000319480896,&#34;a&#34;:0.0},&#34;position&#34;:1.0}],&#34;stopsVar&#34;:[{&#34;color&#34;:{&#34;r&#34;:0.34959998726844788,&#34;g&#34;:0.35828572511672974,&#34;b&#34;:0.41040000319480896,&#34;a&#34;:1.0},&#34;position&#34;:0.0},{&#34;color&#34;:{&#34;r&#34;:0.34959998726844788,&#34;g&#34;:0.35828572511672974,&#34;b&#34;:0.41040000319480896,&#34;a&#34;:0.0},&#34;position&#34;:1.0}],&#34;transform&#34;:{&#34;m00&#34;:11.0,&#34;m01&#34;:-9.0,&#34;m02&#34;:11.0,&#34;m10&#34;:9.0000019073486328,&#34;m11&#34;:10.999998092651367,&#34;m12&#34;:1.5000003576278687},&#34;opacity&#34;:1.0,&#34;blendMode&#34;:&#34;NORMAL&#34;,&#34;visible&#34;:true}"
+                />
+                <defs>
+                  <clipPath id="paint0_angular_286_1213_clip_path">
+                    <path
+                      d="M13 2C13 1.44772 12.5523 1 12 1C11.4477 1 11 1.44772 11 2H12H13ZM11 6C11 6.55228 11.4477 7 12 7C12.5523 7 13 6.55228 13 6H12H11ZM13 18C13 17.4477 12.5523 17 12 17C11.4477 17 11 17.4477 11 18H12H13ZM11 22C11 22.5523 11.4477 23 12 23C12.5523 23 13 22.5523 13 22H12H11ZM5.63711 4.22289C5.24658 3.83237 4.61342 3.83237 4.22289 4.22289C3.83237 4.61342 3.83237 5.24658 4.22289 5.63711L4.93 4.93L5.63711 4.22289ZM7.05289 8.46711C7.44342 8.85763 8.07658 8.85763 8.46711 8.46711C8.85763 8.07658 8.85763 7.44342 8.46711 7.05289L7.76 7.76L7.05289 8.46711ZM16.9471 15.5329C16.5566 15.1424 15.9234 15.1424 15.5329 15.5329C15.1424 15.9234 15.1424 16.5566 15.5329 16.9471L16.24 16.24L16.9471 15.5329ZM18.3629 19.7771C18.7534 20.1676 19.3866 20.1676 19.7771 19.7771C20.1676 19.3866 20.1676 18.7534 19.7771 18.3629L19.07 19.07L18.3629 19.7771ZM2 11C1.44772 11 1 11.4477 1 12C1 12.5523 1.44772 13 2 13V12V11ZM6 13C6.55228 13 7 12.5523 7 12C7 11.4477 6.55228 11 6 11V12V13ZM18 11C17.4477 11 17 11.4477 17 12C17 12.5523 17.4477 13 18 13V12V11ZM22 13C22.5523 13 23 12.5523 23 12C23 11.4477 22.5523 11 22 11V12V13ZM4.22289 18.3629C3.83237 18.7534 3.83237 19.3866 4.22289 19.7771C4.61342 20.1676 5.24658 20.1676 5.63711 19.7771L4.93 19.07L4.22289 18.3629ZM8.46711 16.9471C8.85763 16.5566 8.85763 15.9234 8.46711 15.5329C8.07658 15.1424 7.44342 15.1424 7.05289 15.5329L7.76 16.24L8.46711 16.9471ZM15.5329 7.05289C15.1424 7.44342 15.1424 8.07658 15.5329 8.46711C15.9234 8.85763 16.5566 8.85763 16.9471 8.46711L16.24 7.76L15.5329 7.05289ZM19.7771 5.63711C20.1676 5.24658 20.1676 4.61342 19.7771 4.22289C19.3866 3.83237 18.7534 3.83237 18.3629 4.22289L19.07 4.93L19.7771 5.63711ZM12 2H11V6H12H13V2H12ZM12 18H11V22H12H13V18H12ZM4.93 4.93L4.22289 5.63711L7.05289 8.46711L7.76 7.76L8.46711 7.05289L5.63711 4.22289L4.93 4.93ZM16.24 16.24L15.5329 16.9471L18.3629 19.7771L19.07 19.07L19.7771 18.3629L16.9471 15.5329L16.24 16.24ZM2 12V13H6V12V11H2V12ZM18 12V13H22V12V11H18V12ZM4.93 19.07L5.63711 19.7771L8.46711 16.9471L7.76 16.24L7.05289 15.5329L4.22289 18.3629L4.93 19.07ZM16.24 7.76L16.9471 8.46711L19.7771 5.63711L19.07 4.93L18.3629 4.22289L15.5329 7.05289L16.24 7.76Z"
+                    />
+                  </clipPath>
+                </defs>
+              </svg>
+
+              <h3>In Progress</h3>
+            </div>
+          </div>
+          <div class="status" id="done">
+            <div>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clip-path="url(#clip0_53_495)">
+                  <path
+                    d="M18.3333 9.2333V9.99997C18.3323 11.797 17.7504 13.5455 16.6744 14.9848C15.5985 16.4241 14.0861 17.477 12.3628 17.9866C10.6395 18.4961 8.79771 18.4349 7.11205 17.8121C5.42639 17.1894 3.9872 16.0384 3.00912 14.5309C2.03105 13.0233 1.56648 11.24 1.68472 9.4469C1.80296 7.65377 2.49766 5.94691 3.66522 4.58086C4.83278 3.21482 6.41064 2.26279 8.16348 1.86676C9.91632 1.47073 11.7502 1.65192 13.3917 2.3833"
+                    stroke="#3DD47C"
+                    stroke-width="1.66667"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M18.3333 3.33337L10 11.675L7.5 9.17504"
+                    stroke="#3DD47C"
+                    stroke-width="1.66667"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_53_495">
+                    <rect width="20" height="20" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+              <h3>Done</h3>
+            </div>
           </div>
         </div>
       </div>
       <div class="todos-empty">
         <svg
-          width="379"
-          height="85"
+          style="width: min(379px, 100%); height: auto"
           viewBox="0 0 379 85"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

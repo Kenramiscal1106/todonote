@@ -5,21 +5,31 @@ import { currentCategory } from "./sidebar.js";
 // import { currentCategory } from "./sidebar.js";
 // import { isWithinDay } from "./utilities.js";
 
+export let currentMonth = new Date().getMonth();
 export async function renderCalendar() {
-  document
-    .querySelector(".todos-empty")
-    .classList.remove("todos-empty--active");
-
   const calendarTodos = await getCalendarTodos(currentCategory);
-  // during month
-  const calendarContainer = document.querySelector(".mode--calendar");
-  if (calendarContainer.firstChild) {
-    calendarContainer.removeChild(calendarContainer.firstChild);
+  if (calendarTodos.size === 0) {
+    document
+      .querySelector(".todos-empty")
+      .classList.remove("todos-empty--active");
+    return
   }
+  
+
+
+  // during month
+  const calendarView = document.querySelector(".mode__container--calendar");
+  document.querySelectorAll(".mode__container--calendar > *").forEach((element) => {
+    element.remove();
+  })
+
+  const calendarInfo = document.createElement("div");
+  const calendarHeading = document.createElement("h2");
   const calendarWrapper = document.createElement("table");
   const thead = document.createElement("thead");
   const tbody = document.createElement("tbody");
-  calendarContainer.appendChild(calendarWrapper);
+  calendarView.appendChild(calendarInfo);
+  calendarView.appendChild(calendarWrapper);
   calendarWrapper.appendChild(thead);
   calendarWrapper.appendChild(tbody);
 
@@ -31,6 +41,8 @@ export async function renderCalendar() {
   const [monthData, columns, rows] = generateCalendarMeta();
   const currentDate = new Date();
   const dateToday = currentDate.getDate();
+  calendarHeading.textContent = `${monthData.month} ${currentDate.getFullYear()}`;
+  calendarInfo.appendChild(calendarHeading);
 
   for (let i = 0; i < rows; i++) {
     const trElement = document.createElement("tr");
@@ -81,11 +93,12 @@ export async function renderCalendar() {
 
 /**
  *
- * @returns {[Date, {month: string, date: number}, number, number]}
+ * @returns {[{month: string, date: number}, number, number]}
  */
 function generateCalendarMeta() {
   const currentDate = new Date();
-  const monthIndex = currentDate.getMonth();
+  currentDate.setMonth(currentMonth);
+  const monthIndex = currentMonth;
   const monthData = MONTH_DATA[monthIndex];
 
   const columns = DAYS.length;
@@ -114,12 +127,14 @@ function generateCalendarMeta() {
  * taskName: string,
  * deadline: string,
  * categoryId: string,
- * status: "pending" | "ongoing" | "done"
+ * status: "pending" | "in-progress" | "done"
  * }} todo
  */
-function renderCalendarTask(todo) {
-  const mainContainer = document.querySelector("div");
+export function renderCalendarTask(todo) {
+  if (todo.deadline === "") return;
+  const mainContainer = document.createElement("div");
   mainContainer.setAttribute("data-calendar-task-id", todo.id);
+  mainContainer.classList.add("task-item")
   mainContainer.textContent = todo.taskName;
   const taskDate = new Date(todo.deadline);
   const taskContainer = document.querySelector(

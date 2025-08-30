@@ -6,11 +6,7 @@ let db = null;
 document.addEventListener("DOMContentLoaded", async () => {
   await initDatabase();
 });
-
-document.querySelector('[data-tab="kanban"]').addEventListener("click", () => {
-  console.log("triggers");
-  refreshKanban();
-});
+// const [done, pending, inProgress] =
 
 async function initDatabase() {
   return new Promise((resolve, reject) => {
@@ -28,22 +24,23 @@ async function initDatabase() {
   });
 }
 
-async function refreshKanban() {
-  console.log("triggers refresh");
+export async function refreshKanban() {
   const todosByStatus = await getKanbanTodos(currentCategory);
   clearKanbanItems();
-  Object.values(todosByStatus)
+  const todos = Object.values(todosByStatus)
     .flat()
-    .forEach((todos) => {
-      console.log(todos);
-      renderKanbanItem(todos);
+  if (todos.length === 0) {
+    // document.querySelector(".mode--kanban").classList.remove(".mode--active")
+    document.querySelector(".todos-empty").classList.add("todos-empty--active");
+    return
+  } 
+  todos.forEach((todo) => {
+      renderKanbanItem(todo);
     });
-
-  // console.log("Todos loaded:", todosByStatus);
 }
 
 function clearKanbanItems() {
-  ["#done", "#pending", "#ongoing"].forEach((selector) => {
+  ["#done", "#pending", "#in-progress"].forEach((selector) => {
     document
       .querySelectorAll(`${selector} .list`)
       .forEach((item) => item.remove());
@@ -69,7 +66,7 @@ function getAllCategoryIds() {
 export function renderKanbanItem(kanbanItem) {
   const containerMap = {
     pending: document.querySelector("#pending"),
-    ongoing: document.querySelector("#ongoing"),
+    "in-progress": document.querySelector("#in-progress"),
     done: document.querySelector("#done"),
   };
 
@@ -87,7 +84,6 @@ export function renderKanbanItem(kanbanItem) {
   kanbanTime.classList.add("kanban-time");
 
   list.setAttribute("data-id", kanbanItem.id);
-  console.log(list);
   list.draggable = true;
   item.appendChild(kanbanTask);
   item.appendChild(timeLeft);
@@ -182,7 +178,6 @@ document.querySelectorAll(".status").forEach((status) => {
         );
         renderProgressBar();
 
-        console.log(`Todo ${todoId} status updated to ${newStatus}`);
       } catch (err) {
         console.error("Failed to update todo status:", err);
       }

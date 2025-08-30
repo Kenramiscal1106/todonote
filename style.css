@@ -103,11 +103,15 @@
     gap: var(--space-1, 4px);
     border-radius: 1rem;
     cursor: pointer;
+    &:focus-visible {
+      outline: 2px solid var(--colors-primary-300);
+    }
   }
 }
 @layer components {
   .button {
     padding: 6px var(--space-3, 12px);
+
   }
   button {
     &.primary {
@@ -349,18 +353,24 @@
     position: relative;
   }
 
-  .progress__bar__value {
+  .progress__bar__done, .progress__bar__in-progress {
     border-radius: var(--rounded-small, 8px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width:0%;
+    transition: width 0.4s;
+  }
+  .progress__bar__in-progress {
+    background-color:var(--colors-neutral-600);
+  }
+  .progress__bar__done {
     background: linear-gradient(
       90deg,
       var(--colors-primary-600, #217cad) 0%,
       var(--colors-primary-400, #6db3d9) 100%
     );
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    transition: width 0.4s;
   }
   .progress > *:not(.progress__bar) {
     padding: var(--space-1, 4px) var(--space-4, 16px);
@@ -416,15 +426,18 @@
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    padding: 0 1rem;
     justify-content: center;
+    flex-wrap:wrap;
+    align-items:stretch;
+    
     > * {
-      flex-grow: 1;
-      flex-shrink: 0;
-      flex-basis: 366px;
+      
+      flex-grow:1;
+      flex-basis: 300px;
     }
   }
   .mode--kanban {
+    width: min(100%, 1080px);
     margin: 0 auto;
   }
 
@@ -463,14 +476,20 @@
 
   .status {
     display: flex;
-    padding: var(--space-3, 24px) var(--space-3, 16px);
+    padding: var(--space-4, 24px) var(--space-3, 16px);
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-3, 12px);
     border-radius: var(--rounded-small, 8px);
     background: var(--colors-neutral-800);
+
+    & > :first-child {
+      display:flex;
+      gap:var(--space-3);
+      align-items: center;
+    }
   }
-  .status > h2 {
+  .status > h3 {
     font-size: var(--text-xl);
   }
 
@@ -683,14 +702,14 @@
     align-items: center;
     gap: var(--space-1, 4px);
     color: var(--colors-neutral-100, #f9fafa);
-
+    flex-wrap: wrap;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
   }
 
-  .action__btn-new {
+  .action__btn {
     display: flex;
     padding: var(--space-2, 12px) var(--space-4, 16px);
     justify-content: center;
@@ -753,6 +772,8 @@
     align-items: center;
     gap: var(--space-4);
     font-size: var(--text-xl);
+    text-align: center;
+    padding: 0 var(--space-3);
     & * {
       font-size: initial;
       font-weight: bold;
@@ -839,6 +860,14 @@
   .mode--calendar {
     min-width: 800px;
   }
+  .mode__container--calendar {
+    min-width: 800px;
+    max-width: 1280px;
+    margin:0 auto;
+    display:flex;
+    flex-direction: column;
+    gap:var(--space-2);
+  }
   .task-item {
     padding: var(--space-1);
     border-radius: var(--rounded-xsmall);
@@ -847,11 +876,9 @@
 
   table {
     width: 100%;
-    min-width: 800px;
-    max-width: 1280px;
     border-collapse: collapse;
     margin: 0px auto;
-    height: calc(100vh - 240px);
+    height: calc(100vh - 300px);
     table-layout: fixed;
   }
 
@@ -916,7 +943,7 @@
       left: 0px;
     }
     #toast-drawer {
-      bottom: var(--space-4);
+      bottom: var(--space-16);
       top: initial;
     }
     .sidebar-trigger {
@@ -937,6 +964,9 @@
     }
     .mode-container--kanban {
       flex-wrap: wrap;
+    }
+    .mode {
+      padding: 0 var(--space-3);
     }
   }
 }

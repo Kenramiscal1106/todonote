@@ -1,7 +1,7 @@
-import { renderCalendar } from "./calendar.js";
+import { renderCalendar, renderCalendarTask } from "./calendar.js";
 import { renderDefault } from "./default.js";
-import { currentView } from "./header.js";
-import { renderKanbanItem } from "./kanban.js";
+import { currentView } from "./index.js";
+import { refreshKanban, renderKanbanItem } from "./kanban.js";
 import { currentCategory } from "./sidebar.js";
 import { renderTodo } from "./todos.js";
 
@@ -13,6 +13,9 @@ export function renderContent() {
     case "calendar":
       renderCalendar();
       break;
+    case "kanban":
+      refreshKanban();
+      break;
   }
 }
 /**
@@ -22,7 +25,7 @@ export function renderContent() {
  * taskName: string,
  * deadline: string,
  * categoryId: string,
- * status: "pending" | "ongoing" | "done"
+ * status: "pending" | "in-progress" | "done"
  * }} todo
  */
 export function addContent(todo) {
@@ -31,7 +34,11 @@ export function addContent(todo) {
     case "default":
       renderTodo(todo);
       break;
+    case "calendar":
+      renderCalendarTask(todo);
+      break;
     case "kanban":
       renderKanbanItem(todo)
+      break;
   }
 }
