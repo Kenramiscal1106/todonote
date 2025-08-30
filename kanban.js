@@ -27,16 +27,15 @@ async function initDatabase() {
 export async function refreshKanban() {
   const todosByStatus = await getKanbanTodos(currentCategory);
   clearKanbanItems();
-  const todos = Object.values(todosByStatus)
-    .flat()
+  const todos = Object.values(todosByStatus).flat();
   if (todos.length === 0) {
     // document.querySelector(".mode--kanban").classList.remove(".mode--active")
     document.querySelector(".todos-empty").classList.add("todos-empty--active");
-    return
-  } 
+    return;
+  }
   todos.forEach((todo) => {
-      renderKanbanItem(todo);
-    });
+    renderKanbanItem(todo);
+  });
 }
 
 function clearKanbanItems() {
@@ -116,9 +115,6 @@ export function renderKanbanItem(kanbanItem) {
   containerMap[kanbanItem.status]?.appendChild(list);
 }
 
-let placeholder = document.createElement("div");
-placeholder.classList.add("drop-placeholder");
-
 // Drag and Drop
 const container = document.querySelector(".mode-container--kanban");
 let draggedList = null;
@@ -134,42 +130,37 @@ container.addEventListener("dragend", (e) => {
   if (e.target.classList.contains("list")) {
     draggedList.style.opacity = "1";
     draggedList = null;
-
-    if (placeholder.parentNode) {
-      placeholder.parentNode.removeChild(placeholder);
-    }
   }
 });
 
 document.querySelectorAll(".status").forEach((status) => {
   status.addEventListener("dragover", (e) => {
+    const placeholder = document.querySelector(".drop-placeholder") || document.createElement("div");
+    placeholder.classList.add("drop-placeholder");
     e.preventDefault();
 
-    if (!status.contains(placeholder)) {
+    if (!status.contains(document.querySelector(".drop-placeholder"))) {
+      console.log("triggers");
       status.appendChild(placeholder);
     }
   });
 
-  status.addEventListener("dragleave", (e) => {
-    if (placeholder.parentNode === status) {
-      placeholder.parentNode.removeChild(placeholder);
-    }
-  });
-
   status.addEventListener("drop", async () => {
+    const placeholder = document.querySelector(".drop-placeholder");
     if (draggedList) {
       const todoId = draggedList.dataset.id;
       const newStatus = status.id;
 
       status.appendChild(draggedList);
 
-      if (placeholder.parentNode) {
+      if (placeholder) {
         placeholder.parentNode.removeChild(placeholder);
       }
 
       // Glare animation
       draggedList.classList.add("glare-effect");
-      setTimeout(() => draggedList.classList.remove("glare-effect"), 600);
+
+      // setTimeout(() => draggedList.classList.remove("glare-effect"), 600);
 
       try {
         await updateTodoStatus(todoId, newStatus);
@@ -177,7 +168,6 @@ document.querySelectorAll(".status").forEach((status) => {
           new CustomEvent("todos-updated", { detail: { source: "kanban" } })
         );
         renderProgressBar();
-
       } catch (err) {
         console.error("Failed to update todo status:", err);
       }

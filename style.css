@@ -922,6 +922,24 @@
       color: var(--colors-alert-400);
     }
   }
+  .calendar__info {
+    display:flex;
+    gap:var(--space-6);
+    align-items: center;
+    justify-content: space-between;
+  }
+  .calendar__buttons {
+    display:flex;
+    gap:var(--space-4);
+    > * {
+      border-radius: var(--rounded-full);
+      background-color: var(--colors-neutral-800);
+      padding: var(--space-2);
+      &:active {
+        background-color: var(--colors-neutral-700);
+      }
+    }
+  }
 
   .tstatus {
     font-weight: bold;

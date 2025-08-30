@@ -1,37 +1,57 @@
 import { DAYS, MONTH_DATA } from "./constants.js";
 import { getCalendarTodos } from "./index.js";
 import { currentCategory } from "./sidebar.js";
-// import { getCalendarTodos } from "./index.js";
-// import { currentCategory } from "./sidebar.js";
-// import { isWithinDay } from "./utilities.js";
 
 export let currentMonth = new Date().getMonth();
+const forward = document.createElement("button");
+const backward = document.createElement("button");
+
+forward.innerHTML = `<svg width="20" height="21" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 18.9641L15 12.9641L9 6.96411" stroke="#F9FAFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`
+backward.innerHTML = `<svg width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.5342 18.9641L9.53418 12.9641L15.5342 6.96411" stroke="#F9FAFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+`
+const monthWrapper = document.createElement("div");
+monthWrapper.classList.add("calendar__buttons")
+monthWrapper.append(backward, forward);
+
+forward.addEventListener(
+  "click",
+  () => {(currentMonth = currentMonth === 11 ? 0 : currentMonth + 1); renderCalendar()}
+);
+backward.addEventListener(
+  "click",
+  () => {(currentMonth = currentMonth === 0 ? 11 : currentMonth - 1); renderCalendar()}
+);
+
 export async function renderCalendar() {
   const calendarTodos = await getCalendarTodos(currentCategory);
   if (calendarTodos.size === 0) {
     document
       .querySelector(".todos-empty")
       .classList.remove("todos-empty--active");
-    return
+    return;
   }
-  
-
 
   // during month
   const calendarView = document.querySelector(".mode__container--calendar");
-  document.querySelectorAll(".mode__container--calendar > *").forEach((element) => {
-    element.remove();
-  })
+  document
+    .querySelectorAll(".mode__container--calendar > *")
+    .forEach((element) => {
+      element.remove();
+    });
 
   const calendarInfo = document.createElement("div");
   const calendarHeading = document.createElement("h2");
   const calendarWrapper = document.createElement("table");
   const thead = document.createElement("thead");
   const tbody = document.createElement("tbody");
-  calendarView.appendChild(calendarInfo);
-  calendarView.appendChild(calendarWrapper);
-  calendarWrapper.appendChild(thead);
-  calendarWrapper.appendChild(tbody);
+  calendarView.append(calendarInfo, calendarWrapper);
+  calendarWrapper.append(thead, tbody);
+  calendarInfo.classList.add("calendar__info")
 
   DAYS.forEach((day) => {
     const heading = document.createElement("th");
@@ -40,9 +60,12 @@ export async function renderCalendar() {
   });
   const [monthData, columns, rows] = generateCalendarMeta();
   const currentDate = new Date();
+  currentDate.setMonth(currentMonth);
   const dateToday = currentDate.getDate();
-  calendarHeading.textContent = `${monthData.month} ${currentDate.getFullYear()}`;
-  calendarInfo.appendChild(calendarHeading);
+  calendarHeading.textContent = `${
+    monthData.month
+  } ${currentDate.getFullYear()}`;
+  calendarInfo.append(calendarHeading, monthWrapper);
 
   for (let i = 0; i < rows; i++) {
     const trElement = document.createElement("tr");
@@ -62,7 +85,7 @@ export async function renderCalendar() {
     const targetCell = document.querySelector(
       `[data-row="${currentRow}"][data-column="${day}"]`
     );
-    if (dateToday === i + 1) {
+    if (dateToday === i + 1 && currentMonth === new Date().getMonth()) {
       targetCell.classList.add("cell--active");
     }
     const taskContainer = document.createElement("div");
@@ -134,7 +157,7 @@ export function renderCalendarTask(todo) {
   if (todo.deadline === "") return;
   const mainContainer = document.createElement("div");
   mainContainer.setAttribute("data-calendar-task-id", todo.id);
-  mainContainer.classList.add("task-item")
+  mainContainer.classList.add("task-item");
   mainContainer.textContent = todo.taskName;
   const taskDate = new Date(todo.deadline);
   const taskContainer = document.querySelector(
