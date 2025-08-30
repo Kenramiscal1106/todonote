@@ -120,6 +120,9 @@ export function renderKanbanItem(kanbanItem) {
   containerMap[kanbanItem.status]?.appendChild(list);
 }
 
+let placeholder = document.createElement("div");
+placeholder.classList.add("drop-placeholder");
+
 // Drag and Drop
 const container = document.querySelector(".mode-container--kanban");
 let draggedList = null;
@@ -135,21 +138,42 @@ container.addEventListener("dragend", (e) => {
   if (e.target.classList.contains("list")) {
     draggedList.style.opacity = "1";
     draggedList = null;
+
+    if (placeholder.parentNode) {
+      placeholder.parentNode.removeChild(placeholder);
+    }
   }
 });
 
 document.querySelectorAll(".status").forEach((status) => {
-  status.addEventListener("dragover", (e) => e.preventDefault());
+  status.addEventListener("dragover", (e) => {
+    e.preventDefault();
+
+    if (!status.contains(placeholder)) {
+      status.appendChild(placeholder);
+    }
+  });
+
+  status.addEventListener("dragleave", (e) => {
+    if (placeholder.parentNode === status) {
+      placeholder.parentNode.removeChild(placeholder);
+    }
+  });
 
   status.addEventListener("drop", async () => {
     if (draggedList) {
       const todoId = draggedList.dataset.id;
       const newStatus = status.id;
+
       status.appendChild(draggedList);
+
+      if (placeholder.parentNode) {
+        placeholder.parentNode.removeChild(placeholder);
+      }
 
       // Glare animation
       draggedList.classList.add("glare-effect");
-      setTimeout(() => status.classList.remove("glare-effect"), 600);
+      setTimeout(() => draggedList.classList.remove("glare-effect"), 600);
 
       try {
         await updateTodoStatus(todoId, newStatus);
