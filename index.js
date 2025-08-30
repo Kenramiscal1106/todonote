@@ -282,7 +282,6 @@ export function clearDone() {
       renderProgressBar()
       return;
     }; // no more entries
-    // console.log(cursor.value);
 
     const { status, categoryId } = cursor.value;
     if (status === "done" && categoryId === currentCategory) {

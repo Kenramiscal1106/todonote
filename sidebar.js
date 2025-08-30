@@ -113,8 +113,6 @@ export async function renderProgressBar() {
       ? `${Math.round((todosInProgress.length / todos.length) * 100)}%`
       : "0%";
 
-  console.log(doneWidth);
-  console.log(inProgressWidth);
 
   doneBar.textContent = `${doneWidth}`;
   doneProgressBar.animate(

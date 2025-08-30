@@ -211,6 +211,5 @@ export function renderTodo(todo) {
   }
   mainContainer.appendChild(metaContainer);
   mainContainer.appendChild(actionsContainer);
-  // console.log(mainContainer);
   defaultContainer.appendChild(mainContainer);
 }
