@@ -279,6 +279,7 @@ export function clearDone() {
         type: "success",
         message: "Todo has been cleared successfully"
       })
+      renderProgressBar()
       return;
     }; // no more entries
     // console.log(cursor.value);
