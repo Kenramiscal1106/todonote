@@ -6,10 +6,11 @@ import { deleteModal } from "./modal.js";
 export let currentCategory = localStorage.getItem("current-category") || "";
 
 const homeTab = document.querySelector(".sidebar__home-tab");
-homeTab.classList.add("tab--active");
+if (currentCategory === "") homeTab.classList.add("tab--active");
 homeTab.addEventListener("click", handleHome);
-const progressBar = document.querySelector(".progress__bar__value");
-const progressValue = document.querySelector(".progress-status");
+const doneProgressBar = document.querySelector(".progress__bar__done");
+const inProgressBar = document.querySelector(".progress__bar__in-progress");
+const doneBar = document.querySelector(".progress-status");
 const sidebarTrigger = document.querySelector(".sidebar-trigger");
 
 const sidebarOverlay = document.querySelector(".sidebar-overlay");
@@ -55,6 +56,9 @@ export function renderCategoryTab(category) {
   categoryTab.setAttribute("data-category-id", category.id);
   categoryTab.appendChild(categoryInfo);
   categoryTab.appendChild(deleteButton);
+  if (currentCategory === category.id) {
+    categoryTab.classList.add("tab--active");
+  }
 
   categoryInfo.classList.add("category__info");
   categoryTab.classList.add("category");
@@ -92,22 +96,31 @@ function handleCategoryChange(category) {
     renderHeaderElement(category.id);
     renderContent();
     renderProgressBar();
+    renderProgressBar();
     closeSidebar();
   };
 }
 export async function renderProgressBar() {
   const todos = await getCategoryTodos(currentCategory, true);
   const todosDone = todos.filter((todo) => todo.status === "done");
-  const width =
+  const todosInProgress = todos.filter((todo) => todo.status === "in-progress");
+  const doneWidth =
     todos.length !== 0
       ? `${Math.round((todosDone.length / todos.length) * 100)}%`
       : "0%";
+  const inProgressWidth =
+    todos.length !== 0
+      ? `${Math.round((todosInProgress.length / todos.length) * 100)}%`
+      : "0%";
 
-  progressValue.textContent = `${width}`;
-  progressBar.animate(
+  console.log(doneWidth);
+  console.log(inProgressWidth);
+
+  doneBar.textContent = `${doneWidth}`;
+  doneProgressBar.animate(
     [
       {
-        width,
+        width: doneWidth,
       },
     ],
     {
@@ -115,17 +128,32 @@ export async function renderProgressBar() {
       fill: "forwards",
       easing: "ease-in-out",
     }
-  );
+  )
+  inProgressBar.animate(
+    [
+      {
+        width: inProgressWidth,
+      },
+    ],
+    {
+      duration: 400,
+      fill: "forwards",
+      easing: "ease-in-out",
+    }
+  )
+
 }
 
 async function handleHome(event) {
   currentCategory = "";
+  localStorage.setItem("current-category", "");
   const activeTab = document.querySelector("button.tab--active");
   event.stopPropagation();
   event.currentTarget.classList.add("tab--active");
   activeTab.classList.remove("tab--active");
   renderHeaderElement();
   renderContent();
+  renderProgressBar();
   renderProgressBar();
   closeSidebar();
 }

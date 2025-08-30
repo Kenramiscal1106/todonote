@@ -1,4 +1,4 @@
-import { renderCalendar } from "./calendar.js";
+import { renderCalendar, renderCalendarTask } from "./calendar.js";
 import { renderDefault } from "./default.js";
 import { currentView } from "./index.js";
 import { refreshKanban, renderKanbanItem } from "./kanban.js";
@@ -34,7 +34,11 @@ export function addContent(todo) {
     case "default":
       renderTodo(todo);
       break;
+    case "calendar":
+      renderCalendarTask(todo);
+      break;
     case "kanban":
       renderKanbanItem(todo)
+      break;
   }
 }

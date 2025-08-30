@@ -2,7 +2,11 @@
 
 import { renderContent } from "./content.js";
 import { renderHeaderElement } from "./header.js";
-import { renderCategoryTab, renderProgressBar } from "./sidebar.js";
+import {
+  currentCategory,
+  renderCategoryTab,
+  renderProgressBar,
+} from "./sidebar.js";
 import { renderToast } from "./toast.js";
 // import { renderTodo } from "./todos.js";
 
@@ -56,20 +60,19 @@ document.addEventListener("viewchange", ({ detail }) => {
 });
 
 document.addEventListener("todoschange", ({ detail }) => {
-  console.log(detail);
   /**
    * @type {"added" | "edited" | "deleted"}
    */
   let verb = "";
   switch (detail.type) {
     case "add":
-      verb = "added"
+      verb = "added";
       break;
     case "update":
-      verb = "updated"
+      verb = "updated";
       break;
     case "delete":
-      verb = "deleted"
+      verb = "deleted";
   }
   renderToast({
     message: "Todo successfully " + verb,
@@ -245,8 +248,8 @@ export function addTodo(data) {
       resolve();
     };
     action.onerror = (event) => {
-      reject()
-    }
+      reject();
+    };
   });
 }
 
@@ -259,16 +262,40 @@ export function deleteTodo(todoId) {
   const action = todoStore.delete(todoId);
   action.onsuccess = () => {
     document.dispatchEvent(
-      new CustomEvent("todoschange", {detail: {type: "delete"}})
-    )
+      new CustomEvent("todoschange", { detail: { type: "delete" } })
+    );
   };
 }
 
 export function clearDone() {
   const todoStore = db.transaction("Todos", "readwrite").objectStore("Todos");
   // const status = todoStore.index("status").
-}
+  const request = todoStore.openCursor();
+  request.onsuccess = (event) => {
+    const cursor = event.target.result;
+    if (!cursor) {
+      renderContent();
+      renderToast({
+        type: "success",
+        message: "Todo has been cleared successfully"
+      })
+      return;
+    }; // no more entries
+    // console.log(cursor.value);
 
+    const { status, categoryId } = cursor.value;
+    if (status === "done" && categoryId === currentCategory) {
+      cursor.delete();
+    }
+    cursor.continue();
+  };
+
+
+  request.onerror = (event) => {
+    console.error("Cursor error:", event.target.error);
+  };
+}
+// clearDone();
 /**
  *
  * @param {string} categoryId
@@ -324,8 +351,8 @@ export function updateTodo(newData) {
     const action = todoStore.put(newData);
     action.onsuccess = (event) => {
       document.dispatchEvent(
-        new CustomEvent("todoschange", {detail: {type: "update"} })
-      )
+        new CustomEvent("todoschange", { detail: { type: "update" } })
+      );
       todoStore.put(newData);
       resolve();
     };

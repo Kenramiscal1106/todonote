@@ -6,6 +6,7 @@ let db = null;
 document.addEventListener("DOMContentLoaded", async () => {
   await initDatabase();
 });
+// const [done, pending, inProgress] =
 
 async function initDatabase() {
   return new Promise((resolve, reject) => {
@@ -24,17 +25,18 @@ async function initDatabase() {
 }
 
 export async function refreshKanban() {
-  console.log("triggers refresh")
   const todosByStatus = await getKanbanTodos(currentCategory);
   clearKanbanItems();
-  Object.values(todosByStatus)
+  const todos = Object.values(todosByStatus)
     .flat()
-    .forEach((todos) => {
-      console.log(todos);
-      renderKanbanItem(todos);
+  if (todos.length === 0) {
+    // document.querySelector(".mode--kanban").classList.remove(".mode--active")
+    document.querySelector(".todos-empty").classList.add("todos-empty--active");
+    return
+  } 
+  todos.forEach((todo) => {
+      renderKanbanItem(todo);
     });
-
-  // console.log("Todos loaded:", todosByStatus);
 }
 
 function clearKanbanItems() {
@@ -82,7 +84,6 @@ export function renderKanbanItem(kanbanItem) {
   kanbanTime.classList.add("kanban-time");
 
   list.setAttribute("data-id", kanbanItem.id);
-  console.log(list);
   list.draggable = true;
   item.appendChild(kanbanTask);
   item.appendChild(timeLeft);
@@ -149,7 +150,6 @@ document.querySelectorAll(".status").forEach((status) => {
         );
         renderProgressBar();
 
-        console.log(`Todo ${todoId} status updated to ${newStatus}`);
       } catch (err) {
         console.error("Failed to update todo status:", err);
       }
