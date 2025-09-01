@@ -1,3 +1,4 @@
+import { HOUR, MINUTE, SECOND } from "./constants.js";
 import { getKanbanTodos, updateTodoStatus } from "./index.js";
 import { currentCategory, renderProgressBar } from "./sidebar.js";
 
@@ -70,25 +71,50 @@ export function renderKanbanItem(kanbanItem) {
   };
 
   const list = document.createElement("div");
-  const item = document.createElement("div");
   const kanbanTask = document.createElement("p");
   const timeLeft = document.createElement("div");
-  const kanbanTime = document.createElement("p");
+  const kanbanTime = document.createElement("div");
+  const kanbanIcon = document.createElement("div");
 
-  list.appendChild(item);
   list.classList.add("list");
-  item.classList.add("item");
   kanbanTask.classList.add("kanban-task");
   timeLeft.classList.add("time-left");
-  kanbanTime.classList.add("kanban-time");
+  kanbanTime.classList.add("time-left__text");
+  kanbanIcon.classList.add("time-left__icon");
 
+  function updateDeadline() {
+    const deadlineMS = Date.parse(kanbanItem.deadline);
+    const nowMS = Date.now();
+    const beforeMS = deadlineMS - nowMS;
+    if (beforeMS > HOUR * MINUTE * SECOND) {
+      kanbanTime.textContent = `${Math.floor(
+        beforeMS / (HOUR * MINUTE * SECOND)
+      )} hour/s left`;
+    } else if (beforeMS > MINUTE * SECOND) {
+      kanbanTime.textContent = `${Math.floor(
+        beforeMS / (MINUTE * SECOND)
+      )} minute/s left`;
+    } else if (beforeMS > SECOND) {
+      kanbanTime.textContent = `${Math.floor(
+        beforeMS / SECOND
+      )} second/s left`;
+    } else {
+      kanbanTime.textContent = "Todo is overdue ";
+    }
+  }
   list.setAttribute("data-id", kanbanItem.id);
   list.draggable = true;
-  item.appendChild(kanbanTask);
-  item.appendChild(timeLeft);
-  timeLeft.appendChild(kanbanTime);
-
-  timeLeft.innerHTML = `
+  list.append(kanbanTask, kanbanItem.deadline !== "" ? timeLeft : "");
+  timeLeft.append(kanbanIcon, kanbanTime);
+  
+  
+  if (kanbanItem.status === "done") {
+    list.classList.add("list--done")
+  } else {
+    updateDeadline();
+    const interval = setInterval(updateDeadline, 1000)
+  }
+  kanbanIcon.innerHTML = `
     <svg
       width="18"
       height="19"
@@ -111,7 +137,6 @@ export function renderKanbanItem(kanbanItem) {
     </svg>`;
 
   kanbanTask.textContent = kanbanItem.taskName || "";
-
   containerMap[kanbanItem.status]?.appendChild(list);
 }
 
@@ -150,6 +175,11 @@ document.querySelectorAll(".status").forEach((status) => {
     if (draggedList) {
       const todoId = draggedList.dataset.id;
       const newStatus = status.id;
+      if (status.id === "done") {
+        draggedList.classList.add("list--done")
+      } else {
+        draggedList.classList.remove("list--done")
+      }
 
       status.appendChild(draggedList);
 

@@ -1,3 +1,4 @@
+import { HOUR, MINUTE, SECOND } from "./constants.js";
 import { renderHeaderElement } from "./header.js";
 import { updateTodo } from "./index.js";
 import { deleteModal, openModal } from "./modal.js";
@@ -17,9 +18,6 @@ export function renderTodo(todo) {
 
   const defaultContainer = document.querySelector(".mode__container--default");
 
-  const HOUR = 60,
-    MINUTE = 60,
-    SECOND = 1000;
   const mainContainer =
     document.querySelector(`[data-task-id="${todo.id}"]`) ||
     document.createElement("div");

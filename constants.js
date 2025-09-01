@@ -1,10 +1,14 @@
-const current = new Date()
+const current = new Date();
 function isLeapYear() {
-  const year = current.getFullYear()
+  const year = current.getFullYear();
   if (year % 4 !== 0) return false;
   if (year % 100 !== 0) return true;
   return year % 400 === 0;
 }
+
+export const HOUR = 60,
+  MINUTE = 60,
+  SECOND = 1000;
 
 export const MONTH_DATA = [
   { month: "January", date: 31 },
@@ -22,4 +26,3 @@ export const MONTH_DATA = [
 ];
 
 export const DAYS = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
-
