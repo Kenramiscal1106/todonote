@@ -445,6 +445,7 @@ export function getCalendarTodos(categoryId) {
         }
         todosMap.set(key, [todo]);
       });
+      console.log(todosMap)
       resolve(todosMap);
     };
     data.onerror = (event) => {

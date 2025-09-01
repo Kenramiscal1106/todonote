@@ -94,7 +94,8 @@ export async function renderCalendar() {
 
     const tasksKey = `${currentDate.getFullYear()}-${
       currentDate.getMonth() < 10 ? "0" : ""
-    }${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+    }${currentDate.getMonth() + 1}-${currentDate.getDate() < 10 ? "0" : ""}${currentDate.getDate()}`;
+    console.log(tasksKey)
     const tasks = calendarTodos.has(tasksKey)
       ? calendarTodos.get(tasksKey)
       : [];
