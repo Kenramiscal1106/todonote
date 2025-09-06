@@ -983,6 +983,11 @@
         background-color: var(--colors-neutral-700);
       }
     }
+    .actions {
+      position:fixed;
+      right:var(--space-1);
+      bottom:var(--space-1);
+    }
   }
   @media screen and (max-width: 434px) {
     #view-tabs {
@@ -994,6 +999,7 @@
     .mode {
       padding: 0 var(--space-3);
     }
+    
   }
 }
 
